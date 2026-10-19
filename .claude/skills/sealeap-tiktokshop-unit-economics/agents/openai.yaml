@@ -1,0 +1,4 @@
+interface:
+  display_name: "TikTok Shop 佣金与内容全成本"
+  short_description: "计算 TikTok Shop 单位贡献、佣金上限与投流预算，核对退款和达人订单口径"
+  default_prompt: "使用 $sealeap-tiktokshop-unit-economics，核对我提供的输入并运行计算器，给出各订单组的贡献、佣金经济上限与佣金广告共同预算。"
