@@ -41,6 +41,13 @@ Presupuesto mensual (por defecto 500 €), nicho si lo hay, y si la tienda es nu
    - mes 1 sin anuncios: muestra propia (1–2 unidades), cuota del proveedor si la hay, 8–10 muestras a microcreadores y 2–3 vídeos propios al día;
    - mes 2: GMV Max solo en vídeos que ya venden, como máximo lo que diga "Anuncio máx./pedido" × los pedidos esperados.
 
+## Cómo leer a cada proveedor (probado el 20/10/2026)
+
+- **AliExpress ES**: `node scripts/aliexpress_es.js "término"` (Playwright con el Chromium de `/opt/pw-browsers`). Saca precio en €, ventas, valoración y plazo de la búsqueda filtrada por envío desde España. Si sale `CAPTCHA`, repite. Las fichas de producto no cargan sin `alicdn.com`. En la nube, Chromium necesita el CA del proxy en NSS: `certutil -A -d sql:/root/.pki/nssdb -n ccr-agent-proxy -t "C,," -i /root/.ccr/agent-proxy-ca.crt` (paquete `libnss3-tools`).
+- **BigBuy**: bloquea navegadores automáticos con Cloudflare. No intentes saltarlo; pide al usuario el precio desde su cuenta.
+- **CJ Dropshipping**: necesita `cjdropshipping.com` y `app.cjdropshipping.com` permitidos en la red. Si da `ERR_TUNNEL_CONNECTION_FAILED`, están bloqueados.
+- El precio de AliExpress es precio de venta al público con IVA: úsalo entero como coste (prudente) y envío 0 si pone "Envío gratis".
+
 ## Si la red bloquea a los proveedores
 
 Si WebFetch o curl fallan con estos dominios, dilo y nombra el dominio. El usuario tiene que permitirlo en la configuración de red del entorno o usar la skill en Claude Code en su PC. Mientras tanto entrega la lista de candidatos (pasos 1–2) y deja los costes como "no verificado". No rellenes con estimaciones.
