@@ -3,7 +3,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 (async () => {
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', headless: false, proxy: { server: process.env.HTTPS_PROXY }, args: ['--headless=new','--disable-blink-features=AutomationControlled'] });
+  const b = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', headless: false, proxy: { server: process.env.HTTPS_PROXY }, args: ['--headless=new','--disable-blink-features=AutomationControlled'] });
   const ctx = await b.newContext({ locale: 'es-ES', timezoneId: 'Europe/Madrid', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36' });
   await ctx.addCookies([{ name: 'aep_usuc_f', value: 'site=esp&c_tp=EUR&region=ES&b_locale=es_ES', domain: '.aliexpress.com', path: '/' }]);
   const out = {};
