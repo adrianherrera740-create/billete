@@ -45,6 +45,7 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .pill{font-family:var(--font-mono);font-size:12px;border-radius:99px;padding:3px 10px;background:var(--bg);border:1px solid var(--line)}
 .pill.ok{color:var(--ok)} .pill.bad{color:var(--bad);background:var(--bad-soft)} .pill.busy{color:#9a5b00;background:var(--warn-soft)}
 .real a{color:var(--accent);overflow-wrap:anywhere}
+label.label{display:block;flex-basis:100%}
 .msg{font-size:14px;background:var(--bg);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
 .err{background:var(--bad-soft);color:var(--bad);border-radius:8px;padding:8px 10px;font-size:14px}
 .chat{background:#0b0f0e;color:#d9fbe9;border:2px solid #36e09b;border-radius:14px;padding:16px 18px;display:grid;gap:14px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
@@ -96,6 +97,11 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
       <span class="pill" id="r-estado">Sin sesión real</span>
       <span id="r-link"></span>
       <div class="progress"><span id="prog-txt">0/27 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
+    </div>
+    <div class="row">
+      <label for="r-sesion" class="label">Seguir una sesión que ya está trabajando</label>
+      <input id="r-sesion" type="text" value="session_01JreApZBKLVQy156QdeNr4v" spellcheck="false" autocomplete="off" style="flex:1;min-width:220px;font-family:var(--font-mono);font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)">
+      <button class="btn" id="b-seguir" type="button">Seguir sesión</button>
     </div>
     <div class="msg" id="r-msg" hidden></div>
     <div class="err" id="r-err" hidden></div>
@@ -354,18 +360,30 @@ async function ronda(){
   }catch(e){}
 }
 /* ---------- sesión real ---------- */
-let realActiva=false, realId=null, mcp=null, pollT=null, cursor=null, started={}, ended={}, ultimoTexto='', primeraVez=0, errsSeguidos=0;
+let seguirSiempre=false, realActiva=false, realId=null, mcp=null, pollT=null, cursor=null, started={}, ended={}, ultimoTexto='', primeraVez=0, errsSeguidos=0;
 const clavePayload=p=>{if(typeof p==='string'){try{return JSON.parse(p)}catch(e){return p}}return p};
 function ccr(p){p=clavePayload(p);return (p&&p.ccr)?p.ccr:p}
 function recorre(x,fn){if(Array.isArray(x)){x.forEach(v=>recorre(v,fn))}else if(x&&typeof x==='object'){fn(x);Object.keys(x).forEach(k=>recorre(x[k],fn))}}
+function textoResultado(c){return typeof c==='string'?c:Array.isArray(c)?c.map(x=>x&&x.text||'').join(' '):''}
 function procesar(eventos){
+  // started: id de la llamada Agent -> nombre del agente. ended: esa llamada ya devolvió su resultado.
   const nuevos=[];
-  recorre(eventos,o=>{
-    if(o.type==='tool_use'&&(o.name==='Agent'||o.name==='Task')&&o.input&&typeof o.input.subagent_type==='string'){
-      if(!started[o.id]){started[o.id]=o.input.subagent_type;nuevos.push(o.input.subagent_type)}
-    }
-    if(o.type==='tool_result'&&typeof o.tool_use_id==='string'&&started[o.tool_use_id])ended[o.tool_use_id]=true;
-    if(o.type==='text'&&typeof o.text==='string'&&o.text.length>3&&!o.signature){/* texto del director lo recoge leerTexto */}
+  (Array.isArray(eventos)?eventos:[]).forEach(ev=>{
+    const kind=ev&&Object.keys(ev).find(k=>ev[k]&&typeof ev[k]==='object'&&ev[k].internal_anthropic_catchall);
+    const c=kind&&ev[kind].internal_anthropic_catchall; const m=c&&c.message; const cont=m&&m.content;
+    if(!Array.isArray(cont))return;
+    cont.forEach(o=>{
+      if(!o||typeof o!=='object')return;
+      if(o.type==='tool_use'&&(o.name==='Agent'||o.name==='Task')&&o.input&&typeof o.input.subagent_type==='string'&&!c.parent_tool_use_id){
+        if(!started[o.id]){started[o.id]=o.input.subagent_type;nuevos.push(o.input.subagent_type)}
+      }
+      // el agente entrega su informe con SubagentHandback (el id de su llamada viene en parent_tool_use_id)
+      if(o.type==='tool_use'&&o.name==='SubagentHandback'&&c.parent_tool_use_id&&started[c.parent_tool_use_id])ended[c.parent_tool_use_id]=true;
+      // llamada síncrona: el resultado llega en el tool_result; las asíncronas devuelven solo "Async agent launched"
+      if(o.type==='tool_result'&&typeof o.tool_use_id==='string'&&started[o.tool_use_id]&&!c.parent_tool_use_id){
+        if(!/^\s*Async agent launched/.test(textoResultado(o.content)))ended[o.tool_use_id]=true;
+      }
+    });
   });
   return nuevos;
 }
@@ -431,12 +449,12 @@ async function sondear(){
     if(!cursor){
       let before=null,pag=0,first=true;
       for(;;){
-        const inp={session_id:realId,kinds:['assistant','user'],limit:100};if(before)inp.before_id=before;
+        const inp={session_id:realId,kinds:['assistant','user'],limit:seguirSiempre?40:100};if(before)inp.before_id=before;
         const r=ccr((await mcp.callTool(SERVER,'list_events',inp,{cache:false})).payload)||{};
         const d=r.data||[];eventos=d.concat(eventos);
         if(first){cursor=r.last_id||null;first=false}
         before=r.first_id;pag++;
-        if(!r.has_more||!before||pag>=20)break;
+        if(!r.has_more||!before||pag>=(seguirSiempre?10:20))break;
       }
     }else{
       const r=ccr((await mcp.callTool(SERVER,'list_events',{session_id:realId,kinds:['assistant','user'],limit:100,after_id:cursor},{cache:false})).payload)||{};
@@ -446,17 +464,28 @@ async function sondear(){
     const nuevos=procesar(eventos);aplicar(nuevos);
     const t=leerTexto(eventos);if(t){ultimoTexto=t;const el=$('r-msg');el.hidden=false;el.textContent='Director: '+t.slice(0,600)}
     const lanzados=Object.keys(started).length, hechos=Object.keys(ended).length;
-    if(/COMPLETED|REVIEW_READY|IDLE/i.test(bucket)&&lanzados>0&&hechos>=lanzados){ponerEstadoReal('Sesión terminada ('+hechos+' agentes)','ok');DIR.msg=listo?'Todo aprobado':'Sesión terminada';pararSondeo()}
+    if(/COMPLETED|REVIEW_READY|IDLE/i.test(bucket)&&lanzados>0&&hechos>=lanzados){ponerEstadoReal((seguirSiempre?'Sesión en espera, ':'Sesión terminada, ')+hechos+' agentes han entregado','ok');DIR.msg=listo?'Todo aprobado':'Sesión terminada';if(!seguirSiempre)pararSondeo()}
     else if(/FAILED|failed/.test(bucket)){ponerEstadoReal('La sesión falló','bad');mostrarError('La sesión terminó con error. Ábrela para ver el motivo.');pararSondeo()}
     else if(lanzados===0){
       ponerEstadoReal('Sesión en marcha, sin agentes todavía','busy');
-      if(Date.now()-primeraVez>120000)mostrarError('Han pasado 2 minutos y el director aún no ha lanzado a nadie. Abre la sesión para ver qué está haciendo.');
+      if(!seguirSiempre&&Date.now()-primeraVez>120000)mostrarError('Han pasado 2 minutos y el director aún no ha lanzado a nadie. Abre la sesión para ver qué está haciendo.');
     }
     else{ponerEstadoReal('Trabajando: '+hechos+'/'+lanzados+' agentes han devuelto resultado','busy');DIR.msg='Dirigiendo'}
   }catch(e){
     errsSeguidos++;
     if(errsSeguidos>=3){mostrarError('Se perdió la conexión con la sesión: '+errTexto(e));pararSondeo()}
   }
+}
+async function seguirSesion(){
+  mostrarError('');
+  const id=$('r-sesion').value.trim();
+  if(!/^session_[A-Za-z0-9]+$/.test(id)){mostrarError('El identificador debe empezar por session_ y no llevar espacios.');return}
+  if(!mcp){mostrarError('Esta vista no puede leer sesiones: abre la oficina en claude.ai con el conector Claude Code Remote.');return}
+  pararSondeo();corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;
+  seguirSiempre=true;realId=id;realActiva=true;primeraVez=Date.now();errsSeguidos=0;
+  $('r-link').innerHTML='<a target="_blank" rel="noopener" href="https://claude.ai/code/'+realId+'">Abrir la sesión</a>';
+  ponerEstadoReal('Leyendo la sesión…','busy');DIR.msg='Siguiendo la sesión';
+  sondear();pollT=setInterval(sondear,8000);
 }
 function pararSondeo(){clearInterval(pollT);pollT=null;realActiva=false}
 /* ---------- ficha de chat ---------- */
@@ -505,7 +534,8 @@ $('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintarBotones();ficha()};
 $('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintarBotones();ficha()};
 $('b-dir').onclick=()=>copiar(promptDir());
 $('b-demo').onclick=()=>{ronda()};
-$('b-trabajar').onclick=()=>{trabajarReal()};
+$('b-trabajar').onclick=()=>{seguirSiempre=false;trabajarReal()};
+$('b-seguir').onclick=()=>{seguirSesion()};
 $('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
 pintarBotones();ficha();contar();requestAnimationFrame(tick);
 // conector de sesiones: la oficina funciona sin él (ronda simulada y prompts)
