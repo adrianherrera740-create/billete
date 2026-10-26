@@ -10,6 +10,9 @@ Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual 
 | `productos.md` | Tabla de todo producto evaluado: enlace, coste, PVP, veredicto y motivo | Antes de proponer un producto | Al evaluar o cambiar un veredicto |
 | `decisiones.md` | Registro fechado de decisiones y por qué se tomaron | Cuando haya dudas sobre el pasado | Cada vez que se decide algo |
 | `red-y-limites.md` | Qué se puede y qué no se puede hacer desde cada entorno | Antes de buscar proveedores o datos | Cuando cambie el entorno |
+| `proceso.md` | Cómo funciona la empresa: organigrama, ritmo semanal, puertas, criterios de parada, escalado y modelos | Antes de decidir | Cuando cambie el proceso |
+| `backlog.md`, `okrs.md`, `hipotesis.md`, `riesgos.md`, `kpis.md` | Tareas, objetivos, hipótesis, riesgos y números de la empresa | Al planificar y revisar | Cada semana |
+| `plantillas/` | Formato "Datos clave" de los informes | Al entregar | Si cambia el formato |
 | `usuario.md` | Cómo le gusta trabajar a la persona y qué ha rechazado | Siempre, al empezar | Cuando exprese una preferencia |
 | `diario/AAAA-MM-DD.md` | Qué se hizo cada día, en orden | Solo si hace falta el detalle | Al final de cada sesión |
 | `USAR-EN-FCC.md` | Cómo usar este proyecto con Free Claude Code | Una vez | Cuando cambie el método |

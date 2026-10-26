@@ -16,12 +16,14 @@ Proyecto: tienda de dropshipping en TikTok Shop España. Responde siempre en esp
 - Pendientes siempre: alta fiscal, GPSR, CE/RAEE si hay electrónica.
 
 ## Equipo (roles en `.claude/agents/`)
-Cada archivo `.claude/agents/<nombre>.md` define un rol. Si tu herramienta no puede lanzar subagentes, ejecuta los roles tú mismo, uno detrás de otro, leyendo su archivo: `director` (orquesta), 6 jefes (`buscador-producto`, `analista-margenes`, `operaciones-cumplimiento`, `creativos-ia`, `creadores-muestras`, `crecimiento-anuncios`) con 3 especialistas cada uno, `auditor-calidad`, `gestor-skills` y `curador-cerebro`. El método está en `.claude/agents/director.md` ("Modos de trabajo").
+Cada archivo `.claude/agents/<nombre>.md` define un rol. Si tu herramienta no puede lanzar subagentes, ejecuta los roles tú mismo, uno detrás de otro, leyendo su archivo: `director` (orquesta), dirección y finanzas (`ceo-estratega`, `cfo-finanzas`, `analista-escalado`, `pmo-operaciones`, `critico-escepticismo`), 6 jefes (`buscador-producto`, `analista-margenes`, `operaciones-cumplimiento`, `creativos-ia`, `creadores-muestras`, `crecimiento-anuncios`) con 3 especialistas cada uno, `auditor-calidad`, `gestor-skills` y `curador-cerebro`. El proceso (puertas, ritmo semanal, criterios de parada y escalado) está en `cerebro/proceso.md`; léelo antes de decidir. El método está en `.claude/agents/director.md` ("Modos de trabajo").
 
 ## Herramientas del proyecto
 - Margen: `python3 .claude/skills/proveedor-es/scripts/margen_es.py --pvp 24.90 --coste 7.09 --envio 0 --dias-preparacion 2 --afiliado 0 --devoluciones 0.10 --tienda-nueva` (`--afiliado` es una fracción).
 - Búsqueda en AliExpress ES con envío desde España: `node .claude/skills/proveedor-es/scripts/aliexpress_es.js "término"`.
 - Filtro de catálogos CSV de proveedores: `.claude/skills/proveedor-es/scripts/filtrar_catalogo.py`.
+- Barrido de AliExpress ES en paralelo con filtro y tabla: `python3 .claude/skills/proveedor-es/scripts/barrido.py terminos.txt --salida tienda/trabajo/ronda-N/barrido`.
+- ¿Se puede escalar?: `python3 .claude/skills/proveedor-es/scripts/escalado.py --pvp 24.90 --coste 7.09 --devoluciones 0.15`.
 
 ## Al terminar (obligatorio)
-Actualiza `cerebro/estado.md` (máx. 60 líneas), `cerebro/productos.md`, `cerebro/decisiones.md`, `cerebro/aprendizajes.md` si aprendiste algo y `cerebro/diario/AAAA-MM-DD.md`. Después `git add -A`, commit y push. Sin datos personales ni claves.
+Actualiza `cerebro/estado.md` (máx. 60 líneas), `cerebro/backlog.md`, `cerebro/productos.md`, `cerebro/decisiones.md`, `cerebro/aprendizajes.md` si aprendiste algo y `cerebro/diario/AAAA-MM-DD.md`. Después `git add -A`, commit y push. Sin datos personales ni claves.

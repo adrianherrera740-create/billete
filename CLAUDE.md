@@ -13,6 +13,8 @@ Primera tienda de dropshipping en TikTok Shop España, sin stock propio, 500 €
 
 ## Skills y agentes
 - `.claude/skills/proveedor-es` (margen, búsqueda en AliExpress ES, filtro de catálogos CSV) y `sealeap-tiktokshop-*` (selección de producto, márgenes, creadores, vídeos, GMV Max, logística, devoluciones).
-- 28 agentes en `.claude/agents/`: `director` (orquesta por pasos: especialistas en paralelo → jefes → `auditor-calidad`), 6 jefes con 3 especialistas cada uno, `gestor-skills` y `curador-cerebro`. Un subagente no puede lanzar a otros: solo el director.
+- 33 agentes en `.claude/agents/`, organizados como una empresa (`cerebro/proceso.md`): `director`; dirección y finanzas (`ceo-estratega`, `cfo-finanzas`, `analista-escalado`, `pmo-operaciones`, `critico-escepticismo`); 6 departamentos con jefe y 3 especialistas; `auditor-calidad`, `gestor-skills` y `curador-cerebro`. Un subagente no puede lanzar a otros: solo el director.
+- Proceso: puertas de decisión, ritmo semanal, criterios de parada y modelo de escalado en `cerebro/proceso.md`; tareas en `cerebro/backlog.md`; OKR, hipótesis, riesgos y KPI en `cerebro/`.
+- Herramientas: `margen_es.py` (margen), `escalado.py` (¿escalar?), `barrido.py` (barrido de AliExpress en paralelo), `aliexpress_es.js`, `filtrar_catalogo.py`.
 - Oficina visual: `tienda/panel-agentes.html` (artefacto privado). Resultados en `tienda/trabajo/ronda-<n>/`.
 - Uso con Free Claude Code: `cerebro/USAR-EN-FCC.md`.

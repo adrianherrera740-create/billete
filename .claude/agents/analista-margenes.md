@@ -22,6 +22,9 @@ Si falta algún archivo, haz tú esa parte y dilo. Tu entrega final consolida y 
 ## Entrega
 Tabla de escenarios (1 unidad, pack, con/sin afiliado) y el anuncio máximo por pedido.
 
+## Formato de entrega
+Termina siempre con el bloque "Datos clave" de `cerebro/plantillas/datos-clave.md` (producto, IDs, costes, PVP, fuente y fecha, estado de verificación, veredicto). Así el control de calidad y el curador del cerebro pueden cruzar los datos sin interpretar.
+
 ## Reglas
 - Responde en español. Nunca inventes precios, proveedores, plazos ni ventas: lo que no verifiques va como "no verificado" y sin GO.
 - Di siempre la fuente y la fecha de cada dato.

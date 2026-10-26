@@ -10,9 +10,9 @@ Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €
 - Candidato "wow" más fuerte hasta ahora: extractor de abolladuras para coche (antes/después). Fichas: 1005013054629715 (7,09 €, 10.000+), 1005013071285711 (5,89 €), kit 1005013064104106 (22,59 €). Riesgo: solo repara abolladuras suaves; devoluciones. PENDIENTE de que la persona abra la ficha y de comprobar precio de mercado en España.
 - Idea de la persona (problema primero): limpiador de altavoces del móvil. HOLD: saturado (genérico 0,80–3 €, kit 7–15 €); PVP realista 9,90–12,90 €.
 - Otros canales investigados (ronda 7): mejor puntuado = productos digitales (pack estética Miami/80s) y afiliación; tienda propia con envío desde China y eBay/Miravia: no recomendables ahora.
-- Herramientas: oficina de agentes (artefacto `tienda/panel-agentes.html`), 28 agentes en `.claude/agents/`, barrido de AliExpress con `proveedor-es/scripts/aliexpress_es.js`.
+- Empresa: 33 agentes con dirección (CEO, CFO, escalado, PMO, crítico), 6 departamentos, calidad y memoria. Proceso, puertas y criterios de parada en `proceso.md`; tareas en `backlog.md`; modelo de escalado `escalado.py`; barrido `barrido.py`. Oficina: `tienda/panel-agentes.html`.
 
-## Próximo paso
+## Próximo paso (el detalle está en `backlog.md`)
 1. La persona abre la ficha del extractor de abolladuras (1005013054629715) y cuenta qué trae y qué dicen las reseñas de 1–2 estrellas.
 2. Si le convence: precio de mercado en España, doble comprobación de proveedor, normativa y calidad; luego guiones de antes/después.
 3. En paralelo, decidir si prueba el pack digital (sin stock) o el método "problema primero" con más ideas suyas.
