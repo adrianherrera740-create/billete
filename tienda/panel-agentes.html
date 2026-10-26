@@ -2,36 +2,30 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: plano de oficina en SVG (director arriba, 3 departamentos en paralelo, 3 después, sala de resultado) y ficha del departamento elegido debajo */
+/* Layout: oficina pixel-art en canvas (director al centro, 3 despachos arriba, 3 abajo, trofeo abajo) y tarjeta de chat del agente elegido debajo */
 :root{
-  --bg:#eef0f3; --floor:#f9fafb; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#cfd4dc; --wall:#aeb6c2;
-  --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec;
-  --idle:#9aa3b2; --busy:#d98a00; --done:#1c9a5c; --done-soft:#dcf3e7; --busy-soft:#fdeccb;
-  --d1:#2f6fed; --d2:#8a4fd6; --d3:#0f9aa8; --d4:#d6336c; --d5:#d98a00; --d6:#1c9a5c;
+  --bg:#eef0f3; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#cfd4dc;
+  --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec; --ok:#157f4b; --warn-soft:#fdeccb;
   --font-display:'Bricolage Grotesque',system-ui,sans-serif;
   --font-body:'IBM Plex Sans',system-ui,sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0d1016; --floor:#151a22; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340; --wall:#4a5466;
-  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
-  --idle:#7b8494; --busy:#f2b45a; --done:#5fd39a; --done-soft:#12301f; --busy-soft:#352610;
-  --d1:#6b9bff; --d2:#b794f4; --d3:#4fd1dc; --d4:#ff6b9a; --d5:#f2b45a; --d6:#5fd39a; color-scheme:dark}}
+  --bg:#0d1016; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340;
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0d1016; --floor:#151a22; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340; --wall:#4a5466;
-  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
-  --idle:#7b8494; --busy:#f2b45a; --done:#5fd39a; --done-soft:#12301f; --busy-soft:#352610;
-  --d1:#6b9bff; --d2:#b794f4; --d3:#4fd1dc; --d4:#ff6b9a; --d5:#f2b45a; --d6:#5fd39a; color-scheme:dark}
+  --bg:#0d1016; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340;
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
   padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15}
-h1{font-size:clamp(26px,5vw,38px)} h2{font-size:20px} h3{font-size:17px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(26px,5vw,38px)} h2{font-size:20px}
 .label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .sub{color:var(--muted);margin:6px 0 0;max-width:64ch}
 button{font:inherit;cursor:pointer}
-button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .switch{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
 .switch button{border:0;background:transparent;color:var(--muted);font-weight:500;padding:7px 12px;border-radius:7px}
@@ -40,38 +34,30 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);ou
 .btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .progress{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:13px}
 .track{width:140px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
-.track i{display:block;height:100%;background:var(--done);width:0;transition:width .3s}
-figure{margin:0;background:var(--floor);border:1px solid var(--line);border-radius:14px;padding:10px;overflow-x:auto}
-figure svg{display:block;width:100%;min-width:680px;height:auto;color:var(--ink);font-family:var(--font-body)}
-figcaption{padding:8px 6px 2px;color:var(--muted);font-size:13px}
-.room{cursor:pointer}
-.room:hover .wall{stroke:var(--accent)}
-.room.sel .wall{stroke:var(--accent);stroke-width:3}
-.wall{fill:var(--surface);stroke:var(--wall);stroke-width:2}
-.t{font-size:12px;fill:currentColor} .tm{font-size:11px;fill:var(--muted)} .tb{font-size:14px;font-weight:600;font-family:var(--font-display);fill:currentColor}
-.mono{font-family:var(--font-mono)}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:16px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
-.panel > div{min-width:0}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.chip{font-family:var(--font-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
-.order{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}
-.order .label{color:var(--accent);display:block}
+.track i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.stage{background:#1b1b1f;border-radius:14px;padding:6px;border:1px solid var(--line)}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:9px;cursor:pointer;aspect-ratio:352/224}
+.note{color:var(--muted);font-size:13px;margin:0}
+.chat{background:#0b0f0e;color:#d9fbe9;border:2px solid #36e09b;border-radius:14px;padding:16px 18px;display:grid;gap:14px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.chat > div{min-width:0}
+.chat h2{color:#5af0b0;font-size:18px}
+.chat .meta{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7ab89c}
+.chat p{margin:6px 0}
+.chat .order{background:#12201b;border-radius:8px;padding:9px 11px;margin:8px 0;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-family:var(--font-mono);font-size:11px;border:1px solid #2b5b48;border-radius:6px;padding:2px 7px;color:#9fd8bf}
 .states{display:flex;gap:6px;flex-wrap:wrap}
-.states button{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;font-weight:500}
-.states button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-details{border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:13px} summary{cursor:pointer;color:var(--muted)}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);font-size:12px;background:var(--bg);border-radius:8px;padding:10px;margin:8px 0 0}
+.states button{border:1px solid #2b5b48;background:#0f1a16;color:#d9fbe9;padding:7px 12px;border-radius:8px;font-weight:500}
+.states button[aria-pressed="true"]{border-color:#36e09b;box-shadow:inset 0 0 0 1px #36e09b}
+.chat .btn.main{background:#36e09b;color:#04110c;border-color:#36e09b}
+details{margin-top:10px;font-size:13px} summary{cursor:pointer;color:#7ab89c}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);font-size:12px;background:#12201b;border-radius:8px;padding:10px;margin:8px 0 0;color:#d9fbe9}
 .how{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .how ol{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
-.how code,.sub code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:5px}
-.block{background:var(--busy-soft);color:var(--ink);border-radius:12px;padding:12px 16px;font-size:14px}
+code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:5px}
+.block{background:var(--warn-soft);border-radius:12px;padding:12px 16px;font-size:14px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-weight:500}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-@keyframes flow{to{stroke-dashoffset:-16}}
-.busy-av{animation:bob 1.2s ease-in-out infinite}
-.pulse{stroke-dasharray:5 3;animation:flow 1s linear infinite}
-@media (prefers-reduced-motion:reduce){.busy-av,.pulse{animation:none}}
-@media (max-width:760px){.panel{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.chat{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="wrap">
@@ -79,7 +65,7 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);fon
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
       <h1>Oficina de agentes</h1>
-      <p class="sub">El director reparte órdenes, los departamentos trabajan en paralelo por fases y nada avanza sin su visto bueno. Toca un despacho para ver su orden y copiar el prompt.</p>
+      <p class="sub">El director reparte órdenes, los departamentos trabajan en paralelo por fases y nada avanza sin su visto bueno. Pulsa "Ver una ronda" para verlos moverse y toca a cualquiera para abrir su chat.</p>
     </div>
     <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
@@ -90,40 +76,41 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);fon
   <div class="bar">
     <div class="progress"><span id="prog-txt">0/6 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn main" id="b-dir" type="button">Copiar orden del director</button>
-      <button class="btn" id="b-reset" type="button">Reiniciar estados</button>
+      <button class="btn main" id="b-demo" type="button">Ver una ronda</button>
+      <button class="btn" id="b-dir" type="button">Copiar orden del director</button>
+      <button class="btn" id="b-reset" type="button">Reiniciar</button>
     </div>
   </div>
 
-  <figure>
-    <svg id="office" viewBox="0 0 960 640" role="img" aria-label="Plano de la oficina: el director arriba da órdenes a tres departamentos en paralelo, luego a otros tres, y todo converge en la sala de resultado"></svg>
-    <figcaption>Cada despacho tiene una luz: gris espera, ámbar trabaja, verde entregó. Las flechas discontinuas marcan órdenes activas. Los estados los marcas tú a mano; el panel no ejecuta los agentes.</figcaption>
-  </figure>
+  <div class="stage">
+    <canvas id="c" width="352" height="224" tabindex="0" role="img" aria-label="Oficina pixel-art: el director en el centro, tres departamentos arriba, tres abajo y un trofeo que se enciende cuando los seis han entregado"></canvas>
+  </div>
+  <p class="note">La ronda es una simulación del flujo: no ejecuta agentes. Los agentes reales se lanzan con <code>claude --agent director</code>. Puedes marcar estados a mano en el chat de cada uno.</p>
 
-  <section class="panel" aria-live="polite">
+  <section class="chat" aria-live="polite">
     <div>
-      <div class="label" id="d-fase"></div>
+      <div class="meta" id="d-fase"></div>
       <h2 id="d-nombre"></h2>
-      <p class="sub" id="d-rol"></p>
-      <div class="order"><span class="label">Orden del director</span><span id="d-orden"></span></div>
+      <p id="d-estado" style="color:#7ab89c"></p>
+      <div class="order" id="d-orden"></div>
       <div class="chips" id="d-skills"></div>
-      <div class="label" style="margin-bottom:6px">Estado</div>
+      <div class="meta" style="margin:10px 0 6px">Estado</div>
       <div class="states" id="d-estados" role="group" aria-label="Estado del departamento"></div>
     </div>
     <div>
-      <div class="label" style="margin-bottom:6px">Entrega esperada</div>
-      <p style="margin:0 0 12px" id="d-entrega"></p>
-      <button class="btn main" id="b-copiar" type="button">Copiar prompt de este departamento</button>
+      <div class="meta" style="margin-bottom:6px">Entrega esperada</div>
+      <p id="d-entrega" style="margin:0 0 12px"></p>
+      <button class="btn main" id="b-copiar" type="button">Copiar prompt</button>
       <details><summary>Ver prompt</summary><pre id="d-prompt"></pre></details>
     </div>
   </section>
 
   <section class="how">
-    <h2>Cómo ponerlo a trabajar</h2>
+    <h2>Cómo ponerlo a trabajar de verdad</h2>
     <ol>
       <li>Abre una sesión de Claude Code en el repo <code>billete</code> con el director como agente principal: <code>claude --agent director</code>.</li>
       <li>Pega la orden del director (botón de arriba). Él lanza los departamentos de cada fase a la vez y revisa cada entrega antes de pasar de fase.</li>
-      <li>Para probar un solo departamento, copia su prompt y úsalo en una sesión normal.</li>
+      <li>Para probar un solo departamento, copia su prompt desde su chat y úsalo en una sesión normal.</li>
     </ol>
   </section>
 
@@ -136,28 +123,30 @@ const PRODUCTOS = {
   rodillo: {nombre:'Rodillo quitapelos', ctx:'rodillo quitapelos (AliExpress ES 1005012948478747, coste 13,30 €, PVP 27,90 €, beneficio ≈ 7,15 €/pedido; creativos en creativos/rodillo-quitapelos-ia.md)'},
   cepillos: {nombre:'Set de cepillos de limpieza', ctx:'set de cepillos de limpieza (AliExpress ES 1005013107637317, coste 9,29 €, PVP 24,90 € o pack de 2 a 39,90 €, beneficio ≈ 8,93 € / 10,80 €; creativos en creativos/set-cepillos-ia.md; aún sin fotos reales del producto)'}
 };
-// x,y,w,h del despacho en el plano; color: variable de departamento
+// cx: centro del despacho; fy: pies del agente; dy: borde superior de la mesa; stand: dónde se pone el director
 const DEPTS = [
-  {id:'buscador-producto', n:'Producto', fase:1, x:30, y:190, color:'--d1', rol:'Encuentra producto y proveedor con stock en España.', skills:['proveedor-es','product-selection','trend-validation'],
+  {id:'buscador-producto', n:'Producto', fase:1, cx:64, fy:88, dy:92, stand:[64,114], body:'#2f6fed', hair:'#3b2a1e', rol:'Encuentra producto y proveedor con stock en España.', skills:['proveedor-es','product-selection','trend-validation'],
    orden:'Verifica proveedor, coste, plazos y demanda del producto; propón dos alternativas.', entrega:'Tabla con URL de ficha, coste, plazos y veredicto, y lo que no se pudo verificar.'},
-  {id:'analista-margenes', n:'Márgenes', fase:1, x:345, y:190, color:'--d2', rol:'Beneficio por pedido, PVP mínimo y anuncio máximo.', skills:['unit-economics','promotion-margin','margen_es.py'],
+  {id:'analista-margenes', n:'Márgenes', fase:1, cx:176, fy:88, dy:92, stand:[176,114], body:'#8a4fd6', hair:'#1c1c22', rol:'Beneficio por pedido, PVP mínimo y anuncio máximo.', skills:['unit-economics','promotion-margin','margen_es.py'],
    orden:'Calcula escenarios con comisión 4 % y 9 %, con y sin afiliado, y revisa cómo interpreta --afiliado el script.', entrega:'Tabla de escenarios y anuncio máximo por pedido.'},
-  {id:'operaciones-cumplimiento', n:'Cumplimiento', fase:1, x:660, y:190, color:'--d3', rol:'Plazos, devoluciones y reglas de TikTok y la UE.', skills:['fulfillment-service','returns-feedback','product-link-validation'],
+  {id:'operaciones-cumplimiento', n:'Cumplimiento', fase:1, cx:288, fy:88, dy:92, stand:[288,114], body:'#0f9aa8', hair:'#7a4a22', rol:'Plazos, devoluciones y reglas de TikTok y la UE.', skills:['fulfillment-service','returns-feedback','product-link-validation'],
    orden:'Checklist antes de publicar: entrega en 2 días, seguimiento, desistimiento de 14 días, etiqueta IA, CE y alta fiscal.', entrega:'Checklist por producto con bloqueos marcados.'},
-  {id:'creativos-ia', n:'Creativos IA', fase:2, x:30, y:370, color:'--d4', rol:'Guiones, prompts de Higgsfield y fichas en español.', skills:['short-video-tests','content-calendar','listing-localization'],
+  {id:'creativos-ia', n:'Creativos IA', fase:2, cx:64, fy:168, dy:172, stand:[64,130], body:'#d6336c', hair:'#e6b422', rol:'Guiones, prompts de Higgsfield y fichas en español.', skills:['short-video-tests','content-calendar','listing-localization'],
    orden:'Con el producto aprobado, prepara ficha y 10 ganchos de 2 s. No afirmes cómo se ve en persona sin fotos reales.', entrega:'Archivo en creativos/ con ángulos, prompts y calendario; ficha en tienda/.'},
-  {id:'creadores-muestras', n:'Creadores', fase:2, x:345, y:370, color:'--d5', rol:'Microcreadores, briefs y seguimiento de muestras.', skills:['creator-discovery','creator-brief-rights','sample-operations'],
+  {id:'creadores-muestras', n:'Creadores', fase:2, cx:176, fy:168, dy:172, stand:[176,130], body:'#d98a00', hair:'#5a2d0c', rol:'Microcreadores, briefs y seguimiento de muestras.', skills:['creator-discovery','creator-brief-rights','sample-operations'],
    orden:'Define perfil de creador, brief con derechos de uso y la comisión que permite el margen.', entrega:'Lista anónima de candidatos, brief y tabla de seguimiento.'},
-  {id:'crecimiento-anuncios', n:'Crecimiento', fase:3, x:660, y:370, color:'--d6', rol:'Qué vídeos venden y cuándo invertir.', skills:['advertising','gmvmax-testing','analytics-attribution'],
+  {id:'crecimiento-anuncios', n:'Crecimiento', fase:3, cx:288, fy:168, dy:172, stand:[288,130], body:'#1c9a5c', hair:'#222', rol:'Qué vídeos venden y cuándo invertir.', skills:['advertising','gmvmax-testing','analytics-attribution'],
    orden:'Hoja de métricas del día 3 por vídeo y reglas para activar GMV Max con tope de gasto.', entrega:'Informe semanal y propuesta de inversión con tope.'}
 ];
-const W=270,H=130;
-const ESTADOS=[['espera','Esperando','--idle'],['trabaja','Trabajando','--busy'],['entregado','Entregado','--done']];
-let activo='cepillos', sel=DEPTS[0].id, est={};
+const DIR_HOME=[176,112], TROFEO=[176,202], CORR=120;
+const ESTADOS=[['espera','Esperando'],['trabaja','Trabajando'],['entregado','Entregado']];
+let activo='cepillos', sel='buscador-producto', est={};
 DEPTS.forEach(d=>est[d.id]='espera');
-try{const s=localStorage.getItem('oficina');if(s){const o=JSON.parse(s);if(PRODUCTOS[o.p])activo=o.p;if(o.e)DEPTS.forEach(d=>{if(o.e[d.id])est[d.id]=o.e[d.id]})}}catch(e){}
+try{const s=localStorage.getItem('oficina2');if(s){const o=JSON.parse(s);if(PRODUCTOS[o.p])activo=o.p}}catch(e){}
 const $=id=>document.getElementById(id);
-function guardar(){try{localStorage.setItem('oficina',JSON.stringify({p:activo,e:est}))}catch(e){}}
+const cv=$('c'), g=cv.getContext('2d');
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+function guardar(){try{localStorage.setItem('oficina2',JSON.stringify({p:activo}))}catch(e){}}
 function toast(t){const el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800)}
 function copiar(txt){
   const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copiado')}catch(e){toast('Selecciona el texto de "Ver prompt"')}ta.remove()};
@@ -166,99 +155,170 @@ function copiar(txt){
 function promptDept(d){return `Usa el agente ${d.id} (.claude/agents/${d.id}.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: ${d.orden}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`}
 function promptDir(){return `Eres el director (.claude/agents/director.md). Lee CLAUDE.md primero.\nMisión: dejar listo para lanzar el ${PRODUCTOS[activo].ctx}.\nLanza los departamentos de cada fase en paralelo, revisa cada entrega en su puerta y no pases de fase hasta aprobarla. Al final guarda el resumen en tienda/ y haz commit. Lista aparte lo que solo puede hacer el humano.`}
 
-// avatar sencillo: cabeza + hombros + mesa
-function avatar(cx,cy,col,busy){
-  return `<g transform="translate(${cx},${cy})"><g class="${busy?'busy-av':''}">
-    <rect x="-30" y="16" width="60" height="16" rx="3" fill="var(--bg)" stroke="var(--wall)"/>
-    <path d="M-16 14 q0 -16 16 -16 q16 0 16 16z" fill="${col}"/>
-    <circle cx="0" cy="-12" r="9" fill="${col}"/>
-    <circle cx="-3" cy="-13" r="1.2" fill="var(--surface)"/><circle cx="3" cy="-13" r="1.2" fill="var(--surface)"/>
-  </g></g>`;
+/* ---------- dibujo ---------- */
+const R=(c,x,y,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)};
+function plant(x,y){R('#8a4a1c',x,y+10,8,6);R('#6d3a15',x,y+10,8,1);[[2,6],[5,5],[1,3],[6,3],[3,0],[4,2]].forEach(([a,b])=>R(b%2?'#2e8b3d':'#3fae52',x+a-1,y+b,4,4))}
+function sofa(x,y){R('#6e7b8f',x,y,40,14);R('#8794a8',x+2,y+2,17,9);R('#8794a8',x+21,y+2,17,9);R('#56627a',x,y+11,40,3)}
+function fondo(t){
+  for(let ty=3;ty<14;ty++)for(let tx=0;tx<22;tx++){R((tx+ty)&1?'#9c4a42':'#8f423b',tx*16,ty*16,16,16);R('#7a352f',tx*16,ty*16+15,16,1);R('#7a352f',tx*16+15,ty*16,1,16)}
+  R('#1b1b1f',0,0,352,8);R('#e8dcc8',0,8,352,32);R('#cdb89a',0,22,352,4);
+  for(let x=0;x<352;x+=8)R((x/8)&1?'#d9cfc0':'#b9ad9a',x,40,8,8);
+  [112,232].forEach(x=>{R('#8fb6d6',x-14,12,28,22);R('#fff',x-14,22,28,1);R('#fff',x,12,1,22);R('#7a4b2b',x-18,10,8,26);R('#7a4b2b',x+10,10,8,26);R('#5a361d',x-18,10,28,3)});
+  [[24,16],[328,16]].forEach(([x,y])=>{R('#4a3320',x-12,y,24,16);R('#e8f0e0',x-10,y+2,20,12);R('#c0463a',x-6,y+5,12,6)});
+  // alfombra del director
+  R('#b8862b',124,100,104,38);R('#7e2f24',128,104,96,30);R('#e2bd5c',132,108,88,22);R('#b8862b',136,112,80,14);
+  plant(8,52);plant(336,52);plant(8,200);plant(336,200);sofa(40,196);sofa(272,196);
 }
-function room(d){
-  const e=est[d.id], busy=e==='trabaja';
-  const info=ESTADOS.find(s=>s[0]===e);
-  const col=`var(${d.color})`;
-  const frase={espera:'Esperando orden',trabaja:'Trabajando…',entregado:'Entrega lista'}[e];
-  return `<g class="room ${sel===d.id?'sel':''}" data-id="${d.id}" tabindex="0" role="button" aria-label="${d.n}: ${info[1]}">
-    <rect class="wall" x="${d.x}" y="${d.y}" width="${W}" height="${H}" rx="10"/>
-    <rect x="${d.x}" y="${d.y}" width="${W}" height="6" rx="3" fill="${col}"/>
-    <text class="tb" x="${d.x+14}" y="${d.y+28}">${d.n}</text>
-    <circle cx="${d.x+W-20}" cy="${d.y+22}" r="7" fill="var(${info[2]})"/>
-    <text class="tm mono" x="${d.x+14}" y="${d.y+46}">FASE ${d.fase}</text>
-    ${avatar(d.x+70,d.y+88,col,busy)}
-    <rect x="${d.x+120}" y="${d.y+62}" width="136" height="34" rx="8" fill="var(--bg)" stroke="var(--line)"/>
-    <text class="t" x="${d.x+130}" y="${d.y+84}">${frase}</text>
-  </g>`;
+function mesa(d){
+  const e=est[d.id], t=t_;
+  R('#2f3542',d.cx-5,d.fy-9,10,6); // silla detrás
+  R('#a9703f',d.cx-22,d.dy,44,8);R('#7d4f2a',d.cx-22,d.dy+8,44,6);R('#5a361d',d.cx-22,d.dy+13,44,1);
+  const pant=e==='trabaja'?((Math.floor(t*6)&1)?'#5ad7ff':'#3aa8d6'):e==='entregado'?'#36e09b':'#2a2d35';
+  R('#2a2d35',d.cx+4,d.dy-11,16,11);R(pant,d.cx+6,d.dy-9,12,7);R('#2a2d35',d.cx+10,d.dy,4,1);
+  R('#cfd4dc',d.cx+4,d.dy+2,10,3);
+  if(e==='entregado'){R('#fff',d.cx-20,d.dy-6,9,8);R('#cfd4dc',d.cx-20,d.dy+1,9,1);g.strokeStyle='#17a36a';g.lineWidth=1.5;g.beginPath();g.moveTo(d.cx-18,d.dy-2);g.lineTo(d.cx-16,d.dy);g.lineTo(d.cx-12,d.dy-5);g.stroke()}
+  g.font='bold 7px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText(d.n.toUpperCase(),d.cx,d.dy+11);
 }
-function dibujar(){
-  const dir={x:330,y:20,w:300,h:110};
-  const dirBusy=Object.values(est).some(v=>v==='trabaja');
-  const entregados=Object.values(est).filter(v=>v==='entregado').length;
-  const listo=entregados===6;
-  const arrow=(x1,y1,x2,y2,on)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on?'var(--accent)':'var(--wall)'}" stroke-width="2" ${on?'class="pulse"':''} marker-end="url(#ar${on?'On':''})"/>`;
-  let s=`<defs>
-    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--wall)"/></marker>
-    <marker id="arOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
-  </defs>`;
-  // bandas de fase
-  s+=`<text class="tm mono" x="30" y="170">FASE 1 · EN PARALELO · producto, números, reglas</text>`;
-  s+=`<text class="tm mono" x="30" y="360">FASE 2 · EN PARALELO · creativos y muestras      ·      FASE 3 · medir y decidir inversión</text>`;
+function persona(x,fy,body,hair,anda,teclea,d){
+  const t=t_, bob=anda&&!reduce?(Math.floor(t*8)&1):0, top=fy-21-bob;
+  R('rgba(0,0,0,.25)',x-5,fy-1,10,2);
+  const l=anda?(Math.floor(t*8)&1):0;
+  R('#2b2b36',x-4,fy-5+(l?0:-1),3,5);R('#2b2b36',x+1,fy-5+(l?-1:0),3,5);
+  R(body,x-4,top+10,8,8);
+  const arm=teclea&&!reduce?(Math.floor(t*10)&1):0;
+  R(body,x-6,top+11+arm,2,6);R(body,x+4,top+11+(teclea?1-arm:0),2,6);
+  R('#f2c9a0',x-4,top+3,8,8);R(hair,x-4,top+2,8,3);R(hair,x-5,top+3,1,4);R(hair,x+4,top+3,1,4);
+  R('#222',x-2,top+7,1,2);R('#222',x+1,top+7,1,2);
+  return top;
+}
+function burbuja(x,y,txt,col){
+  g.font='bold 7px monospace';g.textAlign='center';
+  const w=Math.max(18,Math.ceil(g.measureText(txt).width)+8);
+  R('#1b1b1f',x-w/2-1,y-1,w+2,13);R(col||'#fff',x-w/2,y,w,11);R(col||'#fff',x-2,y+11,4,2);
+  g.fillStyle='#1b1b1f';g.fillText(txt,x,y+8);
+}
+const DIR={x:DIR_HOME[0],y:DIR_HOME[1],q:[],res:[],msg:''};
+let t_=0, listo=false, confeti=[];
+function dibujar(t){
+  t_=t; g.clearRect(0,0,352,224);
+  fondo(t);
+  // trofeo
+  const [tx,ty]=TROFEO;
+  R(listo?'#f6e27a':'#d9cfc0',tx-26,ty-14,52,34);R('#b9ad9a',tx-26,ty+19,52,1);
+  const c=listo?'#f2b822':'#8a8f99';
+  R(c,tx-6,ty-10,12,9);R(c,tx-9,ty-9,3,5);R(c,tx+6,ty-9,3,5);R(c,tx-2,ty-1,4,5);R(c,tx-6,ty+4,12,3);
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#14181f';g.fillText('SALA DE RESULTADO',tx,ty+16);
+  // agentes (orden por fy para que se solapen bien)
+  DEPTS.forEach(d=>{
+    const e=est[d.id];
+    const top=persona(d.cx,d.fy,d.body,d.hair,false,e==='trabaja',d);
+    mesa(d);
+    const dots='.'.repeat(1+(Math.floor(t*2)%3));
+    if(e==='trabaja')burbuja(d.cx,top-14,dots+' ',' #ffe9a8'.trim());
+    else if(e==='entregado'){burbuja(d.cx,top-14,'LISTO','#b6f5d4')}
+    else burbuja(d.cx,top-14,'Zz','#e6e9ef');
+    if(sel===d.id){g.fillStyle='#ffd23f';g.beginPath();g.moveTo(d.cx-4,top-18);g.lineTo(d.cx+4,top-18);g.lineTo(d.cx,top-14);g.fill()}
+  });
   // director
-  s+=`<g><rect class="wall" x="${dir.x}" y="${dir.y}" width="${dir.w}" height="${dir.h}" rx="12" style="stroke:var(--accent)"/>
-    <text class="tb" x="${dir.x+16}" y="${dir.y+28}">Director</text>
-    <text class="tm" x="${dir.x+16}" y="${dir.y+46}">Reparte, revisa, aprueba</text>
-    ${avatar(dir.x+70,dir.y+78,'var(--accent)',dirBusy)}
-    <rect x="${dir.x+120}" y="${dir.y+56}" width="168" height="40" rx="8" fill="var(--accent-soft)"/>
-    <text class="t" x="${dir.x+130}" y="${dir.y+73}">${listo?'Todo aprobado':dirBusy?'Revisando entregas':'Esperando misión'}</text>
-    <text class="tm" x="${dir.x+130}" y="${dir.y+88}">${entregados}/6 entregados</text></g>`;
-  // órdenes del director a fase 1
-  DEPTS.filter(d=>d.fase===1).forEach(d=>{
-    const on=est[d.id]==='trabaja';
-    s+=arrow(480,dir.y+dir.h,d.x+W/2,d.y,on);
-  });
-  s+=`<text class="tm" x="${480+8}" y="${dir.y+dir.h+22}">órdenes</text>`;
-  // fase 1 -> fase 2/3 (puerta)
-  DEPTS.filter(d=>d.fase===1).forEach((d,i)=>{
-    const t=DEPTS[i+3];
-    s+=arrow(d.x+W/2,d.y+H,t.x+W/2,t.y,est[t.id]==='trabaja');
-  });
-  s+=`<text class="tm" x="${30+W/2+8}" y="${190+H+20}">pasa si el director aprueba</text>`;
-  DEPTS.forEach(d=>s+=room(d));
-  // sala de resultado
-  const r={x:330,y:545,w:300,h:80};
-  s+=DEPTS.filter(d=>d.fase>=2).map(d=>arrow(d.x+W/2,d.y+H,Math.max(r.x+40,Math.min(r.x+r.w-40,d.x+W/2)),r.y,listo)).join('');
-  s+=`<g><rect class="wall" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="12" style="${listo?'stroke:var(--done);stroke-width:3':''}"/>
-    <text class="tb" x="${r.x+16}" y="${r.y+30}">Sala de resultado</text>
-    <text class="tm" x="${r.x+16}" y="${r.y+50}">${listo?'Lanzamiento listo para decidir':'Se abre con los 6 departamentos entregados'}</text>
-    <circle cx="${r.x+r.w-24}" cy="${r.y+24}" r="8" fill="${listo?'var(--done)':'var(--idle)'}"/></g>`;
-  $('office').innerHTML=s;
-  $('office').querySelectorAll('.room').forEach(g=>{
-    g.onclick=()=>{sel=g.dataset.id;pintar()};
-    g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sel=g.dataset.id;pintar()}};
-  });
-  $('prog-txt').textContent=entregados+'/6 entregados';
-  $('prog-bar').style.width=(entregados/6*100)+'%';
+  const anda=DIR.q.length>0;
+  const dt=persona(DIR.x,DIR.y,'#14181f','#2a2a2a',anda,false);
+  R('#d6336c',DIR.x-1,dt+11,2,7); // corbata
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('DIRECTOR',DIR.x,DIR.y+8);
+  const msg=DIR.msg||(listo?'Todo aprobado':'');
+  if(msg)burbuja(DIR.x,dt-14,msg,'#ffd1e0');
+  if(sel==='director'){g.fillStyle='#ffd23f';g.beginPath();g.moveTo(DIR.x-4,dt-(msg?18:6));g.lineTo(DIR.x+4,dt-(msg?18:6));g.lineTo(DIR.x,dt-(msg?14:2));g.fill()}
+  // confeti
+  if(listo&&!reduce){if(confeti.length<40&&Math.random()<.6)confeti.push({x:Math.random()*352,y:-4,v:20+Math.random()*30,c:['#ffd23f','#36e09b','#ff6b9a','#5ad7ff'][Math.floor(Math.random()*4)]});
+    confeti.forEach(p=>R(p.c,p.x,p.y,3,3))}
 }
+let last=0;
+function tick(ms){
+  const t=ms/1000, dt=Math.min(.05,t-last);last=t;
+  if(DIR.q.length){
+    const [wx,wy]=DIR.q[0], dx=wx-DIR.x, dy=wy-DIR.y, dist=Math.hypot(dx,dy), step=(reduce?160:60)*dt;
+    if(dist<=step){DIR.x=wx;DIR.y=wy;DIR.q.shift();if(!DIR.q.length&&DIR.res.length)DIR.res.shift()()}
+    else{DIR.x+=dx/dist*step;DIR.y+=dy/dist*step}
+  }
+  confeti.forEach(p=>p.y+=p.v*dt);confeti=confeti.filter(p=>p.y<228);
+  dibujar(t);
+  requestAnimationFrame(tick);
+}
+/* ---------- simulación ---------- */
+let corrida=0;
+const sleep=(ms,id)=>new Promise((ok,no)=>setTimeout(()=>id===corrida?ok():no('x'),reduce?Math.min(ms,200):ms));
+function ir(x,y,id,via){
+  return new Promise((ok,no)=>{
+    DIR.q=(via?[[DIR.x,CORR],[232,CORR],[232,y],[x,y]]:[[DIR.x,CORR],[x,CORR],[x,y]]).filter((p,i,a)=>!(i>0&&p[0]===a[i-1][0]&&p[1]===a[i-1][1]));
+    DIR.res=[()=>id===corrida?ok():no('x')];
+  });
+}
+function poner(id,v){est[id]=v;ficha();contar()}
+async function ronda(){
+  const id=++corrida;
+  DEPTS.forEach(d=>est[d.id]='espera');listo=false;confeti=[];DIR.msg='';DIR.q=[];contar();ficha();
+  const f=n=>DEPTS.filter(d=>d.fase===n);
+  try{
+    DIR.msg='Fase 1: órdenes';
+    for(const d of f(1)){await ir(d.stand[0],d.stand[1],id);poner(d.id,'trabaja')}
+    await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Esperando entregas';
+    for(const d of f(1)){await sleep(1400,id);poner(d.id,'entregado')}
+    DIR.msg='Puerta 1: revisando';await sleep(1500,id);DIR.msg='Fase 1 aprobada';await sleep(900,id);
+    DIR.msg='Fase 2: órdenes';
+    for(const d of f(2)){await ir(d.stand[0],d.stand[1],id);poner(d.id,'trabaja')}
+    await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Esperando entregas';
+    for(const d of f(2)){await sleep(1400,id);poner(d.id,'entregado')}
+    DIR.msg='Puerta 2: revisando';await sleep(1500,id);DIR.msg='Fase 2 aprobada';await sleep(900,id);
+    DIR.msg='Fase 3: métricas';
+    const c=f(3)[0];await ir(c.stand[0],c.stand[1],id);poner(c.id,'trabaja');
+    await ir(DIR_HOME[0],DIR_HOME[1],id);await sleep(1600,id);poner(c.id,'entregado');
+    DIR.msg='Resumen final';await ir(TROFEO[0],TROFEO[1]+6,id,true);
+    listo=true;DIR.msg='Todo aprobado';toast('Ronda completa (simulación)');
+  }catch(e){}
+}
+function contar(){
+  const n=Object.values(est).filter(v=>v==='entregado').length;
+  $('prog-txt').textContent=n+'/6 entregados';$('prog-bar').style.width=(n/6*100)+'%';
+  if(n<6)listo=false;
+}
+/* ---------- ficha de chat ---------- */
 function ficha(){
+  if(sel==='director'){
+    $('d-fase').textContent='Director · '+PRODUCTOS[activo].nombre;$('d-nombre').textContent='Director';
+    $('d-estado').textContent=listo?'Todo aprobado.':'Reparte órdenes y aprueba cada puerta.';
+    $('d-orden').textContent='Fase 1 en paralelo (Producto, Márgenes, Cumplimiento) → puerta → Fase 2 en paralelo (Creativos, Creadores) → puerta → Fase 3 (Crecimiento) → resumen final.';
+    $('d-skills').innerHTML='<span class="chip">Agent</span><span class="chip">CLAUDE.md</span>';
+    $('d-entrega').textContent='Resumen de lanzamiento en tienda/ con producto, números, qué se publica, qué falta por verificar y qué decide una persona.';
+    $('d-estados').innerHTML='';$('d-prompt').textContent=promptDir();$('b-copiar').onclick=()=>copiar(promptDir());return;
+  }
   const d=DEPTS.find(x=>x.id===sel);
   $('d-fase').textContent='Fase '+d.fase+(d.fase<3?' · en paralelo':'')+' · '+PRODUCTOS[activo].nombre;
-  $('d-nombre').textContent=d.n; $('d-rol').textContent=d.rol; $('d-orden').textContent=d.orden;
+  $('d-nombre').textContent=d.n+' · '+d.rol;
+  $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Documento listo para el director.'}[est[d.id]];
+  $('d-orden').textContent=d.orden;
   $('d-skills').innerHTML=d.skills.map(k=>`<span class="chip">${k}</span>`).join('');
   $('d-entrega').textContent=d.entrega;
   $('d-prompt').textContent=promptDept(d);
   $('d-estados').innerHTML=ESTADOS.map(s=>`<button type="button" data-e="${s[0]}" aria-pressed="${est[d.id]===s[0]}">${s[1]}</button>`).join('');
-  $('d-estados').querySelectorAll('button').forEach(b=>b.onclick=()=>{est[d.id]=b.dataset.e;guardar();pintar()});
+  $('d-estados').querySelectorAll('button').forEach(b=>b.onclick=()=>{corrida++;DIR.q=[];DIR.res=[];est[d.id]=b.dataset.e;listo=Object.values(est).every(v=>v==='entregado');contar();ficha()});
   $('b-copiar').onclick=()=>copiar(promptDept(d));
 }
-function pintar(){
-  $('b-rodillo').setAttribute('aria-pressed',activo==='rodillo');
-  $('b-cepillos').setAttribute('aria-pressed',activo==='cepillos');
-  dibujar(); ficha();
-}
-$('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintar()};
-$('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintar()};
+function pintarBotones(){$('b-rodillo').setAttribute('aria-pressed',activo==='rodillo');$('b-cepillos').setAttribute('aria-pressed',activo==='cepillos')}
+cv.addEventListener('click',ev=>{
+  const r=cv.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width*352, y=(ev.clientY-r.top)/r.height*224;
+  let hit=null;
+  if(Math.abs(x-DIR.x)<12&&y>DIR.y-26&&y<DIR.y+10)hit='director';
+  DEPTS.forEach(d=>{if(Math.abs(x-d.cx)<24&&y>d.fy-30&&y<d.dy+16)hit=hit||d.id});
+  if(hit){sel=hit;ficha()}
+});
+cv.addEventListener('keydown',ev=>{
+  const ids=['director',...DEPTS.map(d=>d.id)];
+  if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){ev.preventDefault();const i=ids.indexOf(sel);sel=ids[(i+(ev.key==='ArrowRight'?1:ids.length-1))%ids.length];ficha()}
+});
+$('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintarBotones();ficha()};
+$('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintarBotones();ficha()};
 $('b-dir').onclick=()=>copiar(promptDir());
-$('b-reset').onclick=()=>{DEPTS.forEach(d=>est[d.id]='espera');guardar();pintar()};
-pintar();
+$('b-demo').onclick=()=>{ronda()};
+$('b-reset').onclick=()=>{corrida++;DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';DEPTS.forEach(d=>est[d.id]='espera');listo=false;confeti=[];contar();ficha()};
+// estado inicial para la captura: ?demo=1 en el hash lo deja a medias
+pintarBotones();ficha();contar();requestAnimationFrame(tick);
 </script>
