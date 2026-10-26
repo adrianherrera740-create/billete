@@ -47,6 +47,16 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .real a{color:var(--accent);overflow-wrap:anywhere}
 label.label{display:block;flex-basis:100%}
 .campo{display:block;width:100%;font-family:var(--font-body);font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.activ{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.activ h3{font-family:var(--font-display);font-size:15px;margin:14px 0 6px}
+.fila{display:grid;grid-template-columns:12px minmax(0,1fr);gap:4px 10px;padding:8px 0;border-top:1px solid var(--line);align-items:start}
+.fila:first-of-type{border-top:0}
+.fila i{width:10px;height:10px;border-radius:50%;margin-top:6px;background:var(--line)}
+.fila.t i{background:#ffb020}.fila.e i{background:#36e09b}
+.fila b{font-weight:600}
+.fila p{margin:2px 0 0;font-size:14px;color:var(--muted);overflow-wrap:anywhere}
+.fila .ahora{color:var(--ink)}
+.fila button{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
 .msg{font-size:14px;background:var(--bg);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
 .err{background:var(--bad-soft);color:var(--bad);border-radius:8px;padding:8px 10px;font-size:14px}
 .chat{background:#0b0f0e;color:#d9fbe9;border:2px solid #36e09b;border-radius:14px;padding:16px 18px;display:grid;gap:14px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
@@ -125,11 +135,18 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
   </div>
   <p class="note">Luz sobre la cabeza: gris espera, ámbar trabaja, verde entregó. La ronda simulada es solo una demostración del flujo; no ejecuta agentes.</p>
 
+  <section class="activ" aria-live="polite">
+    <h2>Qué hace cada uno ahora</h2>
+    <p class="note" style="margin:4px 0 12px">Explicado sin tecnicismos. Con una sesión real, verás la tarea que tiene cada uno y lo que ha contado al terminar.</p>
+    <div id="act"></div>
+  </section>
+
   <section class="chat" aria-live="polite">
     <div>
       <div class="meta" id="d-fase"></div>
       <h2 id="d-nombre"></h2>
       <p id="d-estado" style="color:#7ab89c"></p>
+      <p id="d-facil" style="font-size:15px;margin:8px 0"></p>
       <div class="order" id="d-orden"></div>
       <div class="chips" id="d-skills"></div>
       <div class="meta" style="margin:10px 0 4px">Su equipo</div>
@@ -196,6 +213,36 @@ const QA={id:'auditor-calidad',n:'Control de calidad',tipo:'calidad',equipo:null
 W.push(QA);BY[QA.id]=QA;
 const SK={id:'gestor-skills',n:'Gestor de skills',tipo:'skills',equipo:null,fase:0,x:138,fy:112,body:'#e0a458',hair:'#444',rol:'Asigna a cada trabajador las skills justas y propone, sin instalar, las que falten.',orden:'Antes de cada fase, di qué skills debe cargar cada trabajador, detecta huecos y propón como máximo 2 skills de fuente fiable, leídas enteras. No instales nada sin aprobación de la persona.',skills:['.claude/skills/','SearchSkills','ListSkills'],entrega:'tienda/trabajo/skills/<fase>.md con la tabla trabajador → skills, huecos y propuestas con origen, licencia y riesgos.',state:'espera'};
 W.push(SK);BY[SK.id]=SK;
+const FACIL={
+ 'director':'El jefe. Reparte el trabajo, revisa lo que entregan y decide si se pasa a la siguiente fase.',
+ 'buscador-producto':'Junta lo que han averiguado sus 3 compañeros y dice si el producto merece la pena.',
+ 'investigador-tendencias':'Mira en internet si la gente quiere este producto y si ya lo vende mucha gente.',
+ 'buscador-proveedores':'Busca dónde comprarlo y comprueba que de verdad existe y se envía desde España.',
+ 'verificador-fichas':'Comprueba si lo que dice la tienda es verdad: quejas de clientes y cosas que no podemos prometer.',
+ 'analista-margenes':'Hace las cuentas: cuánto dinero queda en cada venta después de pagar todo.',
+ 'calculador-escenarios':'Calcula cuánto ganamos por pedido con distintos precios y comisiones.',
+ 'auditor-precios-mercado':'Mira a cuánto se vende lo mismo en otras tiendas para saber si nuestro precio es creíble.',
+ 'simulador-packs':'Prueba ofertas (packs, 2 por 1) y mira si compensan.',
+ 'operaciones-cumplimiento':'Se asegura de que podemos vender sin líos legales y de que los envíos llegan a tiempo.',
+ 'revisor-normativa-ue':'Revisa las leyes: seguridad, etiquetas y marcas que no se pueden usar.',
+ 'revisor-logistica-plazos':'Mira si llegamos a enviar a tiempo y cuántas devoluciones habrá.',
+ 'revisor-contenido-ia':'Revisa vídeos y textos para que no nos los quiten ni nos multen.',
+ 'creativos-ia':'Prepara los vídeos y los textos para vender.',
+ 'guionista-videos':'Escribe el guion de los vídeos: qué se ve y qué se dice, segundo a segundo.',
+ 'redactor-fichas':'Escribe el título y la descripción del producto para la tienda.',
+ 'prompter-higgsfield':'Escribe las órdenes que se le dan a la IA para que genere los vídeos.',
+ 'creadores-muestras':'Busca gente que enseñe el producto en TikTok y controla los envíos de prueba.',
+ 'buscador-creadores':'Busca a los creadores adecuados para promocionar el producto.',
+ 'redactor-briefs':'Escribe el mensaje y las condiciones que se mandan a cada creador.',
+ 'gestor-muestras':'Apunta qué muestras se mandan, cuáles llegan y qué ventas generan.',
+ 'crecimiento-anuncios':'Decide qué vídeos funcionan y cuánto dinero gastar en anuncios.',
+ 'analista-metricas':'Mide qué vídeos funcionan: vistas, quién los comparte y quién pregunta el precio.',
+ 'planificador-gmvmax':'Decide cuándo empezar a pagar anuncios y cuánto gastar como máximo.',
+ 'auditor-atribucion':'Evita contar una misma venta dos veces entre vídeos, creadores y anuncios.',
+ 'auditor-calidad':'El revisor final: recalcula las cuentas y rechaza lo que no esté demostrado.',
+ 'gestor-skills':'Reparte las herramientas (skills) que necesita cada uno y propone nuevas sin instalarlas.'
+};
+W.forEach(w=>w.facil=FACIL[w.id]||'');
 const DIRW={id:'director',n:'Director',x:176,y:112};
 const DIR_HOME=[176,112], TROFEO=[176,202], CORR=120;
 const ESTADOS=[['espera','Esperando'],['trabaja','Trabajando'],['entregado','Entregado']];
@@ -347,10 +394,31 @@ function irSuave(x,y){ // en modo real: sin promesa, solo camina si está libre
   DIR.q=[[DIR.x,CORR],[x,CORR],[x,y]].filter((p,i,a)=>!(i>0&&p[0]===a[i-1][0]&&p[1]===a[i-1][1]));DIR.res=[];
 }
 /* ---------- estado y progreso ---------- */
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function pintarActividad(){
+  const el=$('act'); if(!el)return;
+  const nombre=w=>(w.tipo==='jefe'?'Jefe de ':'')+w.n+(w.equipo&&w.tipo!=='jefe'?' · '+LEADS.find(l=>l.id===w.equipo).n:'');
+  const fila=(w,cl)=>{
+    const i=info[w.id]||{};
+    let extra='';
+    if(cl==='t')extra=`<p class="ahora">Ahora mismo: ${i.desc?'<b>'+esc(i.desc)+'</b>. ':''}${esc(w.facil)}</p>`;
+    else if(cl==='e')extra=`<p>${esc(w.facil)}</p>`+(i.res?`<p class="ahora">Ha contado: ${esc(i.res)}</p>`:'<p class="ahora">Entregado.</p>');
+    else extra=`<p>${esc(w.facil)}</p>`;
+    return `<div class="fila ${cl}"><i></i><div><b><button type="button" data-w="${w.id}">${esc(nombre(w))}</button></b>${extra}</div></div>`;
+  };
+  const tr=W.filter(w=>w.state==='trabaja'), en=W.filter(w=>w.state==='entregado'), es=W.filter(w=>w.state==='espera');
+  const dir=`<div class="fila ${DIR.msg?'t':''}"><i></i><div><b><button type="button" data-w="director">Director</button></b><p class="ahora">${esc(DIR.msg||FACIL.director)}</p></div></div>`;
+  el.innerHTML=dir
+    +(tr.length?'<h3>Trabajando ('+tr.length+')</h3>'+tr.map(w=>fila(w,'t')).join(''):'')
+    +(en.length?'<h3>Han terminado ('+en.length+')</h3>'+en.map(w=>fila(w,'e')).join(''):'')
+    +(es.length?'<h3>Esperando su turno ('+es.length+')</h3><details><summary>Ver quiénes son y qué hacen</summary>'+es.map(w=>fila(w,'')).join('')+'</details>':'');
+  el.querySelectorAll('button[data-w]').forEach(b=>b.onclick=()=>{sel=b.dataset.w;ficha();dibujar(t_);$('d-nombre').scrollIntoView({behavior:'smooth',block:'center'})});
+}
 function contar(){
   const n=W.filter(w=>w.state==='entregado').length;
   $('prog-txt').textContent=n+'/'+W.length+' entregados';$('prog-bar').style.width=(n/W.length*100)+'%';
   if(n<W.length&&modo!=='real')listo=false;
+  pintarActividad();
 }
 function poner(id,v){if(BY[id]){BY[id].state=v;ficha();contar()}}
 function todos(v,ids){(ids||W.map(w=>w.id)).forEach(id=>BY[id].state=v);ficha();contar()}
@@ -381,7 +449,7 @@ async function ronda(){
   }catch(e){}
 }
 /* ---------- sesión real ---------- */
-let seguirSiempre=false, realActiva=false, realId=null, mcp=null, pollT=null, cursor=null, started={}, ended={}, ultimoTexto='', primeraVez=0, errsSeguidos=0;
+let info={}, seguirSiempre=false, realActiva=false, realId=null, mcp=null, pollT=null, cursor=null, started={}, ended={}, ultimoTexto='', primeraVez=0, errsSeguidos=0;
 const clavePayload=p=>{if(typeof p==='string'){try{return JSON.parse(p)}catch(e){return p}}return p};
 function ccr(p){p=clavePayload(p);return (p&&p.ccr)?p.ccr:p}
 function recorre(x,fn){if(Array.isArray(x)){x.forEach(v=>recorre(v,fn))}else if(x&&typeof x==='object'){fn(x);Object.keys(x).forEach(k=>recorre(x[k],fn))}}
@@ -396,10 +464,10 @@ function procesar(eventos){
     cont.forEach(o=>{
       if(!o||typeof o!=='object')return;
       if(o.type==='tool_use'&&(o.name==='Agent'||o.name==='Task')&&o.input&&typeof o.input.subagent_type==='string'&&!c.parent_tool_use_id){
-        if(!started[o.id]){started[o.id]=o.input.subagent_type;nuevos.push(o.input.subagent_type)}
+        if(!started[o.id]){started[o.id]=o.input.subagent_type;nuevos.push(o.input.subagent_type);info[o.input.subagent_type]={desc:String(o.input.description||'').slice(0,90),res:''}}
       }
       // el agente entrega su informe con SubagentHandback (el id de su llamada viene en parent_tool_use_id)
-      if(o.type==='tool_use'&&o.name==='SubagentHandback'&&c.parent_tool_use_id&&started[c.parent_tool_use_id])ended[c.parent_tool_use_id]=true;
+      if(o.type==='tool_use'&&o.name==='SubagentHandback'&&c.parent_tool_use_id&&started[c.parent_tool_use_id]){ended[c.parent_tool_use_id]=true;const ag=started[c.parent_tool_use_id];info[ag]=info[ag]||{desc:'',res:''};info[ag].res=String((o.input&&o.input.message)||'').replace(/\s+/g,' ').trim().slice(0,260)}
       // llamada síncrona: el resultado llega en el tool_result; las asíncronas devuelven solo "Async agent launched"
       if(o.type==='tool_result'&&typeof o.tool_use_id==='string'&&started[o.tool_use_id]&&!c.parent_tool_use_id){
         if(!/^\s*Async agent launched/.test(textoResultado(o.content)))ended[o.tool_use_id]=true;
@@ -439,7 +507,7 @@ async function trabajarReal(){
   mostrarError('');
   if(realActiva){toast('Ya hay una sesión real en marcha');return}
   if(!mcp){mostrarError('Esta vista no puede abrir sesiones (hace falta abrir la oficina en claude.ai con el conector Claude Code Remote). Usa "Copiar orden del director" en una sesión de Claude Code.');return}
-  corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ultimoTexto='';
+  corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};info={};cursor=null;ultimoTexto='';
   $('b-trabajar').disabled=true;ponerEstadoReal('Abriendo sesión…','busy');DIR.msg='Abriendo sesión';
   try{
     const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,'');
@@ -502,7 +570,7 @@ async function seguirSesion(){
   const id=$('r-sesion').value.trim();
   if(!/^session_[A-Za-z0-9]+$/.test(id)){mostrarError('El identificador debe empezar por session_ y no llevar espacios.');return}
   if(!mcp){mostrarError('Esta vista no puede leer sesiones: abre la oficina en claude.ai con el conector Claude Code Remote.');return}
-  pararSondeo();corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;
+  pararSondeo();corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};info={};cursor=null;
   seguirSiempre=true;realId=id;realActiva=true;primeraVez=Date.now();errsSeguidos=0;
   $('r-link').innerHTML='<a target="_blank" rel="noopener" href="https://claude.ai/code/'+realId+'">Abrir la sesión</a>';
   ponerEstadoReal('Leyendo la sesión…','busy');DIR.msg='Siguiendo la sesión';
@@ -519,7 +587,7 @@ function ficha(){
     $('d-skills').innerHTML='<span class="chip">Agent</span><span class="chip">CLAUDE.md</span><span class="chip">.claude/agents/director.md</span>';
     $('d-team').innerHTML=LEADS.map(d=>`<button type="button" data-w="${d.id}">${d.n}</button>`).join('')+'<button type="button" data-w="auditor-calidad">Calidad</button>';
     $('d-entrega').textContent='Resumen de lanzamiento en tienda/ con producto, números, qué se publica, qué falta por verificar y qué decide una persona.';
-    $('d-estados').innerHTML='';$('d-estados-label').hidden=true;$('d-prompt').textContent=promptDir();$('b-copiar').onclick=()=>copiar(promptDir());
+    $('d-facil').textContent='En cristiano: '+FACIL.director;$('d-estados').innerHTML='';$('d-estados-label').hidden=true;$('d-prompt').textContent=promptDir();$('b-copiar').onclick=()=>copiar(promptDir());
     $('d-team').querySelectorAll('button').forEach(b=>b.onclick=()=>{sel=b.dataset.w;ficha()});
     return;
   }
@@ -529,6 +597,7 @@ function ficha(){
   $('d-nombre').textContent=w.n;
   $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Entrega lista para el director.'}[w.state];
   $('d-orden').textContent=w.orden;
+  $('d-facil').textContent='En cristiano: '+w.facil+((info[w.id]&&info[w.id].desc)?' Tarea actual: '+info[w.id].desc+'.':'');
   $('d-skills').innerHTML=w.skills.map(k=>`<span class="chip">${k}</span>`).join('');
   $('d-entrega').textContent=w.entrega;
   $('d-prompt').textContent=promptW(w);
@@ -561,7 +630,7 @@ $('b-trabajar').onclick=()=>{
   clearTimeout(confT);confArmado=false;$('b-trabajar').textContent=TXT_TRABAJAR;seguirSiempre=false;trabajarReal();
 };
 $('b-seguir').onclick=()=>{seguirSesion()};
-$('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
+$('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};info={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
 pintarBotones();ficha();contar();requestAnimationFrame(tick);
 // conector de sesiones: la oficina funciona sin él (ronda simulada y prompts)
 (async()=>{try{mcp=await window.claude.use('mcp')}catch(e){mcp=null}
