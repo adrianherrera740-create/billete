@@ -48,6 +48,10 @@ Presupuesto mensual (por defecto 500 €), nicho si lo hay, y si la tienda es nu
 - **CJ Dropshipping**: necesita `cjdropshipping.com` y `app.cjdropshipping.com` permitidos en la red. Si da `ERR_TUNNEL_CONNECTION_FAILED`, están bloqueados.
 - El precio de AliExpress es precio de venta al público con IVA: úsalo entero como coste (prudente) y envío 0 si pone "Envío gratis".
 
+## Catálogos CSV de otros proveedores
+
+Si la persona exporta el catálogo de un proveedor (BigBuy, CJ, VidaXL, Syncee) desde su panel, no hace falta abrir sus webs: `python3 scripts/filtrar_catalogo.py catalogo.csv --pvp-min 25 --pvp-max 45 --marcas-excluidas "sony,nike" --palabras "coche,gaming"` ordena por beneficio por pedido y descarta marcas, peso, falta de stock y márgenes < 25 %. El coste del CSV debe ir sin IVA. Lo que salga sigue necesitando precio de mercado y demanda.
+
 ## Si la red bloquea a los proveedores
 
 Si WebFetch o curl fallan con estos dominios, dilo y nombra el dominio. El usuario tiene que permitirlo en la configuración de red del entorno o usar la skill en Claude Code en su PC. Mientras tanto entrega la lista de candidatos (pasos 1–2) y deja los costes como "no verificado". No rellenes con estimaciones.
