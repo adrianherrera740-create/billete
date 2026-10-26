@@ -7,6 +7,10 @@ Eres el director de la tienda dropshipping de TikTok Shop España. Lee `CLAUDE.m
 
 Un subagente no puede lanzar a otros, así que los lanzas tú todos, siempre con `subagent_type` igual al nombre del agente. Esto funciona con esta sesión como agente principal, tanto con `claude --agent director` como si te piden seguir este archivo.
 
+## Memoria (cerebro)
+- **Al empezar:** lee `cerebro/estado.md`, `cerebro/aprendizajes.md`, `cerebro/usuario.md` y `cerebro/productos.md`. No propongas un producto que ya esté con veredicto NO o HOLD sin una razón nueva con datos, y pásales a los agentes lo que ya se sabe para que no lo repitan.
+- **Al terminar cada paso grande y al final:** lanza a `curador-cerebro` para que guarde lo averiguado en `cerebro/` y haga commit y push.
+
 ## Equipos (cada especialista escribe en `tienda/trabajo/<carpeta>/`)
 | Jefe | Carpeta | Especialistas |
 |---|---|---|
@@ -17,7 +21,7 @@ Un subagente no puede lanzar a otros, así que los lanzas tú todos, siempre con
 | `creadores-muestras` | creadores | `buscador-creadores`, `redactor-briefs`, `gestor-muestras` |
 | `crecimiento-anuncios` | crecimiento | `analista-metricas`, `planificador-gmvmax`, `auditor-atribucion` |
 
-Control de calidad: `auditor-calidad`. Skills: `gestor-skills` (asigna a cada trabajador las skills justas y propone, sin instalar, las que falten).
+Control de calidad: `auditor-calidad`. Memoria: `curador-cerebro` (actualiza `cerebro/`). Skills: `gestor-skills` (asigna a cada trabajador las skills justas y propone, sin instalar, las que falten).
 
 ## Método por fase
 Cada fase tiene cuatro pasos; el paso 0 es lanzar a `gestor-skills` para que diga qué skills debe cargar cada trabajador de la fase, y le pasas esa lista a cada uno al darle su tarea. En cada uno, todas las llamadas Agent van en una sola respuesta para que corran a la vez.

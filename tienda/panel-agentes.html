@@ -89,7 +89,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
       <h1>Oficina de agentes</h1>
-      <p class="sub">Un director, seis equipos con tres especialistas cada uno, un control de calidad y un gestor de skills: 27 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
+      <p class="sub">Un director, seis equipos con tres especialistas cada uno, un control de calidad, un gestor de skills y el cerebro: 28 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
     </div>
     <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
@@ -118,7 +118,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div class="row">
       <span class="pill" id="r-estado">Sin sesión real</span>
       <span id="r-link"></span>
-      <div class="progress"><span id="prog-txt">0/27 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
+      <div class="progress"><span id="prog-txt">0/28 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
     </div>
     <div class="row">
       <label for="r-sesion" class="label">Seguir una sesión que ya está trabajando</label>
@@ -160,6 +160,12 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
       <button class="btn main" id="b-copiar" type="button">Copiar prompt</button>
       <details><summary>Ver prompt</summary><pre id="d-prompt"></pre></details>
     </div>
+  </section>
+
+  <section class="how">
+    <h2>Cerebro del proyecto</h2>
+    <p class="note" style="margin:4px 0 8px">La memoria vive en el repo, en la carpeta <code>cerebro/</code>, y se carga sola al abrir una sesión. Esta es una foto de <code>estado.md</code> en el momento de publicar este panel (<span id="cb-fecha"></span>).</p>
+    <details><summary>Ver lo que recuerda el equipo ahora mismo</summary><pre id="cb-estado" style="background:var(--bg);color:var(--ink)"></pre></details>
   </section>
 
   <section class="how">
@@ -213,6 +219,8 @@ const QA={id:'auditor-calidad',n:'Control de calidad',tipo:'calidad',equipo:null
 W.push(QA);BY[QA.id]=QA;
 const SK={id:'gestor-skills',n:'Gestor de skills',tipo:'skills',equipo:null,fase:0,x:138,fy:112,body:'#e0a458',hair:'#444',rol:'Asigna a cada trabajador las skills justas y propone, sin instalar, las que falten.',orden:'Antes de cada fase, di qué skills debe cargar cada trabajador, detecta huecos y propón como máximo 2 skills de fuente fiable, leídas enteras. No instales nada sin aprobación de la persona.',skills:['.claude/skills/','SearchSkills','ListSkills'],entrega:'tienda/trabajo/skills/<fase>.md con la tabla trabajador → skills, huecos y propuestas con origen, licencia y riesgos.',state:'espera'};
 W.push(SK);BY[SK.id]=SK;
+const CB={id:'curador-cerebro',n:'Cerebro',tipo:'memoria',equipo:null,fase:0,x:252,fy:112,body:'#7a5fb8',hair:'#d8d8e0',rol:'Es la memoria del equipo: guarda lo decidido y aprendido para que cualquier sesión, en cualquier herramienta, recuerde lo mismo.',orden:'Lee los informes nuevos y actualiza cerebro/ (estado, productos, decisiones, aprendizajes, diario). Hace commit y push.',skills:['cerebro/','git'],entrega:'Archivos de cerebro/ al día y subidos al repo.',state:'espera'};
+W.push(CB);BY[CB.id]=CB;
 const FACIL={
  'director':'El jefe. Reparte el trabajo, revisa lo que entregan y decide si se pasa a la siguiente fase.',
  'buscador-producto':'Junta lo que han averiguado sus 3 compañeros y dice si el producto merece la pena.',
@@ -240,6 +248,7 @@ const FACIL={
  'planificador-gmvmax':'Decide cuándo empezar a pagar anuncios y cuánto gastar como máximo.',
  'auditor-atribucion':'Evita contar una misma venta dos veces entre vídeos, creadores y anuncios.',
  'auditor-calidad':'El revisor final: recalcula las cuentas y rechaza lo que no esté demostrado.',
+ 'curador-cerebro':'Es la memoria del equipo: apunta lo que se ha decidido y aprendido para que mañana todos recuerden lo mismo.',
  'gestor-skills':'Reparte las herramientas (skills) que necesita cada uno y propone nuevas sin instalarlas.'
 };
 W.forEach(w=>w.facil=FACIL[w.id]||'');
@@ -357,6 +366,11 @@ function dibujar(t){
   luz(SK.x,st-6,SK.state,t);
   g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('SKILLS',SK.x,SK.fy+8);
   if(sel==='gestor-skills')selMarca(SK.x,st-13);
+  const ct=persona(CB.x,CB.fy,CB.body,CB.hair,false,CB.state==='trabaja',t+.4);
+  R('#e8dcc8',CB.x+7,ct+10,8,10);R('#7a5fb8',CB.x+7,ct+10,8,2);R('#14181f',CB.x+9,ct+14,4,1);R('#14181f',CB.x+9,ct+16,4,1);
+  luz(CB.x,ct-6,CB.state,t);
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('CEREBRO',CB.x,CB.fy+8);
+  if(sel==='curador-cerebro')selMarca(CB.x,ct-13);
   // director
   const anda=DIR.q.length>0;
   const dt=persona(DIR.x,DIR.y,'#14181f','#2a2a2a',anda,false,t);
@@ -593,7 +607,7 @@ function ficha(){
   }
   $('d-estados-label').hidden=false;
   const eq=w.equipo?LEADS.find(l=>l.id===w.equipo):null;
-  $('d-fase').textContent=(w.tipo==='calidad'?'Control de calidad':w.tipo==='skills'?'Gestor de skills':'Fase '+w.fase+' · '+eq.n+' · '+w.tipo)+' · '+PRODUCTOS[activo].nombre;
+  $('d-fase').textContent=(w.tipo==='calidad'?'Control de calidad':w.tipo==='skills'?'Gestor de skills':w.tipo==='memoria'?'Memoria del equipo':'Fase '+w.fase+' · '+eq.n+' · '+w.tipo)+' · '+PRODUCTOS[activo].nombre;
   $('d-nombre').textContent=w.n;
   $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Entrega lista para el director.'}[w.state];
   $('d-orden').textContent=w.orden;
@@ -631,6 +645,8 @@ $('b-trabajar').onclick=()=>{
 };
 $('b-seguir').onclick=()=>{seguirSesion()};
 $('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};info={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
+const CEREBRO_ESTADO="# Estado actual (actualizar al terminar cada sesión)\nÚltima actualización: 2026-10-26\n\n## Objetivo\nPrimera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €/mes, sin comprar muestras, vídeos hechos con IA. Público que le interesa: gamers, coches, streetwear (tirón de GTA VI, sin usar la marca). Quiere un producto llamativo que se pueda anunciar, que resuelva un problema que tenga todo el mundo.\n\n## Dónde estamos\n- NO hay producto ganador verificado. Diez rondas de búsqueda (`tienda/trabajo/ronda-*`), ninguna con GO. Detalle por producto en `productos.md`.\n- El problema de fondo es estructural: con almacén en España y la regla de 2 días de TikTok, el coste sale a 5–14 € y los productos que venden mucho valen 10–15 € en tienda. Un winner pide coste en cliente ≤ ~7 € con PVP ≥ 29,90 € y un precio defendible con ancla de mercado.\n- Candidato \"wow\" más fuerte hasta ahora: extractor de abolladuras para coche (antes/después). Fichas: 1005013054629715 (7,09 €, 10.000+), 1005013071285711 (5,89 €), kit 1005013064104106 (22,59 €). Riesgo: solo repara abolladuras suaves; devoluciones. PENDIENTE de que la persona abra la ficha y de comprobar precio de mercado en España.\n- Idea de la persona (problema primero): limpiador de altavoces del móvil. HOLD: saturado (genérico 0,80–3 €, kit 7–15 €); PVP realista 9,90–12,90 €.\n- Otros canales investigados (ronda 7): mejor puntuado = productos digitales (pack estética Miami/80s) y afiliación; tienda propia con envío desde China y eBay/Miravia: no recomendables ahora.\n- Herramientas: oficina de agentes (artefacto `tienda/panel-agentes.html`), 28 agentes en `.claude/agents/`, barrido de AliExpress con `proveedor-es/scripts/aliexpress_es.js`.\n\n## Próximo paso\n1. La persona abre la ficha del extractor de abolladuras (1005013054629715) y cuenta qué trae y qué dicen las reseñas de 1–2 estrellas.\n2. Si le convence: precio de mercado en España, doble comprobación de proveedor, normativa y calidad; luego guiones de antes/después.\n3. En paralelo, decidir si prueba el pack digital (sin stock) o el método \"problema primero\" con más ideas suyas.\n\n## Lo que solo puede hacer la persona\nAbrir fichas de AliExpress (anti-bot), mirar ventas en TikTok Shop ES / FastMoss / Kalodata / Creative Center, alta fiscal (autónomo) y gestoría, pedir el cuestionario al vendedor, grabar o generar vídeos en Higgsfield, publicar.\n\n## Bloqueos vivos\nSin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no se abren desde el entorno en la nube. Alta fiscal sin cubrir. Plazos reales de los proveedores sin verificar.\n";
+$('cb-estado').textContent=CEREBRO_ESTADO;$('cb-fecha').textContent=(CEREBRO_ESTADO.match(/Última actualización: (\S+)/)||[])[1]||'sin fecha';
 pintarBotones();ficha();contar();requestAnimationFrame(tick);
 // conector de sesiones: la oficina funciona sin él (ronda simulada y prompts)
 (async()=>{try{mcp=await window.claude.use('mcp')}catch(e){mcp=null}

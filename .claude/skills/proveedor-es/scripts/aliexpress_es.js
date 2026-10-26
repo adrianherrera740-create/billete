@@ -1,9 +1,13 @@
 // Busca en AliExpress España solo artículos con envío desde España (filtro shipFromCountry=ES).
-// Uso: node aliexpress_es.js "termino 1" "termino 2"   (requiere playwright y el Chromium de /opt/pw-browsers)
+// Uso: node aliexpress_es.js "termino 1" "termino 2"   (requiere playwright; usa el Chromium de /opt/pw-browsers si existe, CHROMIUM_PATH si lo defines, o el que instala `npx playwright install chromium`; usa HTTPS_PROXY solo si está definido)
 const { chromium } = require('playwright');
 const fs = require('fs');
 (async () => {
-  const b = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', headless: false, proxy: { server: process.env.HTTPS_PROXY }, args: ['--headless=new','--disable-blink-features=AutomationControlled'] });
+  const exe = process.env.CHROMIUM_PATH || (fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
+  const opts = { headless: false, args: ['--headless=new','--disable-blink-features=AutomationControlled'] };
+  if (exe) opts.executablePath = exe;
+  if (process.env.HTTPS_PROXY) opts.proxy = { server: process.env.HTTPS_PROXY };
+  const b = await chromium.launch(opts);
   const ctx = await b.newContext({ locale: 'es-ES', timezoneId: 'Europe/Madrid', userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36' });
   await ctx.addCookies([{ name: 'aep_usuc_f', value: 'site=esp&c_tp=EUR&region=ES&b_locale=es_ES', domain: '.aliexpress.com', path: '/' }]);
   const out = {};

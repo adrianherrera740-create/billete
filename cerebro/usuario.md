@@ -1,0 +1,12 @@
+# Cómo le gusta trabajar a la persona
+- Español de España, directo, sin rodeos. Se frustra con respuestas largas que no llegan a un producto y con listas de productos "pésimos".
+- Quiere ver todo de forma visual (la oficina pixel-art) y entender qué hace cada agente "para tontos".
+- Quiere que el botón de la oficina haga trabajar de verdad a los agentes.
+- Dropshipping sin stock; no quiere comprar muestras ni stock.
+- Quiere productos llamativos, que sirvan para anuncios y vídeos; ha rechazado "3 brochas".
+- Le interesan los problemas que tiene todo el mundo (ej.: limpiar los altavoces del móvil) y de ahí construir estrategia, ads y creativos.
+- Interés por el tirón de GTA VI sin usar la marca; público gamer, coches, streetwear.
+- Ha probado la idea de high ticket y quiere otras estrategias distintas a TikTok si hay.
+- Pide siempre enlaces directos a los productos para verlos él mismo.
+- Usa Free Claude Code (github.com/alishahryar1/free-claude-code) y quiere que este proyecto funcione allí.
+- No ha dado datos personales; no guardar ninguno.
