@@ -42,3 +42,10 @@ Responder siempre en español.
 
 - Sin fotos reales del set de cepillos: la red rechaza `ae-pic-a1.aliexpress-media.com` y `ae01.alicdn.com`, y la ficha pide verificación anti-bot. El usuario no quiere comprar muestra: hay que sacar fotos de reseñas o permitir esos dominios.
 - Sin datos de ventas de TikTok Shop ES (FastMoss 429); BigBuy 403.
+
+## Estado de la búsqueda de producto (26/10/2026)
+
+- Set de cepillos: HOLD (sin demanda ni precio de mercado demostrados). Ver `tienda/trabajo/` y `tienda/trabajo/calidad/fase-1.md`.
+- Ronda 2 (tirón GTA VI sin marca; nunca usar GTA, Rockstar, Vice City ni "estilo GTA"): lámpara de atardecer, alfombrilla, soporte de mandos y letrero neón descartados; cuerda de neón RGB en HOLD (PVP defendible ≈ 25 € frente a 30 € necesarios para 25 % de margen). Ver `tienda/trabajo/ronda-2/`.
+- Ronda 3 (ideas nuevas): mejor candidato hasta ahora = funda de volante deportiva de polipiel (AliExpress ES 1005008219047604 a 13,87 € o 1005008315429915 a 9,99 €; PVP 29,90–34,90 €; referencia de mercado 38,96 €). Condicional: plazos, stock, tallas y demanda en TikTok Shop ES sin verificar. Ver `tienda/trabajo/ronda-3/`.
+- El script `margen_es.py`: `--afiliado` es una fracción (0.15 = 15 %); `--devoluciones` existe; `--help` falla por un `%` sin escapar (línea 88).
