@@ -15,6 +15,8 @@ Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual 
 | `plantillas/` | Formato "Datos clave" de los informes | Al entregar | Si cambia el formato |
 | `usuario.md` | Cómo le gusta trabajar a la persona y qué ha rechazado | Siempre, al empezar | Cuando exprese una preferencia |
 | `diario/AAAA-MM-DD.md` | Qué se hizo cada día, en orden | Solo si hace falta el detalle | Al final de cada sesión |
+| `00-inicio.md` | Índice con enlaces para Obsidian (se genera con `generar-indice.py`) | Para navegar | Al terminar cada ronda |
+| `USAR-CON-OBSIDIAN.md` | Cómo abrir el cerebro en Obsidian | Una vez | Cuando cambie el método |
 | `USAR-EN-FCC.md` | Cómo usar este proyecto con Free Claude Code | Una vez | Cuando cambie el método |
 
 ## Protocolo (obligatorio)

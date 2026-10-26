@@ -15,8 +15,9 @@ Trabajas en la tienda dropshipping de TikTok Shop España descrita en `CLAUDE.md
    - `cerebro/usuario.md`: preferencias o rechazos nuevos de la persona, sin datos personales.
    - `cerebro/red-y-limites.md`: si ha cambiado lo que se puede hacer en el entorno.
    - `cerebro/diario/AAAA-MM-DD.md`: qué se hizo hoy, en orden, en pocas líneas.
-3. Comprueba que `CLAUDE.md` y `AGENTS.md` siguen apuntando al cerebro y que `estado.md` no supera 60 líneas.
-4. `git add -A`, commit con mensaje claro y push.
+3. Regenera el índice para Obsidian con `python3 cerebro/generar-indice.py`.
+4. Comprueba que `CLAUDE.md` y `AGENTS.md` siguen apuntando al cerebro y que `estado.md` no supera 60 líneas.
+5. `git add -A`, commit con mensaje claro y push.
 
 ## Reglas
 - Español, datos con fuente y fecha, lo no verificado como "no verificado". No guardes claves, datos fiscales ni datos personales.
