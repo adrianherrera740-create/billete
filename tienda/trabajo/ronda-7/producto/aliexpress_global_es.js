@@ -30,8 +30,9 @@ const fs = require('fs');
     console.log(`\n### ${q}`);
     if (typeof items === "string") { console.log(items); continue; }
     for (const it of items) {
+      let ship="?"; try{ship=JSON.parse(decodeURIComponent(it.trace.pdpParams.pdp_cdi)).shipFrom}catch(e){}
       const tags = (it.sellingPoints || []).map(s => s.tagContent && s.tagContent.tagText).filter(t => t && !/monedas/.test(t));
-      console.log(`- https://es.aliexpress.com/item/${it.productId}.html | ${it.prices.salePrice.minPrice} € | ${(it.trade || {}).tradeDesc || "-"} | ${(it.evaluation || {}).starRating || "-"}★ | ${it.title.displayTitle.slice(0, 80)} | ${tags.join(" · ")}`);
+      console.log(`- https://es.aliexpress.com/item/${it.productId}.html | ${it.prices.salePrice.minPrice} € | ${(it.trade || {}).tradeDesc || "-"} | ${(it.evaluation || {}).starRating || "-"}★ | ${it.title.displayTitle.slice(0, 80)} | ${tags.join(" · ")} | desde ${ship}`);
     }
   }
   await b.close();
