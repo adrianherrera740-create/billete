@@ -36,7 +36,7 @@ Responder siempre en español.
 
 ## Agentes (`.claude/agents/`)
 
-`buscador-producto`, `analista-margenes`, `creativos-ia`, `creadores-muestras`, `operaciones-cumplimiento`, `crecimiento-anuncios`. Panel con prompts de arranque: `tienda/panel-agentes.html`.
+`director` (orquesta las fases en paralelo; arrancar con `claude --agent director`), `buscador-producto`, `analista-margenes`, `creativos-ia`, `creadores-muestras`, `operaciones-cumplimiento`, `crecimiento-anuncios`. Panel con prompts de arranque: `tienda/panel-agentes.html`.
 
 ## Bloqueos conocidos
 

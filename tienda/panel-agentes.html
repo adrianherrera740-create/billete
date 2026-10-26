@@ -1,191 +1,264 @@
-<title>Panel de agentes</title>
+<title>Oficina de agentes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: cabecera con producto activo, tira de flujo de trabajo y rejilla de agentes con botón de arranque */
+/* Layout: plano de oficina en SVG (director arriba, 3 departamentos en paralelo, 3 después, sala de resultado) y ficha del departamento elegido debajo */
 :root{
-  --bg:#f3f4f6; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#dde1e7;
+  --bg:#eef0f3; --floor:#f9fafb; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#cfd4dc; --wall:#aeb6c2;
   --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec;
-  --ok:#157f4b; --ok-soft:#dcf3e7; --warn:#9a5b00; --warn-soft:#fdeccb; --bad:#b4281f; --bad-soft:#fbdedb;
+  --idle:#9aa3b2; --busy:#d98a00; --done:#1c9a5c; --done-soft:#dcf3e7; --busy-soft:#fdeccb;
+  --d1:#2f6fed; --d2:#8a4fd6; --d3:#0f9aa8; --d4:#d6336c; --d5:#d98a00; --d6:#1c9a5c;
   --font-display:'Bricolage Grotesque',system-ui,sans-serif;
   --font-body:'IBM Plex Sans',system-ui,sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1218; --surface:#181c24; --ink:#eef0f4; --muted:#9aa3b2; --line:#2a303b;
+  --bg:#0d1016; --floor:#151a22; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340; --wall:#4a5466;
   --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
-  --ok:#5fd39a; --ok-soft:#12301f; --warn:#f2b45a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}}
+  --idle:#7b8494; --busy:#f2b45a; --done:#5fd39a; --done-soft:#12301f; --busy-soft:#352610;
+  --d1:#6b9bff; --d2:#b794f4; --d3:#4fd1dc; --d4:#ff6b9a; --d5:#f2b45a; --d6:#5fd39a; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1218; --surface:#181c24; --ink:#eef0f4; --muted:#9aa3b2; --line:#2a303b;
+  --bg:#0d1016; --floor:#151a22; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340; --wall:#4a5466;
   --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
-  --ok:#5fd39a; --ok-soft:#12301f; --warn:#f2b45a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}
+  --idle:#7b8494; --busy:#f2b45a; --done:#5fd39a; --done-soft:#12301f; --busy-soft:#352610;
+  --d1:#6b9bff; --d2:#b794f4; --d3:#4fd1dc; --d4:#ff6b9a; --d5:#f2b45a; --d6:#5fd39a; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
-  padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+  padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15}
-h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.01em}
-h2{font-size:20px;font-weight:700}
-h3{font-size:18px;font-weight:700}
-.sub{color:var(--muted);margin:6px 0 0;max-width:62ch}
+h1{font-size:clamp(26px,5vw,38px)} h2{font-size:20px} h3{font-size:17px}
 .label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
-.switch{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
-.switch button{font:inherit;font-weight:500;border:0;background:transparent;color:var(--muted);padding:8px 14px;border-radius:7px;cursor:pointer}
+.sub{color:var(--muted);margin:6px 0 0;max-width:64ch}
+button{font:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.switch{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
+.switch button{border:0;background:transparent;color:var(--muted);font-weight:500;padding:7px 12px;border-radius:7px}
 .switch button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.prod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:18px;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr)}
-.prod h2{margin-bottom:4px}
-.prod a{color:var(--accent);overflow-wrap:anywhere}
-.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
-.num{border-left:2px solid var(--line);padding-left:12px;min-width:0}
-.num b{display:block;font-family:var(--font-mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
-.num span{font-size:12px;color:var(--muted)}
-.pill{display:inline-block;font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
-.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;counter-reset:s;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
-.flow div{padding:12px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
-.flow strong{display:block;font-family:var(--font-display);font-size:15px}
-.flow small{color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.card .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.card p{margin:0;color:var(--muted)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-family:var(--font-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
-.now{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px}
-.now .label{color:var(--accent);display:block;margin-bottom:2px}
-.actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
-.btn{font:inherit;font-weight:600;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn{font-weight:600;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
 .btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-details{border-top:1px solid var(--line);padding-top:10px;font-size:13px}
-summary{cursor:pointer;color:var(--muted)}
+.progress{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:13px}
+.track{width:140px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.track i{display:block;height:100%;background:var(--done);width:0;transition:width .3s}
+figure{margin:0;background:var(--floor);border:1px solid var(--line);border-radius:14px;padding:10px;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:680px;height:auto;color:var(--ink);font-family:var(--font-body)}
+figcaption{padding:8px 6px 2px;color:var(--muted);font-size:13px}
+.room{cursor:pointer}
+.room:hover .wall{stroke:var(--accent)}
+.room.sel .wall{stroke:var(--accent);stroke-width:3}
+.wall{fill:var(--surface);stroke:var(--wall);stroke-width:2}
+.t{font-size:12px;fill:currentColor} .tm{font-size:11px;fill:var(--muted)} .tb{font-size:14px;font-weight:600;font-family:var(--font-display);fill:currentColor}
+.mono{font-family:var(--font-mono)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:16px;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
+.panel > div{min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{font-family:var(--font-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.order{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}
+.order .label{color:var(--accent);display:block}
+.states{display:flex;gap:6px;flex-wrap:wrap}
+.states button{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:8px;font-weight:500}
+.states button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+details{border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:13px} summary{cursor:pointer;color:var(--muted)}
 pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);font-size:12px;background:var(--bg);border-radius:8px;padding:10px;margin:8px 0 0}
-.blocked{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:14px 16px}
-.blocked ul{margin:6px 0 0;padding-left:18px}
+.how{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.how ol{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
+.how code,.sub code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:5px}
+.block{background:var(--busy-soft);color:var(--ink);border-radius:12px;padding:12px 16px;font-size:14px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-weight:500}
-@media (max-width:760px){.prod{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:minmax(0,1fr)}}
-@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--accent)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes flow{to{stroke-dashoffset:-16}}
+.busy-av{animation:bob 1.2s ease-in-out infinite}
+.pulse{stroke-dasharray:5 3;animation:flow 1s linear infinite}
+@media (prefers-reduced-motion:reduce){.busy-av,.pulse{animation:none}}
+@media (max-width:760px){.panel{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 <div class="wrap">
-  <header>
+  <div class="bar">
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
-      <h1>Panel de agentes</h1>
-      <p class="sub">Seis agentes con el contexto del proyecto. Elige el producto y copia el prompt de arranque en una sesión nueva de Claude Code en el repo <code>billete</code>.</p>
+      <h1>Oficina de agentes</h1>
+      <p class="sub">El director reparte órdenes, los departamentos trabajan en paralelo por fases y nada avanza sin su visto bueno. Toca un despacho para ver su orden y copiar el prompt.</p>
     </div>
-    <div class="switch" role="group" aria-label="Producto activo">
+    <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
       <button id="b-cepillos" type="button" aria-pressed="true">Set de cepillos</button>
     </div>
-  </header>
+  </div>
 
-  <section class="prod" aria-live="polite">
+  <div class="bar">
+    <div class="progress"><span id="prog-txt">0/6 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn main" id="b-dir" type="button">Copiar orden del director</button>
+      <button class="btn" id="b-reset" type="button">Reiniciar estados</button>
+    </div>
+  </div>
+
+  <figure>
+    <svg id="office" viewBox="0 0 960 640" role="img" aria-label="Plano de la oficina: el director arriba da órdenes a tres departamentos en paralelo, luego a otros tres, y todo converge en la sala de resultado"></svg>
+    <figcaption>Cada despacho tiene una luz: gris espera, ámbar trabaja, verde entregó. Las flechas discontinuas marcan órdenes activas. Los estados los marcas tú a mano; el panel no ejecuta los agentes.</figcaption>
+  </figure>
+
+  <section class="panel" aria-live="polite">
     <div>
-      <div class="label">Producto activo</div>
-      <h2 id="p-nombre"></h2>
-      <p class="sub" id="p-nota"></p>
-      <p style="margin:8px 0 0"><a id="p-link" target="_blank" rel="noopener">Ficha en AliExpress ES</a></p>
+      <div class="label" id="d-fase"></div>
+      <h2 id="d-nombre"></h2>
+      <p class="sub" id="d-rol"></p>
+      <div class="order"><span class="label">Orden del director</span><span id="d-orden"></span></div>
+      <div class="chips" id="d-skills"></div>
+      <div class="label" style="margin-bottom:6px">Estado</div>
+      <div class="states" id="d-estados" role="group" aria-label="Estado del departamento"></div>
     </div>
-    <div class="nums" id="p-nums"></div>
-  </section>
-
-  <section>
-    <div class="label" style="margin-bottom:8px">Flujo de las primeras semanas</div>
-    <div class="flow">
-      <div><strong>1 · Producto</strong><small>Buscador + Analista</small></div>
-      <div><strong>2 · Referencias reales</strong><small>Fotos del producto</small></div>
-      <div><strong>3 · Creativos IA</strong><small>2 vídeos al día</small></div>
-      <div><strong>4 · Muestras</strong><small>8–10 microcreadores</small></div>
-      <div><strong>5 · Medir día 3</strong><small>Crecimiento</small></div>
-      <div><strong>6 · GMV Max</strong><small>Solo si un vídeo vende</small></div>
+    <div>
+      <div class="label" style="margin-bottom:6px">Entrega esperada</div>
+      <p style="margin:0 0 12px" id="d-entrega"></p>
+      <button class="btn main" id="b-copiar" type="button">Copiar prompt de este departamento</button>
+      <details><summary>Ver prompt</summary><pre id="d-prompt"></pre></details>
     </div>
   </section>
 
-  <section class="blocked">
-    <b>Bloqueos conocidos</b>
-    <ul>
-      <li>Sin fotos reales del set de cepillos: la red rechaza <code>ae-pic-a1.aliexpress-media.com</code> y <code>ae01.alicdn.com</code>, y la ficha pide verificación anti-bot. Hacen falta las fotos o URLs de reseñas con foto desde tu móvil, o permitir esos dominios en los ajustes del entorno.</li>
-      <li>Sin datos de ventas de TikTok Shop ES (FastMoss respondió 429). La demanda se estimó con ventas de AliExpress.</li>
-      <li>BigBuy da 403; CJ no se ha comprobado a nivel de ficha.</li>
-    </ul>
+  <section class="how">
+    <h2>Cómo ponerlo a trabajar</h2>
+    <ol>
+      <li>Abre una sesión de Claude Code en el repo <code>billete</code> con el director como agente principal: <code>claude --agent director</code>.</li>
+      <li>Pega la orden del director (botón de arriba). Él lanza los departamentos de cada fase a la vez y revisa cada entrega antes de pasar de fase.</li>
+      <li>Para probar un solo departamento, copia su prompt y úsalo en una sesión normal.</li>
+    </ol>
   </section>
 
-  <section>
-    <h2 style="margin-bottom:12px">Agentes</h2>
-    <div class="grid" id="grid"></div>
-  </section>
+  <div class="block"><b>Bloqueos conocidos.</b> Sin fotos reales del set de cepillos (la red rechaza <code>ae-pic-a1.aliexpress-media.com</code> y <code>ae01.alicdn.com</code>; la ficha pide verificación anti-bot), sin datos de ventas de TikTok Shop ES (FastMoss 429) y BigBuy da 403. Pedir la muestra, grabar, generar vídeo en Higgsfield y publicar solo puede hacerlo una persona.</div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
 const PRODUCTOS = {
-  rodillo: {
-    nombre: 'Rodillo quitapelos',
-    nota: 'Creativos ya hechos. Pendiente de lanzar vídeos y muestras.',
-    link: 'https://es.aliexpress.com/item/1005012948478747.html',
-    nums: [['Coste','13,30 €','ok'],['PVP','27,90 €','ok'],['Beneficio/pedido','≈ 7,15 €','ok'],['Plazos','sin verificar','warn']],
-    ctx: 'rodillo quitapelos (AliExpress ES 1005012948478747, coste 13,30 €, PVP 27,90 €, beneficio ≈ 7,15 €/pedido; creativos en creativos/rodillo-quitapelos-ia.md)'
-  },
-  cepillos: {
-    nombre: 'Set de cepillos de limpieza',
-    nota: 'Mejor margen y demanda. No comprar muestra por ahora: faltan fotos reales para animar con IA.',
-    link: 'https://es.aliexpress.com/item/1005013107637317.html',
-    nums: [['Coste','9,29 €','ok'],['PVP 1 set','24,90 €','warn'],['Beneficio/pedido','≈ 8,93 €','ok'],['Pack de 2 a 39,90 €','≈ 10,80 €','ok'],['Plazos','sin verificar','warn']],
-    ctx: 'set de cepillos de limpieza (AliExpress ES 1005013107637317, coste 9,29 €, PVP 24,90 € o pack de 2 a 39,90 €, beneficio ≈ 8,93 € / 10,80 €; creativos en creativos/set-cepillos-ia.md; aún sin fotos reales del producto)'
-  }
+  rodillo: {nombre:'Rodillo quitapelos', ctx:'rodillo quitapelos (AliExpress ES 1005012948478747, coste 13,30 €, PVP 27,90 €, beneficio ≈ 7,15 €/pedido; creativos en creativos/rodillo-quitapelos-ia.md)'},
+  cepillos: {nombre:'Set de cepillos de limpieza', ctx:'set de cepillos de limpieza (AliExpress ES 1005013107637317, coste 9,29 €, PVP 24,90 € o pack de 2 a 39,90 €, beneficio ≈ 8,93 € / 10,80 €; creativos en creativos/set-cepillos-ia.md; aún sin fotos reales del producto)'}
 };
-const AGENTES = [
-  {id:'buscador-producto', nombre:'Buscador de producto', rol:'Encuentra producto y proveedor con stock en España', skills:['proveedor-es','product-selection','trend-validation'],
-   ahora:'Dos descartados por margen (proyector, dispensador). Falta contrastar precios en TikTok Shop.',
-   tarea:'Busca 3 candidatos nuevos distintos al activo, con la skill proveedor-es, y devuélveme la tabla con margen y veredicto.'},
-  {id:'analista-margenes', nombre:'Analista de márgenes', rol:'Beneficio, PVP mínimo y anuncio máximo', skills:['unit-economics','promotion-margin','margen_es.py'],
-   ahora:'Revisar cómo interpreta --afiliado el script: dio un valor absurdo en una prueba.',
-   tarea:'Calcula escenarios (1 unidad, pack, con y sin afiliado, comisión 4 % y 9 %) y dime el anuncio máximo por pedido.'},
-  {id:'creativos-ia', nombre:'Creativos IA', rol:'Guiones, prompts de Higgsfield y fichas', skills:['short-video-tests','content-calendar','listing-localization','audio-clearance'],
-   ahora:'Packs hechos para los dos productos. Para el set de cepillos faltan referencias reales.',
-   tarea:'Prepara la ficha de producto en español y 10 variantes de gancho de 2 segundos, respetando las reglas de contenido IA.'},
-  {id:'creadores-muestras', nombre:'Creadores y muestras', rol:'Microcreadores, briefs y seguimiento', skills:['creator-discovery','creator-brief-rights','sample-operations','affiliate-commissions'],
-   ahora:'Mensaje base y tabla de seguimiento listos en tienda/listing-y-outreach.md.',
-   tarea:'Define el perfil de creador ideal, un brief con derechos de uso y la comisión que podemos ofrecer sin perder dinero.'},
-  {id:'operaciones-cumplimiento', nombre:'Operaciones y cumplimiento', rol:'Plazos, devoluciones y reglas de TikTok y la UE', skills:['fulfillment-service','returns-feedback','inventory-spikes','product-link-validation'],
-   ahora:'Plazos de preparación y entrega sin verificar en los dos productos.',
-   tarea:'Haz la checklist de cumplimiento antes de publicar: plazo de 2 días, seguimiento, desistimiento de 14 días, etiqueta IA y alta fiscal.'},
-  {id:'crecimiento-anuncios', nombre:'Crecimiento y anuncios', rol:'Qué vídeos venden y cuándo invertir', skills:['advertising','gmvmax-testing','analytics-attribution'],
-   ahora:'Mes 1 sin anuncios. Entra en juego desde la semana 2.',
-   tarea:'Prepara la hoja de métricas del día 3 por vídeo y las reglas para activar GMV Max con tope de gasto.'}
+// x,y,w,h del despacho en el plano; color: variable de departamento
+const DEPTS = [
+  {id:'buscador-producto', n:'Producto', fase:1, x:30, y:190, color:'--d1', rol:'Encuentra producto y proveedor con stock en España.', skills:['proveedor-es','product-selection','trend-validation'],
+   orden:'Verifica proveedor, coste, plazos y demanda del producto; propón dos alternativas.', entrega:'Tabla con URL de ficha, coste, plazos y veredicto, y lo que no se pudo verificar.'},
+  {id:'analista-margenes', n:'Márgenes', fase:1, x:345, y:190, color:'--d2', rol:'Beneficio por pedido, PVP mínimo y anuncio máximo.', skills:['unit-economics','promotion-margin','margen_es.py'],
+   orden:'Calcula escenarios con comisión 4 % y 9 %, con y sin afiliado, y revisa cómo interpreta --afiliado el script.', entrega:'Tabla de escenarios y anuncio máximo por pedido.'},
+  {id:'operaciones-cumplimiento', n:'Cumplimiento', fase:1, x:660, y:190, color:'--d3', rol:'Plazos, devoluciones y reglas de TikTok y la UE.', skills:['fulfillment-service','returns-feedback','product-link-validation'],
+   orden:'Checklist antes de publicar: entrega en 2 días, seguimiento, desistimiento de 14 días, etiqueta IA, CE y alta fiscal.', entrega:'Checklist por producto con bloqueos marcados.'},
+  {id:'creativos-ia', n:'Creativos IA', fase:2, x:30, y:370, color:'--d4', rol:'Guiones, prompts de Higgsfield y fichas en español.', skills:['short-video-tests','content-calendar','listing-localization'],
+   orden:'Con el producto aprobado, prepara ficha y 10 ganchos de 2 s. No afirmes cómo se ve en persona sin fotos reales.', entrega:'Archivo en creativos/ con ángulos, prompts y calendario; ficha en tienda/.'},
+  {id:'creadores-muestras', n:'Creadores', fase:2, x:345, y:370, color:'--d5', rol:'Microcreadores, briefs y seguimiento de muestras.', skills:['creator-discovery','creator-brief-rights','sample-operations'],
+   orden:'Define perfil de creador, brief con derechos de uso y la comisión que permite el margen.', entrega:'Lista anónima de candidatos, brief y tabla de seguimiento.'},
+  {id:'crecimiento-anuncios', n:'Crecimiento', fase:3, x:660, y:370, color:'--d6', rol:'Qué vídeos venden y cuándo invertir.', skills:['advertising','gmvmax-testing','analytics-attribution'],
+   orden:'Hoja de métricas del día 3 por vídeo y reglas para activar GMV Max con tope de gasto.', entrega:'Informe semanal y propuesta de inversión con tope.'}
 ];
-let activo = 'cepillos';
-try { const s = localStorage.getItem('producto'); if (PRODUCTOS[s]) activo = s; } catch(e) {}
-
-const $ = id => document.getElementById(id);
-function prompt_(a){
-  const p = PRODUCTOS[activo];
-  return `Usa el agente ${a.id} (.claude/agents/${a.id}.md). Lee CLAUDE.md primero.\nProducto activo: ${p.ctx}.\nTarea: ${a.tarea}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`;
-}
-function toast(t){ const el=$('toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,1800); }
+const W=270,H=130;
+const ESTADOS=[['espera','Esperando','--idle'],['trabaja','Trabajando','--busy'],['entregado','Entregado','--done']];
+let activo='cepillos', sel=DEPTS[0].id, est={};
+DEPTS.forEach(d=>est[d.id]='espera');
+try{const s=localStorage.getItem('oficina');if(s){const o=JSON.parse(s);if(PRODUCTOS[o.p])activo=o.p;if(o.e)DEPTS.forEach(d=>{if(o.e[d.id])est[d.id]=o.e[d.id]})}}catch(e){}
+const $=id=>document.getElementById(id);
+function guardar(){try{localStorage.setItem('oficina',JSON.stringify({p:activo,e:est}))}catch(e){}}
+function toast(t){const el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800)}
 function copiar(txt){
-  const fallback = () => { const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');toast('Prompt copiado');}catch(e){toast('Selecciona el texto de "Ver prompt"');} ta.remove(); };
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(()=>toast('Prompt copiado'), fallback); else fallback();
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copiado')}catch(e){toast('Selecciona el texto de "Ver prompt"')}ta.remove()};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(()=>toast('Copiado'),fb);else fb();
+}
+function promptDept(d){return `Usa el agente ${d.id} (.claude/agents/${d.id}.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: ${d.orden}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`}
+function promptDir(){return `Eres el director (.claude/agents/director.md). Lee CLAUDE.md primero.\nMisión: dejar listo para lanzar el ${PRODUCTOS[activo].ctx}.\nLanza los departamentos de cada fase en paralelo, revisa cada entrega en su puerta y no pases de fase hasta aprobarla. Al final guarda el resumen en tienda/ y haz commit. Lista aparte lo que solo puede hacer el humano.`}
+
+// avatar sencillo: cabeza + hombros + mesa
+function avatar(cx,cy,col,busy){
+  return `<g class="${busy?'busy-av':''}" transform="translate(${cx},${cy})">
+    <rect x="-30" y="16" width="60" height="16" rx="3" fill="var(--bg)" stroke="var(--wall)"/>
+    <path d="M-16 14 q0 -16 16 -16 q16 0 16 16z" fill="${col}"/>
+    <circle cx="0" cy="-12" r="9" fill="${col}"/>
+    <circle cx="-3" cy="-13" r="1.2" fill="var(--surface)"/><circle cx="3" cy="-13" r="1.2" fill="var(--surface)"/>
+  </g>`;
+}
+function room(d){
+  const e=est[d.id], busy=e==='trabaja';
+  const info=ESTADOS.find(s=>s[0]===e);
+  const col=`var(${d.color})`;
+  const frase={espera:'Esperando orden',trabaja:'Trabajando…',entregado:'Entrega lista'}[e];
+  return `<g class="room ${sel===d.id?'sel':''}" data-id="${d.id}" tabindex="0" role="button" aria-label="${d.n}: ${info[1]}">
+    <rect class="wall" x="${d.x}" y="${d.y}" width="${W}" height="${H}" rx="10"/>
+    <rect x="${d.x}" y="${d.y}" width="${W}" height="6" rx="3" fill="${col}"/>
+    <text class="tb" x="${d.x+14}" y="${d.y+28}">${d.n}</text>
+    <circle cx="${d.x+W-20}" cy="${d.y+22}" r="7" fill="var(${info[2]})"/>
+    <text class="tm mono" x="${d.x+14}" y="${d.y+46}">FASE ${d.fase}</text>
+    ${avatar(d.x+70,d.y+88,col,busy)}
+    <rect x="${d.x+120}" y="${d.y+62}" width="136" height="34" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+    <text class="t" x="${d.x+130}" y="${d.y+84}">${frase}</text>
+  </g>`;
+}
+function dibujar(){
+  const dir={x:330,y:20,w:300,h:110};
+  const dirBusy=Object.values(est).some(v=>v==='trabaja');
+  const entregados=Object.values(est).filter(v=>v==='entregado').length;
+  const listo=entregados===6;
+  const arrow=(x1,y1,x2,y2,on)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on?'var(--accent)':'var(--wall)'}" stroke-width="2" ${on?'class="pulse"':''} marker-end="url(#ar${on?'On':''})"/>`;
+  let s=`<defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--wall)"/></marker>
+    <marker id="arOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+  </defs>`;
+  // bandas de fase
+  s+=`<text class="tm mono" x="30" y="170">FASE 1 · EN PARALELO · producto, números, reglas</text>`;
+  s+=`<text class="tm mono" x="30" y="352">FASE 2 · EN PARALELO · creativos y muestras      ·      FASE 3 · medir y decidir inversión</text>`;
+  // director
+  s+=`<g><rect class="wall" x="${dir.x}" y="${dir.y}" width="${dir.w}" height="${dir.h}" rx="12" style="stroke:var(--accent)"/>
+    <text class="tb" x="${dir.x+16}" y="${dir.y+28}">Director</text>
+    <text class="tm" x="${dir.x+16}" y="${dir.y+46}">Reparte, revisa, aprueba</text>
+    ${avatar(dir.x+70,dir.y+78,'var(--accent)',dirBusy)}
+    <rect x="${dir.x+120}" y="${dir.y+56}" width="168" height="40" rx="8" fill="var(--accent-soft)"/>
+    <text class="t" x="${dir.x+130}" y="${dir.y+73}">${listo?'Todo aprobado':dirBusy?'Revisando entregas':'Esperando misión'}</text>
+    <text class="tm" x="${dir.x+130}" y="${dir.y+88}">${entregados}/6 entregados</text></g>`;
+  // órdenes del director a fase 1
+  DEPTS.filter(d=>d.fase===1).forEach(d=>{
+    const on=est[d.id]==='trabaja';
+    s+=arrow(480,dir.y+dir.h,d.x+W/2,d.y,on);
+  });
+  s+=`<text class="tm" x="${480+8}" y="${dir.y+dir.h+22}">órdenes</text>`;
+  // fase 1 -> fase 2/3 (puerta)
+  DEPTS.filter(d=>d.fase===1).forEach((d,i)=>{
+    const t=DEPTS[i+3];
+    s+=arrow(d.x+W/2,d.y+H,t.x+W/2,t.y,est[t.id]==='trabaja');
+  });
+  s+=`<text class="tm" x="${30+W/2+8}" y="${190+H+34}">pasa si el director aprueba</text>`;
+  DEPTS.forEach(d=>s+=room(d));
+  // sala de resultado
+  const r={x:330,y:545,w:300,h:80};
+  s+=DEPTS.filter(d=>d.fase>=2).map(d=>arrow(d.x+W/2,d.y+H,Math.max(r.x+40,Math.min(r.x+r.w-40,d.x+W/2)),r.y,listo)).join('');
+  s+=`<g><rect class="wall" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="12" style="${listo?'stroke:var(--done);stroke-width:3':''}"/>
+    <text class="tb" x="${r.x+16}" y="${r.y+30}">Sala de resultado</text>
+    <text class="tm" x="${r.x+16}" y="${r.y+50}">${listo?'Lanzamiento listo para decidir':'Se abre con los 6 departamentos entregados'}</text>
+    <circle cx="${r.x+r.w-24}" cy="${r.y+24}" r="8" fill="${listo?'var(--done)':'var(--idle)'}"/></g>`;
+  $('office').innerHTML=s;
+  $('office').querySelectorAll('.room').forEach(g=>{
+    g.onclick=()=>{sel=g.dataset.id;pintar()};
+    g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sel=g.dataset.id;pintar()}};
+  });
+  $('prog-txt').textContent=entregados+'/6 entregados';
+  $('prog-bar').style.width=(entregados/6*100)+'%';
+}
+function ficha(){
+  const d=DEPTS.find(x=>x.id===sel);
+  $('d-fase').textContent='Fase '+d.fase+(d.fase<3?' · en paralelo':'')+' · '+PRODUCTOS[activo].nombre;
+  $('d-nombre').textContent=d.n; $('d-rol').textContent=d.rol; $('d-orden').textContent=d.orden;
+  $('d-skills').innerHTML=d.skills.map(k=>`<span class="chip">${k}</span>`).join('');
+  $('d-entrega').textContent=d.entrega;
+  $('d-prompt').textContent=promptDept(d);
+  $('d-estados').innerHTML=ESTADOS.map(s=>`<button type="button" data-e="${s[0]}" aria-pressed="${est[d.id]===s[0]}">${s[1]}</button>`).join('');
+  $('d-estados').querySelectorAll('button').forEach(b=>b.onclick=()=>{est[d.id]=b.dataset.e;guardar();pintar()});
+  $('b-copiar').onclick=()=>copiar(promptDept(d));
 }
 function pintar(){
-  const p = PRODUCTOS[activo];
-  $('b-rodillo').setAttribute('aria-pressed', activo==='rodillo');
-  $('b-cepillos').setAttribute('aria-pressed', activo==='cepillos');
-  $('p-nombre').textContent = p.nombre; $('p-nota').textContent = p.nota; $('p-link').href = p.link;
-  $('p-nums').innerHTML = p.nums.map(n=>`<div class="num"><b>${n[1]}</b><span>${n[0]}</span></div>`).join('');
-  $('grid').innerHTML = AGENTES.map((a,i)=>`
-    <article class="card">
-      <div class="top"><div><h3>${a.nombre}</h3><p>${a.rol}</p></div></div>
-      <div class="chips">${a.skills.map(s=>`<span class="chip">${s}</span>`).join('')}</div>
-      <div class="now"><span class="label">Ahora</span>${a.ahora}</div>
-      <div class="actions"><button class="btn main" type="button" data-i="${i}">Copiar prompt de arranque</button></div>
-      <details><summary>Ver prompt</summary><pre>${prompt_(a).replace(/</g,'&lt;')}</pre></details>
-    </article>`).join('');
-  document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>copiar(prompt_(AGENTES[+b.dataset.i])));
+  $('b-rodillo').setAttribute('aria-pressed',activo==='rodillo');
+  $('b-cepillos').setAttribute('aria-pressed',activo==='cepillos');
+  dibujar(); ficha();
 }
-function elegir(k){ activo=k; try{localStorage.setItem('producto',k);}catch(e){} pintar(); }
-$('b-rodillo').onclick=()=>elegir('rodillo'); $('b-cepillos').onclick=()=>elegir('cepillos');
+$('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintar()};
+$('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintar()};
+$('b-dir').onclick=()=>copiar(promptDir());
+$('b-reset').onclick=()=>{DEPTS.forEach(d=>est[d.id]='espera');guardar();pintar()};
 pintar();
 </script>
