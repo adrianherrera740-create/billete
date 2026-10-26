@@ -168,12 +168,12 @@ function promptDir(){return `Eres el director (.claude/agents/director.md). Lee 
 
 // avatar sencillo: cabeza + hombros + mesa
 function avatar(cx,cy,col,busy){
-  return `<g class="${busy?'busy-av':''}" transform="translate(${cx},${cy})">
+  return `<g transform="translate(${cx},${cy})"><g class="${busy?'busy-av':''}">
     <rect x="-30" y="16" width="60" height="16" rx="3" fill="var(--bg)" stroke="var(--wall)"/>
     <path d="M-16 14 q0 -16 16 -16 q16 0 16 16z" fill="${col}"/>
     <circle cx="0" cy="-12" r="9" fill="${col}"/>
     <circle cx="-3" cy="-13" r="1.2" fill="var(--surface)"/><circle cx="3" cy="-13" r="1.2" fill="var(--surface)"/>
-  </g>`;
+  </g></g>`;
 }
 function room(d){
   const e=est[d.id], busy=e==='trabaja';
@@ -203,7 +203,7 @@ function dibujar(){
   </defs>`;
   // bandas de fase
   s+=`<text class="tm mono" x="30" y="170">FASE 1 · EN PARALELO · producto, números, reglas</text>`;
-  s+=`<text class="tm mono" x="30" y="352">FASE 2 · EN PARALELO · creativos y muestras      ·      FASE 3 · medir y decidir inversión</text>`;
+  s+=`<text class="tm mono" x="30" y="360">FASE 2 · EN PARALELO · creativos y muestras      ·      FASE 3 · medir y decidir inversión</text>`;
   // director
   s+=`<g><rect class="wall" x="${dir.x}" y="${dir.y}" width="${dir.w}" height="${dir.h}" rx="12" style="stroke:var(--accent)"/>
     <text class="tb" x="${dir.x+16}" y="${dir.y+28}">Director</text>
@@ -223,7 +223,7 @@ function dibujar(){
     const t=DEPTS[i+3];
     s+=arrow(d.x+W/2,d.y+H,t.x+W/2,t.y,est[t.id]==='trabaja');
   });
-  s+=`<text class="tm" x="${30+W/2+8}" y="${190+H+34}">pasa si el director aprueba</text>`;
+  s+=`<text class="tm" x="${30+W/2+8}" y="${190+H+20}">pasa si el director aprueba</text>`;
   DEPTS.forEach(d=>s+=room(d));
   // sala de resultado
   const r={x:330,y:545,w:300,h:80};
