@@ -84,9 +84,9 @@ Margen esperado por pedido con la tasa supuesta (escenario B):
 | PVP | Sin mitigar (18 %) | Mitigado (10 %) |
 |---|---|---|
 | 29,90 € | 0,82 × 8,07 - 0,18 × 16,56 = 3,64 € | 0,90 × 8,07 - 0,10 × 16,56 = 5,61 € |
-| 34,90 € | 0,82 × 11,79 - 0,18 × 16,56* = 6,69 € | 0,90 × 11,79 - 0,10 × 16,56* = 8,96 € |
+| 34,90 € | 0,82 × 11,79 - 0,18 × 17,01 = 6,61 € | 0,90 × 11,79 - 0,10 × 17,01 = 8,91 € |
 
-*Pérdida a 34,90 con comisión retenida = 13,87 + 3,14 = 17,01 €: los valores con 17,01 € son 6,61 € y 8,91 €. Se usan 6,6 € y 8,9 € como cifras fiables.
+(Pérdida a 34,90 con comisión retenida = 13,87 + 3,14 = 17,01 €.)
 
 Conclusión: a 29,90 € una tasa de devolución del 18 % deja un margen esperado de unos 3,6 €; el precio de 34,90 € lo absorbe mejor. El margen aguanta devoluciones, pero no con el 25 % del extremo alto a 29,90 €. Para analista-margenes: usar estos escenarios como supuestos; `margen_es.py --devoluciones` existe pero no se ejecutó aquí.
 
