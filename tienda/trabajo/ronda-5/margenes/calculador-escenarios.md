@@ -161,8 +161,8 @@ Definiciones: **pedidos necesarios** = 500 / beneficio por pedido (pedidos cuyo 
 Lectura de CPA (hay negocio si beneficio por pedido > CPA, es decir neto > 0):
 
 - CPA 5 EUR: hay negocio en casi todas las celdas con beneficio > 5 (p. ej. 9,99 EUR a 29,90 PVP: ROAS real = 29,90/5 = 6,0). Un CPA de 5 EUR sobre un PVP de 25-40 EUR exige ROAS 5-8: es un supuesto optimista, **no verificado** para TikTok Shop ES.
-- CPA 8 EUR: solo hay negocio con beneficio > 8, es decir coste 9,99 con PVP >= 29,90 sin afiliado (o >= 34,90 con afiliado), y coste 13,87 / 16,99 solo con PVP 34,90-39,90 sin afiliado. Con afiliado 15 % y coste 13,87 solo 39,90 supera 8 (9,16 a dev 5 %).
-- CPA 12 EUR: solo coste 9,99 con PVP 39,90 (beneficio 11,64-17,74) y apenas; con la mayoría de combinaciones pierdes dinero. Con 500 EUR de anuncios a CPA 12 son ~42 pedidos.
+- CPA 8 EUR: hay negocio solo si beneficio > 8. Coste 9,99: PVP 29,90 sin afiliado (9,48-10,71) y PVP >= 34,90 con o sin afiliado. Coste 13,87: PVP 34,90 sin afiliado (8,90-10,35) y 39,90 con o sin afiliado (salvo 39,90 con afiliado y dev 10 %: 7,76, pierde). Coste 16,99: solo PVP 39,90 sin afiliado (9,09-10,74).
+- CPA 12 EUR (9 %, caso prudente): solo hay negocio con coste 9,99 y PVP 34,90 sin afiliado (12,78-14,23), coste 9,99 y PVP 39,90 (11,64 con afiliado y dev 10 % no llega; el resto sí) y coste 13,87 / PVP 39,90 sin afiliado (12,21-13,86). El resto pierde: a 500 EUR son ~42 pedidos.
 - Conclusión: el negocio con anuncios solo es defendible con coste 9,99 y PVP >= 29,90, o coste 13,87 con PVP >= 34,90 sin afiliado. Con coste 16,99 apenas hay margen para anuncios por debajo de PVP 39,90. Todo depende de que el PVP sea defendible en TikTok Shop ES (referencia de mercado 38,96 EUR según CLAUDE.md; demanda **no verificada**).
 
 ## Comprobación a mano (2 escenarios)
