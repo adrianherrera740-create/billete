@@ -33,3 +33,12 @@ Responder siempre en español.
 
 - [AliExpress ES 1005013107637317](https://es.aliexpress.com/item/1005013107637317.html) · 9,29 € · PVP 24,90 € (pack de 2: 39,90 €). Beneficio ~8,93 € por set / ~10,80 € por pack de 2. Plazos sin verificar.
 - Creativos: `creativos/set-cepillos-ia.md`. Pendiente: muestra.
+
+## Agentes (`.claude/agents/`)
+
+`buscador-producto`, `analista-margenes`, `creativos-ia`, `creadores-muestras`, `operaciones-cumplimiento`, `crecimiento-anuncios`. Panel con prompts de arranque: `tienda/panel-agentes.html`.
+
+## Bloqueos conocidos
+
+- Sin fotos reales del set de cepillos: la red rechaza `ae-pic-a1.aliexpress-media.com` y `ae01.alicdn.com`, y la ficha pide verificación anti-bot. El usuario no quiere comprar muestra: hay que sacar fotos de reseñas o permitir esos dominios.
+- Sin datos de ventas de TikTok Shop ES (FastMoss 429); BigBuy 403.

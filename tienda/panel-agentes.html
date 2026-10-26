@@ -1,0 +1,191 @@
+<title>Panel de agentes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cabecera con producto activo, tira de flujo de trabajo y rejilla de agentes con botón de arranque */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#dde1e7;
+  --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec;
+  --ok:#157f4b; --ok-soft:#dcf3e7; --warn:#9a5b00; --warn-soft:#fdeccb; --bad:#b4281f; --bad-soft:#fbdedb;
+  --font-display:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1218; --surface:#181c24; --ink:#eef0f4; --muted:#9aa3b2; --line:#2a303b;
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
+  --ok:#5fd39a; --ok-soft:#12301f; --warn:#f2b45a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1218; --surface:#181c24; --ink:#eef0f4; --muted:#9aa3b2; --line:#2a303b;
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626;
+  --ok:#5fd39a; --ok-soft:#12301f; --warn:#f2b45a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
+  padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:700}
+h3{font-size:18px;font-weight:700}
+.sub{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
+.switch{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
+.switch button{font:inherit;font-weight:500;border:0;background:transparent;color:var(--muted);padding:8px 14px;border-radius:7px;cursor:pointer}
+.switch button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:18px;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr)}
+.prod h2{margin-bottom:4px}
+.prod a{color:var(--accent);overflow-wrap:anywhere}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px}
+.num{border-left:2px solid var(--line);padding-left:12px;min-width:0}
+.num b{display:block;font-family:var(--font-mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.num span{font-size:12px;color:var(--muted)}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;counter-reset:s;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.flow div{padding:12px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0}
+.flow strong{display:block;font-family:var(--font-display);font-size:15px}
+.flow small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card p{margin:0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--font-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.now{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px}
+.now .label{color:var(--accent);display:block;margin-bottom:2px}
+.actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+details{border-top:1px solid var(--line);padding-top:10px;font-size:13px}
+summary{cursor:pointer;color:var(--muted)}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--font-mono);font-size:12px;background:var(--bg);border-radius:8px;padding:10px;margin:8px 0 0}
+.blocked{background:var(--warn-soft);color:var(--warn);border-radius:12px;padding:14px 16px}
+.blocked ul{margin:6px 0 0;padding-left:18px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-weight:500}
+@media (max-width:760px){.prod{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}.card:hover{border-color:var(--accent)}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="label">Tienda dropshipping · TikTok Shop España</div>
+      <h1>Panel de agentes</h1>
+      <p class="sub">Seis agentes con el contexto del proyecto. Elige el producto y copia el prompt de arranque en una sesión nueva de Claude Code en el repo <code>billete</code>.</p>
+    </div>
+    <div class="switch" role="group" aria-label="Producto activo">
+      <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
+      <button id="b-cepillos" type="button" aria-pressed="true">Set de cepillos</button>
+    </div>
+  </header>
+
+  <section class="prod" aria-live="polite">
+    <div>
+      <div class="label">Producto activo</div>
+      <h2 id="p-nombre"></h2>
+      <p class="sub" id="p-nota"></p>
+      <p style="margin:8px 0 0"><a id="p-link" target="_blank" rel="noopener">Ficha en AliExpress ES</a></p>
+    </div>
+    <div class="nums" id="p-nums"></div>
+  </section>
+
+  <section>
+    <div class="label" style="margin-bottom:8px">Flujo de las primeras semanas</div>
+    <div class="flow">
+      <div><strong>1 · Producto</strong><small>Buscador + Analista</small></div>
+      <div><strong>2 · Referencias reales</strong><small>Fotos del producto</small></div>
+      <div><strong>3 · Creativos IA</strong><small>2 vídeos al día</small></div>
+      <div><strong>4 · Muestras</strong><small>8–10 microcreadores</small></div>
+      <div><strong>5 · Medir día 3</strong><small>Crecimiento</small></div>
+      <div><strong>6 · GMV Max</strong><small>Solo si un vídeo vende</small></div>
+    </div>
+  </section>
+
+  <section class="blocked">
+    <b>Bloqueos conocidos</b>
+    <ul>
+      <li>Sin fotos reales del set de cepillos: la red rechaza <code>ae-pic-a1.aliexpress-media.com</code> y <code>ae01.alicdn.com</code>, y la ficha pide verificación anti-bot. Hacen falta las fotos o URLs de reseñas con foto desde tu móvil, o permitir esos dominios en los ajustes del entorno.</li>
+      <li>Sin datos de ventas de TikTok Shop ES (FastMoss respondió 429). La demanda se estimó con ventas de AliExpress.</li>
+      <li>BigBuy da 403; CJ no se ha comprobado a nivel de ficha.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2 style="margin-bottom:12px">Agentes</h2>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const PRODUCTOS = {
+  rodillo: {
+    nombre: 'Rodillo quitapelos',
+    nota: 'Creativos ya hechos. Pendiente de lanzar vídeos y muestras.',
+    link: 'https://es.aliexpress.com/item/1005012948478747.html',
+    nums: [['Coste','13,30 €','ok'],['PVP','27,90 €','ok'],['Beneficio/pedido','≈ 7,15 €','ok'],['Plazos','sin verificar','warn']],
+    ctx: 'rodillo quitapelos (AliExpress ES 1005012948478747, coste 13,30 €, PVP 27,90 €, beneficio ≈ 7,15 €/pedido; creativos en creativos/rodillo-quitapelos-ia.md)'
+  },
+  cepillos: {
+    nombre: 'Set de cepillos de limpieza',
+    nota: 'Mejor margen y demanda. No comprar muestra por ahora: faltan fotos reales para animar con IA.',
+    link: 'https://es.aliexpress.com/item/1005013107637317.html',
+    nums: [['Coste','9,29 €','ok'],['PVP 1 set','24,90 €','warn'],['Beneficio/pedido','≈ 8,93 €','ok'],['Pack de 2 a 39,90 €','≈ 10,80 €','ok'],['Plazos','sin verificar','warn']],
+    ctx: 'set de cepillos de limpieza (AliExpress ES 1005013107637317, coste 9,29 €, PVP 24,90 € o pack de 2 a 39,90 €, beneficio ≈ 8,93 € / 10,80 €; creativos en creativos/set-cepillos-ia.md; aún sin fotos reales del producto)'
+  }
+};
+const AGENTES = [
+  {id:'buscador-producto', nombre:'Buscador de producto', rol:'Encuentra producto y proveedor con stock en España', skills:['proveedor-es','product-selection','trend-validation'],
+   ahora:'Dos descartados por margen (proyector, dispensador). Falta contrastar precios en TikTok Shop.',
+   tarea:'Busca 3 candidatos nuevos distintos al activo, con la skill proveedor-es, y devuélveme la tabla con margen y veredicto.'},
+  {id:'analista-margenes', nombre:'Analista de márgenes', rol:'Beneficio, PVP mínimo y anuncio máximo', skills:['unit-economics','promotion-margin','margen_es.py'],
+   ahora:'Revisar cómo interpreta --afiliado el script: dio un valor absurdo en una prueba.',
+   tarea:'Calcula escenarios (1 unidad, pack, con y sin afiliado, comisión 4 % y 9 %) y dime el anuncio máximo por pedido.'},
+  {id:'creativos-ia', nombre:'Creativos IA', rol:'Guiones, prompts de Higgsfield y fichas', skills:['short-video-tests','content-calendar','listing-localization','audio-clearance'],
+   ahora:'Packs hechos para los dos productos. Para el set de cepillos faltan referencias reales.',
+   tarea:'Prepara la ficha de producto en español y 10 variantes de gancho de 2 segundos, respetando las reglas de contenido IA.'},
+  {id:'creadores-muestras', nombre:'Creadores y muestras', rol:'Microcreadores, briefs y seguimiento', skills:['creator-discovery','creator-brief-rights','sample-operations','affiliate-commissions'],
+   ahora:'Mensaje base y tabla de seguimiento listos en tienda/listing-y-outreach.md.',
+   tarea:'Define el perfil de creador ideal, un brief con derechos de uso y la comisión que podemos ofrecer sin perder dinero.'},
+  {id:'operaciones-cumplimiento', nombre:'Operaciones y cumplimiento', rol:'Plazos, devoluciones y reglas de TikTok y la UE', skills:['fulfillment-service','returns-feedback','inventory-spikes','product-link-validation'],
+   ahora:'Plazos de preparación y entrega sin verificar en los dos productos.',
+   tarea:'Haz la checklist de cumplimiento antes de publicar: plazo de 2 días, seguimiento, desistimiento de 14 días, etiqueta IA y alta fiscal.'},
+  {id:'crecimiento-anuncios', nombre:'Crecimiento y anuncios', rol:'Qué vídeos venden y cuándo invertir', skills:['advertising','gmvmax-testing','analytics-attribution'],
+   ahora:'Mes 1 sin anuncios. Entra en juego desde la semana 2.',
+   tarea:'Prepara la hoja de métricas del día 3 por vídeo y las reglas para activar GMV Max con tope de gasto.'}
+];
+let activo = 'cepillos';
+try { const s = localStorage.getItem('producto'); if (PRODUCTOS[s]) activo = s; } catch(e) {}
+
+const $ = id => document.getElementById(id);
+function prompt_(a){
+  const p = PRODUCTOS[activo];
+  return `Usa el agente ${a.id} (.claude/agents/${a.id}.md). Lee CLAUDE.md primero.\nProducto activo: ${p.ctx}.\nTarea: ${a.tarea}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`;
+}
+function toast(t){ const el=$('toast'); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,1800); }
+function copiar(txt){
+  const fallback = () => { const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');toast('Prompt copiado');}catch(e){toast('Selecciona el texto de "Ver prompt"');} ta.remove(); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(()=>toast('Prompt copiado'), fallback); else fallback();
+}
+function pintar(){
+  const p = PRODUCTOS[activo];
+  $('b-rodillo').setAttribute('aria-pressed', activo==='rodillo');
+  $('b-cepillos').setAttribute('aria-pressed', activo==='cepillos');
+  $('p-nombre').textContent = p.nombre; $('p-nota').textContent = p.nota; $('p-link').href = p.link;
+  $('p-nums').innerHTML = p.nums.map(n=>`<div class="num"><b>${n[1]}</b><span>${n[0]}</span></div>`).join('');
+  $('grid').innerHTML = AGENTES.map((a,i)=>`
+    <article class="card">
+      <div class="top"><div><h3>${a.nombre}</h3><p>${a.rol}</p></div></div>
+      <div class="chips">${a.skills.map(s=>`<span class="chip">${s}</span>`).join('')}</div>
+      <div class="now"><span class="label">Ahora</span>${a.ahora}</div>
+      <div class="actions"><button class="btn main" type="button" data-i="${i}">Copiar prompt de arranque</button></div>
+      <details><summary>Ver prompt</summary><pre>${prompt_(a).replace(/</g,'&lt;')}</pre></details>
+    </article>`).join('');
+  document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>copiar(prompt_(AGENTES[+b.dataset.i])));
+}
+function elegir(k){ activo=k; try{localStorage.setItem('producto',k);}catch(e){} pintar(); }
+$('b-rodillo').onclick=()=>elegir('rodillo'); $('b-cepillos').onclick=()=>elegir('cepillos');
+pintar();
+</script>
