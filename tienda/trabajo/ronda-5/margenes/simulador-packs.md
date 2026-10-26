@@ -5,7 +5,7 @@ Fecha: 2026-10-26. Autor: simulador de packs (analista-margenes).
 ## 1. Fuentes y límites
 - Fichas: listados de AliExpress ES con envío desde España (filtro `shipFromCountry=ES`), ejecutando `.claude/skills/proveedor-es/scripts/aliexpress_es.js` el 2026-10-26. Solo se leyó el listado: las fichas NO se abrieron, así que variantes, tallas, compatibilidad, plazo real, CE/GPSR y marca real = no verificado.
 - Funda de volante: AliExpress ES 1005008219047604 a 13,87 € y 1005008315429915 a 9,99 € (CLAUDE.md, estado ronda 3). Referencia de mercado de la funda sola: 38,96 € (CLAUDE.md, ronda 3; fecha no verificada).
-- Cálculo: `margen_es.py` (python3, desde su carpeta) con `--envio 0 --dias-preparacion 2 --dias-entrega 5 --tienda-nueva --afiliado 0 --devoluciones 0.05`. Los días 2 y 5 son ESTIMACIÓN mía, no verificados; solo afectan al veredicto. Coste = precio entero de AliExpress (conservador, igual que en ronda 3). Comisión 4 % por tienda nueva (comprobar en Seller Center; al 9 % el margen baja unos 1,2-1,6 puntos de beneficio por pedido... cifra orientativa, no recalculada). Embalaje 0,30 €/pedido (defecto del script).
+- Cálculo: `margen_es.py` (python3, desde su carpeta) con `--envio 0 --dias-preparacion 2 --dias-entrega 5 --tienda-nueva --afiliado 0 --devoluciones 0.05`. Los días 2 y 5 son ESTIMACIÓN mía, no verificados; solo afectan al veredicto. Coste = precio entero de AliExpress (conservador, igual que en ronda 3). Comisión 4 % por tienda nueva (comprobar en Seller Center; al 9 % el beneficio baja (no recalculado en esta ronda)). Embalaje 0,30 €/pedido (defecto del script).
 - Ambientador sin marca: no se buscó (fuera del encargo); queda fuera de los packs. Sin precio = no verificado.
 
 ## 2. Fichas encontradas
@@ -23,7 +23,7 @@ Aviso: el listado también devolvió productos ajenos (juguetes, arneses); ignor
 Coste de pack = suma de precios de AliExpress. PVP en 25-45 €. Margen sobre base sin IVA. Veredicto = el del script (GO si margen >= 25 % y beneficio suficiente).
 
 ### Con funda a 13,87 €
-| Pack | Piezas | Coste | PVP | Beneficio/pedido | Margen | Margen para anuncio (beneficio - 3 €) | Veredicto |
+| Pack | Piezas | Coste | PVP | Beneficio/pedido | Margen | Hueco para anuncio (beneficio - 3 €) | Veredicto |
 |---|---|---|---|---|---|---|---|
 | A. Solo funda | funda | 13,87 | 29,90 | 8,07 | 32,7 % | 5,07 | GO |
 | A. Solo funda | funda | 13,87 | 34,90 | 11,79 | 40,9 % | 8,79 | GO |
@@ -33,7 +33,7 @@ Coste de pack = suma de precios de AliExpress. PVP en 25-45 €. Margen sobre ba
 | C. Kit 3 piezas | idem | 32,98 | 44,90 | 0,12 | 0,3 % | -2,88 | HOLD (PVP mín. 25 %: 62,0) |
 
 ### Con funda a 9,99 €
-| Pack | Coste | PVP | Beneficio/pedido | Margen | Margen para anuncio (beneficio - 3 €) | Veredicto |
+| Pack | Coste | PVP | Beneficio/pedido | Margen | Hueco para anuncio (beneficio - 3 €) | Veredicto |
 |---|---|---|---|---|---|---|
 | A. Solo funda | 9,99 | 29,90 | 11,95 | 48,4 % | 8,95 | GO |
 | A. Solo funda | 9,99 | 34,90 | 15,67 | 54,3 % | 12,67 | GO |
