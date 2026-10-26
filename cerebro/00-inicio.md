@@ -74,9 +74,20 @@ actualizado: 2026-10-26
 ### ronda-10
 - [[tienda/trabajo/ronda-10/margenes/auditor-precios-mercado]]
 - [[tienda/trabajo/ronda-10/producto/investigador-tendencias]]
+### ronda-11
+- [[tienda/trabajo/ronda-11/barrido]]
+- [[tienda/trabajo/ronda-11/critica/pre-mortem]]
+- [[tienda/trabajo/ronda-11/cumplimiento/revisor-normativa-ue]]
+- [[tienda/trabajo/ronda-11/decision-ceo]]
+- [[tienda/trabajo/ronda-11/margenes/auditor-precios-mercado]]
+- [[tienda/trabajo/ronda-11/margenes/calculador-escenarios]]
+- [[tienda/trabajo/ronda-11/producto/buscador-proveedores]]
+- [[tienda/trabajo/ronda-11/producto/investigador-tendencias]]
+- [[tienda/trabajo/ronda-11/producto/verificador-fichas]]
 
 ## Otros informes
 - [[tienda/trabajo/calidad/fase-1]]
+- [[tienda/trabajo/calidad/ronda-11-puerta-1]]
 - [[tienda/trabajo/calidad/ronda-5-fase-1]]
 - [[tienda/trabajo/cumplimiento/entrega-jefe]]
 - [[tienda/trabajo/cumplimiento/revisor-contenido-ia]]
@@ -90,6 +101,8 @@ actualizado: 2026-10-26
 - [[tienda/trabajo/producto/entrega-jefe]]
 - [[tienda/trabajo/producto/investigador-tendencias]]
 - [[tienda/trabajo/producto/verificador-fichas]]
+- [[tienda/trabajo/ronda-11/barrido]]
+- [[tienda/trabajo/ronda-11/decision-ceo]]
 - [[tienda/trabajo/ronda-8/barrido-aliexpress-es]]
 - [[tienda/trabajo/skills/ronda-4]]
 - [[tienda/trabajo/skills/ronda-5]]

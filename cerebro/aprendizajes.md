@@ -5,8 +5,11 @@
 2. Un precio de venta sin ancla de mercado leída (con fuente y fecha) es "no verificado" y sin GO. Lo que el mercado paga manda, no el margen que se quiere.
 3. Productos que venden miles de unidades con envío desde España suelen ser baratos (5–8 €): venden mucho porque valen poco. Con PVP de 12–19 € casi nada llega a PVP/coste ≥ 4.
 4. El método "problema primero" (un dolor que tenga todo el mundo) mejora el gancho, pero el mercado de esos productos suele estar saturado y barato: comprobar siempre el precio real en España antes de entusiasmarse.
-5. Puntuar con criterios fijos (gancho, novedad, regalo, demostrabilidad, saturación, margen, devoluciones, logística, normativa). Umbral de ganador del equipo: 32/40.
+5. Puntuar con criterios fijos (gancho, novedad, regalo, demostrabilidad, saturación, margen, devoluciones, logística, normativa). Umbral de ganador del equipo: 32/40. No se puntúa con otros baremos (la ronda 11 usó 6 criterios sobre 30 y no era comparable); si se usa otro, reexpresar a los 9 sobre 40 o decir que es solo ranking relativo.
 6. High ticket (120–400 €) no es viable para tienda nueva con 500 €/mes: sin marca no se defiende el precio, la electrónica exige alta RAEE y CE, y una devolución de bulto borra decenas de pedidos.
+19. Calcular al revés: partir del precio P leído en el canal real y buscar solo productos con coste <= 0,62 × P − 4,3 € (>= 4 € por pedido sin anuncios; fórmula del crítico, ronda 11). P = 29,90 € admite coste <= 14,2 €; P = 14,90 € admite <= 4,9 €. Sin ancla leída no se puntúa el producto.
+20. Los precios de mercado sacados de resúmenes de búsqueda (Leroy, Worten, Carrefour, Shein) son indicativos, no ancla válida: hasta leer el precio real en TikTok Shop ES el PVP sigue "no verificado" (el PVP de 19,90–24,90 € del extractor cayó a 12,90–14,90 € por esto).
+21. Verificar qué producto es cada ID antes de calcular o puntuar: el ID 1005013082078464, puntuado como "desatascador de pelo", es un cepillo de fregadero. Margen siempre con `margen_es.py` (el cálculo a mano omitió el IVA).
 
 ## Cálculo
 7. `margen_es.py`: `--afiliado` es una FRACCIÓN (0.15 = 15 %); `--devoluciones` existe (usar 0.10–0.15 como caso base); `--comision-tiktok` sobrescribe la comisión; `--help` falla (línea 88). Plazos 2 y 5 días = estimación marcada. El script trata el producto devuelto como perdido (prudente).
