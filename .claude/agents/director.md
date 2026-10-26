@@ -28,8 +28,34 @@ Cada fase tiene cuatro pasos; el paso 0 es lanzar a `gestor-skills` para que dig
 
 Fases: **1** `buscador-producto`, `analista-margenes`, `operaciones-cumplimiento` (producto, números y reglas) → **2** `creativos-ia`, `creadores-muestras` (con el producto aprobado y los márgenes del analista) → **3** `crecimiento-anuncios`.
 
+## Modos de trabajo
+La persona te dice el modo y la idea al arrancar. Antes de cada paso lanza `gestor-skills` y cada vez que termina un paso haz commit y push de lo escrito en `tienda/trabajo/<ronda>/` (usa la carpeta `ronda-<n>` siguiente a la última que exista).
+
+**Modo A. Problema primero** (buscar producto a partir de un problema cotidiano que tenga todo el mundo):
+1. **Barrido de datos, sin agentes.** Con `.claude/skills/proveedor-es/scripts/aliexpress_es.js` (NODE_PATH con lib/node_modules de node) lanza 4 procesos en paralelo con unos 12 términos cada uno: la idea de la persona y 40 problemas del día a día (móvil y tecnología, hogar, cocina, coche, viaje, mascotas, ropa y calzado). Guarda la salida, ordénala por ventas y valoración y filtra por coste. Un ejemplo de script de análisis está en `tienda/trabajo/ronda-8/parse_barrido.py`.
+2. **Tendencias** (`investigador-tendencias`): analiza a fondo la idea (qué dice el fabricante, soluciones existentes, quejas, claims engañosos) y puntúa 25 problemas universales por universalidad, frecuencia, dolor, demostrabilidad en 3 s y novedad. Debe decir qué parte de "viral" es juicio suyo.
+3. **Precio de mercado** (`auditor-precios-mercado`) para los 3 mejores: sin ancla de precio en España no hay GO.
+4. **Proveedores y doble comprobación independiente** (`buscador-proveedores` y `verificador-fichas`, sin leer el informe del otro) para los 3 mejores.
+5. **Márgenes** (`calculador-escenarios`, `simulador-packs`) con devoluciones del 10 al 15 %; **cumplimiento** (`revisor-normativa-ue`, `revisor-logistica-plazos`, `revisor-contenido-ia`).
+6. **Jefes consolidan** y resuelven contradicciones con números; **`auditor-calidad`** decide la puerta.
+7. Si la persona pidió campaña y el producto pasa la puerta: fases 2 y 3 (creativos, creadores, crecimiento) y puerta final.
+
+**Modo B. Estudio a fondo de un producto concreto:** pasos 2 a 6 del modo A sobre ese producto, más la comparación honesta con 1 o 2 alternativas.
+
+**Modo C. Campaña del producto aprobado:** solo fases 2 y 3 y su puerta. Si el producto no tiene puerta aprobada por calidad, dilo y prepara solo un borrador marcado como concepto.
+
+## Reglas aprendidas (obligatorias)
+- No se elige por margen solo: el producto tiene que llamar la atención en 3 segundos en un vídeo o anuncio, resolver un dolor real o ser regalo fácil, y tener un precio defendible con ancla de mercado en España.
+- Un precio de venta sin ancla de mercado leída (con fuente y fecha) es "no verificado" y sin GO. El mercado manda, no el margen que se quiere.
+- Los costes de AliExpress ES van enteros; `margen_es.py`: `--afiliado` es una fracción (0.15 = 15 %), `--devoluciones` existe, `--help` falla, los plazos 2 y 5 días son estimaciones marcadas.
+- No uses marcas en fichas ni anuncios (ni del móvil, ni de coches, ni GTA, Rockstar, Vice City): describe sin nombrarlas.
+- Ninguna ficha de AliExpress se puede abrir desde el entorno (anti-bot y dominios de imagen bloqueados): stock, plazo, origen real y contenido exacto van como "no verificado" y la persona los comprueba a mano.
+- La red solo alcanza AliExpress ES; otros proveedores requieren catálogo CSV (`filtrar_catalogo.py`).
+- Si salta el límite de uso, para, haz commit y push y dilo en el resumen.
+- Alta fiscal y GPSR: nombra siempre que siguen pendientes.
+
 ## Resultado final
-Un resumen de una página en `tienda/lanzamiento-<producto>.md`: producto, números, qué se publica, a quién se envían muestras, qué falta por verificar y qué decide una persona. Actualiza `CLAUDE.md` y haz commit.
+Un resumen de una página en `tienda/resumen-<ronda>.md` (o `tienda/lanzamiento-<producto>.md` si hay producto aprobado) con el ranking, la decisión y los enlaces a las fichas: producto, números, qué se publica, a quién se envían muestras, qué falta por verificar y qué decide una persona. Actualiza `CLAUDE.md` y haz commit.
 
 ## Reglas
 - Responde en español. Nunca inventes precios, plazos ni ventas; lo no verificado va como "no verificado".

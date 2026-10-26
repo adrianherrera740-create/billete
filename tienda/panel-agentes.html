@@ -46,6 +46,7 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .pill.ok{color:var(--ok)} .pill.bad{color:var(--bad);background:var(--bad-soft)} .pill.busy{color:#9a5b00;background:var(--warn-soft)}
 .real a{color:var(--accent);overflow-wrap:anywhere}
 label.label{display:block;flex-basis:100%}
+.campo{display:block;width:100%;font-family:var(--font-body);font-size:14px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 .msg{font-size:14px;background:var(--bg);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
 .err{background:var(--bad-soft);color:var(--bad);border-radius:8px;padding:8px 10px;font-size:14px}
 .chat{background:#0b0f0e;color:#d9fbe9;border:2px solid #36e09b;border-radius:14px;padding:16px 18px;display:grid;gap:14px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
@@ -78,7 +79,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
       <h1>Oficina de agentes</h1>
-      <p class="sub">Un director, seis equipos con tres especialistas cada uno un control de calidad y un gestor de skills: 27 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
+      <p class="sub">Un director, seis equipos con tres especialistas cada uno, un control de calidad y un gestor de skills: 27 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
     </div>
     <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
@@ -87,6 +88,17 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
   </div>
 
   <section class="real" aria-live="polite">
+    <div class="row" style="align-items:flex-start">
+      <div style="flex:1;min-width:240px"><label class="label" for="m-tipo">Misión</label>
+        <select id="m-tipo" class="campo">
+          <option value="problema">Buscar producto desde un problema cotidiano</option>
+          <option value="estudio">Estudio a fondo de un producto concreto</option>
+          <option value="campana">Campaña de marketing de un producto aprobado</option>
+        </select></div>
+      <div style="flex:2;min-width:260px"><label class="label" for="m-idea">Idea, problema o producto (texto o enlace)</label>
+        <textarea id="m-idea" class="campo" rows="2">limpiador de la suciedad incrustada en los altavoces y puertos del móvil; ampliar a otros problemas cotidianos que tenga todo el mundo</textarea></div>
+    </div>
+    <div class="row"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="m-campana" checked> Si el producto pasa el control de calidad, preparar también la campaña (guiones, fichas, creadores, métricas)</label></div>
     <div class="row">
       <button class="btn main big" id="b-trabajar" type="button">Poner a trabajar (sesión real)</button>
       <button class="btn" id="b-demo" type="button">Ver una ronda simulada</button>
@@ -105,7 +117,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     </div>
     <div class="msg" id="r-msg" hidden></div>
     <div class="err" id="r-err" hidden></div>
-    <p class="note" id="r-nota">"Poner a trabajar" abre una sesión nueva de Claude Code en tu cuenta con el director al mando. Los muñecos se mueven según lo que esa sesión hace de verdad. Claude te pedirá permiso la primera vez.</p>
+    <p class="note" id="r-nota">"Poner a trabajar" abre una sesión nueva de Claude Code en tu cuenta con el director al mando y la misión de arriba. Los muñecos se mueven según lo que esa sesión hace de verdad. Una ronda completa lanza decenas de agentes y gasta bastante uso de tu cuenta: hay que pulsar dos veces para confirmar. Claude te pedirá permiso la primera vez.</p>
   </section>
 
   <div class="stage">
@@ -202,7 +214,16 @@ function promptW(w){
   if(w.id==='auditor-calidad')return `Usa el agente auditor-calidad (.claude/agents/auditor-calidad.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: revisa las entregas que haya en tienda/trabajo/ y creativos/ y escribe tu informe en tienda/trabajo/calidad/.`;
   return `Usa el agente ${w.id} (.claude/agents/${w.id}.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: ${w.orden}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`;
 }
-function promptDir(){return `Eres el director de la tienda. Sigue al pie de la letra .claude/agents/director.md y lee CLAUDE.md primero.\nMisión: dejar listo para lanzar el ${PRODUCTOS[activo].ctx}.\nLanza con la herramienta Agent (subagent_type igual al nombre del agente) a todos los especialistas de cada fase a la vez, después a los jefes para que consoliden y por último a auditor-calidad. No pases de fase hasta que calidad apruebe. Guarda los resultados en tienda/trabajo/ y el resumen final en tienda/lanzamiento-<producto>.md, haz commit y push. Lista aparte lo que solo puede hacer una persona.`}
+const MODOS={problema:'Modo A (problema primero)',estudio:'Modo B (estudio a fondo de un producto concreto)',campana:'Modo C (campaña de marketing del producto aprobado)'};
+function promptMision(){
+  const tipo=$('m-tipo').value, idea=$('m-idea').value.trim()||'sin idea concreta: parte de problemas cotidianos universales';
+  const camp=$('m-campana').checked&&tipo!=='campana';
+  return 'Eres el director de la tienda dropshipping de TikTok Shop España. Lee CLAUDE.md y sigue al pie de la letra .claude/agents/director.md (secciones "Modos de trabajo" y "Reglas aprendidas").\n'
+   +'Misión: '+MODOS[tipo]+'.\nIdea, problema o producto de partida: '+idea+'.\n'
+   +(camp?'Si el producto pasa el control de calidad, prepara también la campaña (fases 2 y 3).\n':'')
+   +'Lanza a los agentes con la herramienta Agent (subagent_type igual al nombre del agente), a todos los de cada paso a la vez. Haz commit y push de lo que escribas en cada paso. Al final escribe el resumen en tienda/ con el ranking, la decisión, los enlaces a las fichas y la lista de lo que solo puede hacer una persona. Todo en español y sin inventar datos.';
+}
+function promptDir(){return promptMision()}
 
 /* ---------- dibujo ---------- */
 const R=(c,x,y,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)};
@@ -423,7 +444,7 @@ async function trabajarReal(){
   try{
     const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,'');
     const res=await mcp.callTool(SERVER,'create_session',{
-      title:'Ronda del director: '+PRODUCTOS[activo].nombre,
+      title:'Ronda del director: '+MODOS[$('m-tipo').value].split(' (')[0]+' · '+($('m-idea').value.trim().slice(0,40)||'sin idea'),
       source_url:REPO, source_revision:RAMA, permission_mode:'auto',
       outcome_branch:'claude/ronda-director-'+stamp,
       prompt:promptDir()
@@ -534,7 +555,11 @@ $('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintarBotones();ficha()};
 $('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintarBotones();ficha()};
 $('b-dir').onclick=()=>copiar(promptDir());
 $('b-demo').onclick=()=>{ronda()};
-$('b-trabajar').onclick=()=>{seguirSiempre=false;trabajarReal()};
+let confArmado=false,confT=null;const TXT_TRABAJAR='Poner a trabajar (sesión real)';
+$('b-trabajar').onclick=()=>{
+  if(!confArmado){confArmado=true;$('b-trabajar').textContent='Confirmar: gastará uso de tu cuenta';confT=setTimeout(()=>{confArmado=false;$('b-trabajar').textContent=TXT_TRABAJAR},7000);return}
+  clearTimeout(confT);confArmado=false;$('b-trabajar').textContent=TXT_TRABAJAR;seguirSiempre=false;trabajarReal();
+};
 $('b-seguir').onclick=()=>{seguirSesion()};
 $('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
 pintarBotones();ficha();contar();requestAnimationFrame(tick);
