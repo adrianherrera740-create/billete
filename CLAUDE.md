@@ -28,3 +28,8 @@ Lanzar la primera tienda de dropshipping en **TikTok Shop España**, vendiendo d
 ## Idioma
 
 Responder siempre en español.
+
+## Segundo candidato: set de cepillos de limpieza
+
+- [AliExpress ES 1005013107637317](https://es.aliexpress.com/item/1005013107637317.html) · 9,29 € · PVP 24,90 € (pack de 2: 39,90 €). Beneficio ~8,93 € por set / ~10,80 € por pack de 2. Plazos sin verificar.
+- Creativos: `creativos/set-cepillos-ia.md`. Pendiente: muestra.
