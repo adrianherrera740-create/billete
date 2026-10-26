@@ -2,20 +2,20 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: oficina pixel-art en canvas (director al centro, 3 despachos arriba, 3 abajo, trofeo abajo) y tarjeta de chat del agente elegido debajo */
+/* Layout: oficina pixel-art en canvas (director y calidad al centro, 3 equipos arriba, 3 abajo, trofeo abajo), panel de sesión real y tarjeta de chat del trabajador elegido */
 :root{
   --bg:#eef0f3; --surface:#ffffff; --ink:#14181f; --muted:#5b6472; --line:#cfd4dc;
-  --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec; --ok:#157f4b; --warn-soft:#fdeccb;
+  --accent:#d6336c; --accent-ink:#ffffff; --accent-soft:#fbe4ec; --ok:#157f4b; --warn-soft:#fdeccb; --bad:#b4281f; --bad-soft:#fbdedb;
   --font-display:'Bricolage Grotesque',system-ui,sans-serif;
   --font-body:'IBM Plex Sans',system-ui,sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0d1016; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340;
-  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; color-scheme:dark}}
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0d1016; --surface:#1a1f29; --ink:#eef0f4; --muted:#9aa3b2; --line:#2b3340;
-  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; color-scheme:dark}
+  --accent:#ff6b9a; --accent-ink:#1a0910; --accent-soft:#3a1626; --ok:#5fd39a; --warn-soft:#352610; --bad:#ff8a80; --bad-soft:#3a1714; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
   padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -23,21 +23,30 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
 h1,h2{font-family:var(--font-display);margin:0;text-wrap:balance;line-height:1.15}
 h1{font-size:clamp(26px,5vw,38px)} h2{font-size:20px}
 .label{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.sub{color:var(--muted);margin:6px 0 0;max-width:64ch}
+.sub{color:var(--muted);margin:6px 0 0;max-width:66ch}
 button{font:inherit;cursor:pointer}
-button:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button:disabled{opacity:.55;cursor:default}
+button:focus-visible,canvas:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
 .switch{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
 .switch button{border:0;background:transparent;color:var(--muted);font-weight:500;padding:7px 12px;border-radius:7px}
 .switch button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .btn{font-weight:600;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
 .btn.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.big{padding:12px 20px;font-size:16px}
 .progress{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:13px}
 .track{width:140px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
 .track i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
 .stage{background:#1b1b1f;border-radius:14px;padding:6px;border:1px solid var(--line)}
 canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:9px;cursor:pointer;aspect-ratio:352/224}
 .note{color:var(--muted);font-size:13px;margin:0}
+.real{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:10px}
+.real .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pill{font-family:var(--font-mono);font-size:12px;border-radius:99px;padding:3px 10px;background:var(--bg);border:1px solid var(--line)}
+.pill.ok{color:var(--ok)} .pill.bad{color:var(--bad);background:var(--bad-soft)} .pill.busy{color:#9a5b00;background:var(--warn-soft)}
+.real a{color:var(--accent);overflow-wrap:anywhere}
+.msg{font-size:14px;background:var(--bg);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
+.err{background:var(--bad-soft);color:var(--bad);border-radius:8px;padding:8px 10px;font-size:14px}
 .chat{background:#0b0f0e;color:#d9fbe9;border:2px solid #36e09b;border-radius:14px;padding:16px 18px;display:grid;gap:14px;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
 .chat > div{min-width:0}
 .chat h2{color:#5af0b0;font-size:18px}
@@ -45,7 +54,10 @@ canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 .chat p{margin:6px 0}
 .chat .order{background:#12201b;border-radius:8px;padding:9px 11px;margin:8px 0;font-size:14px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.chip{font-family:var(--font-mono);font-size:11px;border:1px solid #2b5b48;border-radius:6px;padding:2px 7px;color:#9fd8bf}
+.chip{font-family:var(--font-mono);font-size:11px;border:1px solid #2b5b48;border-radius:6px;padding:2px 7px;color:#9fd8bf;overflow-wrap:anywhere}
+.team{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.team button{background:#0f1a16;border:1px solid #2b5b48;color:#d9fbe9;border-radius:7px;padding:4px 9px;font-size:12px}
+.team button[aria-current="true"]{border-color:#36e09b;box-shadow:inset 0 0 0 1px #36e09b}
 .states{display:flex;gap:6px;flex-wrap:wrap}
 .states button{border:1px solid #2b5b48;background:#0f1a16;color:#d9fbe9;padding:7px 12px;border-radius:8px;font-weight:500}
 .states button[aria-pressed="true"]{border-color:#36e09b;box-shadow:inset 0 0 0 1px #36e09b}
@@ -65,7 +77,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
       <h1>Oficina de agentes</h1>
-      <p class="sub">El director reparte órdenes, los departamentos trabajan en paralelo por fases y nada avanza sin su visto bueno. Pulsa "Ver una ronda" para verlos moverse y toca a cualquiera para abrir su chat.</p>
+      <p class="sub">Un director, seis equipos con tres especialistas cada uno y un control de calidad: 26 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
     </div>
     <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
@@ -73,19 +85,27 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     </div>
   </div>
 
-  <div class="bar">
-    <div class="progress"><span id="prog-txt">0/6 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn main" id="b-demo" type="button">Ver una ronda</button>
+  <section class="real" aria-live="polite">
+    <div class="row">
+      <button class="btn main big" id="b-trabajar" type="button">Poner a trabajar (sesión real)</button>
+      <button class="btn" id="b-demo" type="button">Ver una ronda simulada</button>
       <button class="btn" id="b-dir" type="button">Copiar orden del director</button>
       <button class="btn" id="b-reset" type="button">Reiniciar</button>
     </div>
-  </div>
+    <div class="row">
+      <span class="pill" id="r-estado">Sin sesión real</span>
+      <span id="r-link"></span>
+      <div class="progress"><span id="prog-txt">0/26 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
+    </div>
+    <div class="msg" id="r-msg" hidden></div>
+    <div class="err" id="r-err" hidden></div>
+    <p class="note" id="r-nota">"Poner a trabajar" abre una sesión nueva de Claude Code en tu cuenta con el director al mando. Los muñecos se mueven según lo que esa sesión hace de verdad. Claude te pedirá permiso la primera vez.</p>
+  </section>
 
   <div class="stage">
-    <canvas id="c" width="352" height="224" tabindex="0" role="img" aria-label="Oficina pixel-art: el director en el centro, tres departamentos arriba, tres abajo y un trofeo que se enciende cuando los seis han entregado"></canvas>
+    <canvas id="c" width="352" height="224" tabindex="0" role="img" aria-label="Oficina pixel-art con el director y el control de calidad al centro, seis equipos de cuatro trabajadores y un trofeo que se enciende cuando todos han entregado"></canvas>
   </div>
-  <p class="note">La ronda es una simulación del flujo: no ejecuta agentes. Los agentes reales se lanzan con <code>claude --agent director</code>. Puedes marcar estados a mano en el chat de cada uno.</p>
+  <p class="note">Luz sobre la cabeza: gris espera, ámbar trabaja, verde entregó. La ronda simulada es solo una demostración del flujo; no ejecuta agentes.</p>
 
   <section class="chat" aria-live="polite">
     <div>
@@ -94,8 +114,10 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
       <p id="d-estado" style="color:#7ab89c"></p>
       <div class="order" id="d-orden"></div>
       <div class="chips" id="d-skills"></div>
-      <div class="meta" style="margin:10px 0 6px">Estado</div>
-      <div class="states" id="d-estados" role="group" aria-label="Estado del departamento"></div>
+      <div class="meta" style="margin:10px 0 4px">Su equipo</div>
+      <div class="team" id="d-team"></div>
+      <div class="meta" style="margin:10px 0 6px" id="d-estados-label">Estado (a mano)</div>
+      <div class="states" id="d-estados" role="group" aria-label="Estado del trabajador"></div>
     </div>
     <div>
       <div class="meta" style="margin-bottom:6px">Entrega esperada</div>
@@ -106,81 +128,101 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
   </section>
 
   <section class="how">
-    <h2>Cómo ponerlo a trabajar de verdad</h2>
+    <h2>Cómo funciona de verdad</h2>
     <ol>
-      <li>Abre una sesión de Claude Code en el repo <code>billete</code> con el director como agente principal: <code>claude --agent director</code>.</li>
-      <li>Pega la orden del director (botón de arriba). Él lanza los departamentos de cada fase a la vez y revisa cada entrega antes de pasar de fase.</li>
-      <li>Para probar un solo departamento, copia su prompt desde su chat y úsalo en una sesión normal.</li>
+      <li>El botón grande crea una sesión nueva de Claude Code sobre el repo <code>billete</code>. Esa sesión sigue <code>.claude/agents/director.md</code>.</li>
+      <li>En cada fase el director lanza a todos los especialistas a la vez, después a los jefes para que consoliden y por último al control de calidad. Un subagente no puede lanzar a otros, por eso los lanza siempre el director.</li>
+      <li>La oficina lee los eventos de esa sesión cada pocos segundos y pone en ámbar a quien ha sido lanzado y en verde a quien ya ha devuelto su resultado. Los archivos quedan en <code>tienda/trabajo/</code> de la rama que el director sube.</li>
     </ol>
   </section>
 
-  <div class="block"><b>Bloqueos conocidos.</b> Sin fotos reales del set de cepillos (la red rechaza <code>ae-pic-a1.aliexpress-media.com</code> y <code>ae01.alicdn.com</code>; la ficha pide verificación anti-bot), sin datos de ventas de TikTok Shop ES (FastMoss 429) y BigBuy da 403. Pedir la muestra, grabar, generar vídeo en Higgsfield y publicar solo puede hacerlo una persona.</div>
+  <div class="block"><b>Límites actuales.</b> Sin fotos reales del set de cepillos (la red rechaza <code>ae-pic-a1.aliexpress-media.com</code> y <code>ae01.alicdn.com</code>; la ficha pide verificación anti-bot), sin datos de ventas de TikTok Shop ES (FastMoss 429) y BigBuy da 403. Pedir la muestra, grabar, generar vídeo en Higgsfield y publicar solo puede hacerlo una persona. Cada ronda real consume uso de tu cuenta: son decenas de agentes.</div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
+const REPO='https://github.com/adrianherrera740-create/billete', RAMA='claude/limpiar-repositorio-o2fihp', SERVER='Claude Code Remote';
 const PRODUCTOS = {
   rodillo: {nombre:'Rodillo quitapelos', ctx:'rodillo quitapelos (AliExpress ES 1005012948478747, coste 13,30 €, PVP 27,90 €, beneficio ≈ 7,15 €/pedido; creativos en creativos/rodillo-quitapelos-ia.md)'},
   cepillos: {nombre:'Set de cepillos de limpieza', ctx:'set de cepillos de limpieza (AliExpress ES 1005013107637317, coste 9,29 €, PVP 24,90 € o pack de 2 a 39,90 €, beneficio ≈ 8,93 € / 10,80 €; creativos en creativos/set-cepillos-ia.md; aún sin fotos reales del producto)'}
 };
-// cx: centro del despacho; fy: pies del agente; dy: borde superior de la mesa; stand: dónde se pone el director
-const DEPTS = [
-  {id:'buscador-producto', n:'Producto', fase:1, cx:64, fy:88, dy:92, stand:[64,114], body:'#2f6fed', hair:'#3b2a1e', rol:'Encuentra producto y proveedor con stock en España.', skills:['proveedor-es','product-selection','trend-validation'],
+const SPEC={"investigador-tendencias": {"lead": "buscador-producto", "mision": "Valida demanda y vida útil del producto: ventas en TikTok Shop ES si se pueden leer, tendencias, estacionalidad y saturación.", "skills": ["sealeap-tiktokshop-trend-validation", "sealeap-tiktokshop-content-product-fit"], "entrega": "Informe de demanda con fuente y fecha de cada dato y nivel de saturación."}, "buscador-proveedores": {"lead": "buscador-producto", "mision": "Encuentra el proveedor exacto con stock en España/UE para el producto: URL de ficha, coste, envío, plazos, stock y pedido mínimo.", "skills": ["proveedor-es (scripts/aliexpress_es.js)", "BigBuy y CJ solo si la red lo permite"], "entrega": "Tabla de proveedores con \"no verificado\" donde no se pudo leer."}, "verificador-fichas": {"lead": "buscador-producto", "mision": "Contrasta lo que dice la ficha del proveedor con la realidad: reseñas con foto, quejas frecuentes, medidas, material y marca registrada ajena.", "skills": ["proveedor-es"], "entrega": "Lista de afirmaciones de la ficha: verificada, dudosa o falsa, con fuente."}, "calculador-escenarios": {"lead": "analista-margenes", "mision": "Ejecuta margen_es.py en todos los escenarios (1 unidad y pack, comisión 4 % y 9 %, con y sin afiliado) y comprueba que las cifras cuadran a mano.", "skills": ["sealeap-tiktokshop-unit-economics", ".claude/skills/proveedor-es/scripts/margen_es.py"], "entrega": "Tabla de escenarios con beneficio, margen y anuncio máximo, y cualquier cifra rara marcada."}, "auditor-precios-mercado": {"lead": "analista-margenes", "mision": "Compara el PVP propuesto con lo que cuesta lo mismo en TikTok Shop y Amazon España; nunca subas el PVP por encima del mercado para que salga GO.", "skills": ["WebSearch", "WebFetch"], "entrega": "PVP de mercado con fuente y fecha, y si el PVP propuesto es defendible."}, "simulador-packs": {"lead": "analista-margenes", "mision": "Diseña packs y promociones (2x, envío incluido, cupón) y calcula su efecto en el margen y en el ticket medio.", "skills": ["sealeap-tiktokshop-promotion-margin"], "entrega": "Tabla de packs con margen y recomendación."}, "revisor-normativa-ue": {"lead": "operaciones-cumplimiento", "mision": "Revisa el producto contra reglas de la UE y de TikTok Shop: sectores regulados, marcado CE, marcas, derecho de desistimiento y datos del fabricante.", "skills": ["sealeap-tiktokshop-listing-localization", "sealeap-tiktokshop-store-operations"], "entrega": "Checklist normativa con riesgo alto/medio/bajo y qué falta por comprobar."}, "revisor-logistica-plazos": {"lead": "operaciones-cumplimiento", "mision": "Comprueba la regla de entregar al transportista en 2 días laborables con seguimiento válido, y calcula el riesgo de devoluciones y roturas.", "skills": ["sealeap-tiktokshop-fulfillment-service", "sealeap-tiktokshop-returns-feedback", "sealeap-tiktokshop-inventory-spikes"], "entrega": "Informe de plazos y riesgos, con los datos no verificados marcados."}, "revisor-contenido-ia": {"lead": "operaciones-cumplimiento", "mision": "Revisa guiones y fichas contra las reglas de contenido: etiqueta de contenido IA, nada que el producto no haga, sin reseñas falsas, audio con derechos.", "skills": ["sealeap-tiktokshop-commercial-audio-clearance", "sealeap-tiktokshop-product-link-validation"], "entrega": "Lista de incumplimientos por pieza y la corrección propuesta."}, "guionista-videos": {"lead": "creativos-ia", "mision": "Escribe guiones de 15–25 s con la estructura de creativos/*.md: gancho de 2 s, problema, demo, prueba y llamada; 5 ángulos distintos.", "skills": ["sealeap-tiktokshop-short-video-tests"], "entrega": "Guiones por ángulo con texto en pantalla y tiempos."}, "redactor-fichas": {"lead": "creativos-ia", "mision": "Escribe título, puntos clave y descripción de la ficha en español de España, solo con lo verificado.", "skills": ["sealeap-tiktokshop-listing-localization"], "entrega": "Ficha lista para pegar, con lo pendiente de verificar aparte."}, "prompter-higgsfield": {"lead": "creativos-ia", "mision": "Convierte cada guion en prompts para Higgsfield (Kling 3.0 / Veo 3.1 Fast): escena fija, animación y gancho. No describas cómo se ve el producto en persona sin fotos reales.", "skills": ["sealeap-tiktokshop-content-calendar"], "entrega": "Prompts por escena y calendario de 2 semanas."}, "buscador-creadores": {"lead": "creadores-muestras", "mision": "Define el perfil de microcreador ideal y la forma de encontrarlos; lista anónima de candidatos con criterios de audiencia e historial.", "skills": ["sealeap-tiktokshop-creator-discovery"], "entrega": "Perfil y lista anónima de candidatos con motivo de encaje."}, "redactor-briefs": {"lead": "creadores-muestras", "mision": "Redacta el brief y el mensaje de contacto: sin guion que exagere, con derechos de uso, #publi y comisión acorde al margen.", "skills": ["sealeap-tiktokshop-creator-brief-rights", "sealeap-tiktokshop-affiliate-commissions"], "entrega": "Brief y mensaje, con la comisión máxima que permite el margen."}, "gestor-muestras": {"lead": "creadores-muestras", "mision": "Monta el seguimiento de muestras: presupuesto, estados de envío, entrega, vídeo publicado y ventas.", "skills": ["sealeap-tiktokshop-sample-operations"], "entrega": "Tabla de seguimiento y reglas de reposición."}, "analista-metricas": {"lead": "crecimiento-anuncios", "mision": "Define las métricas del día 3 por vídeo (vistas, % 3 s, compartidos, comentarios de precio/enlace) y cómo leerlas.", "skills": ["sealeap-tiktokshop-analytics-attribution"], "entrega": "Hoja de métricas y umbrales de \"vídeo ganador\"."}, "planificador-gmvmax": {"lead": "crecimiento-anuncios", "mision": "Fija cuándo activar GMV Max y el tope de gasto: anuncio máx./pedido × pedidos esperados, con 500 €/mes.", "skills": ["sealeap-tiktokshop-gmvmax-testing", "sealeap-tiktokshop-advertising"], "entrega": "Reglas de activación, tope y plan de pruebas."}, "auditor-atribucion": {"lead": "crecimiento-anuncios", "mision": "Revisa que las métricas no se cuenten doble entre vídeo, afiliados y anuncios, y que cada pedido tenga origen claro.", "skills": ["sealeap-tiktokshop-analytics-attribution"], "entrega": "Diccionario de métricas y riesgos de doble conteo."}};
+// jefes: cx = centro del equipo; fy = pies; dy = borde superior de la mesa; stand = dónde se pone el director
+const LEADS = [
+  {id:'buscador-producto', n:'Producto', fase:1, cx:64, fy:88, dy:92, stand:[64,114], body:'#2f6fed', rol:'Encuentra producto y proveedor con stock en España.', skills:['proveedor-es','product-selection','trend-validation'],
    orden:'Verifica proveedor, coste, plazos y demanda del producto; propón dos alternativas.', entrega:'Tabla con URL de ficha, coste, plazos y veredicto, y lo que no se pudo verificar.'},
-  {id:'analista-margenes', n:'Márgenes', fase:1, cx:176, fy:88, dy:92, stand:[176,114], body:'#8a4fd6', hair:'#1c1c22', rol:'Beneficio por pedido, PVP mínimo y anuncio máximo.', skills:['unit-economics','promotion-margin','margen_es.py'],
+  {id:'analista-margenes', n:'Márgenes', fase:1, cx:176, fy:88, dy:92, stand:[176,114], body:'#8a4fd6', rol:'Beneficio por pedido, PVP mínimo y anuncio máximo.', skills:['unit-economics','promotion-margin','margen_es.py'],
    orden:'Calcula escenarios con comisión 4 % y 9 %, con y sin afiliado, y revisa cómo interpreta --afiliado el script.', entrega:'Tabla de escenarios y anuncio máximo por pedido.'},
-  {id:'operaciones-cumplimiento', n:'Cumplimiento', fase:1, cx:288, fy:88, dy:92, stand:[288,114], body:'#0f9aa8', hair:'#7a4a22', rol:'Plazos, devoluciones y reglas de TikTok y la UE.', skills:['fulfillment-service','returns-feedback','product-link-validation'],
+  {id:'operaciones-cumplimiento', n:'Cumplimiento', fase:1, cx:288, fy:88, dy:92, stand:[288,114], body:'#0f9aa8', rol:'Plazos, devoluciones y reglas de TikTok y la UE.', skills:['fulfillment-service','returns-feedback','product-link-validation'],
    orden:'Checklist antes de publicar: entrega en 2 días, seguimiento, desistimiento de 14 días, etiqueta IA, CE y alta fiscal.', entrega:'Checklist por producto con bloqueos marcados.'},
-  {id:'creativos-ia', n:'Creativos IA', fase:2, cx:64, fy:168, dy:172, stand:[64,130], body:'#d6336c', hair:'#e6b422', rol:'Guiones, prompts de Higgsfield y fichas en español.', skills:['short-video-tests','content-calendar','listing-localization'],
+  {id:'creativos-ia', n:'Creativos IA', fase:2, cx:64, fy:168, dy:172, stand:[64,130], body:'#d6336c', rol:'Guiones, prompts de Higgsfield y fichas en español.', skills:['short-video-tests','content-calendar','listing-localization'],
    orden:'Con el producto aprobado, prepara ficha y 10 ganchos de 2 s. No afirmes cómo se ve en persona sin fotos reales.', entrega:'Archivo en creativos/ con ángulos, prompts y calendario; ficha en tienda/.'},
-  {id:'creadores-muestras', n:'Creadores', fase:2, cx:176, fy:168, dy:172, stand:[176,130], body:'#d98a00', hair:'#5a2d0c', rol:'Microcreadores, briefs y seguimiento de muestras.', skills:['creator-discovery','creator-brief-rights','sample-operations'],
+  {id:'creadores-muestras', n:'Creadores', fase:2, cx:176, fy:168, dy:172, stand:[176,130], body:'#d98a00', rol:'Microcreadores, briefs y seguimiento de muestras.', skills:['creator-discovery','creator-brief-rights','sample-operations'],
    orden:'Define perfil de creador, brief con derechos de uso y la comisión que permite el margen.', entrega:'Lista anónima de candidatos, brief y tabla de seguimiento.'},
-  {id:'crecimiento-anuncios', n:'Crecimiento', fase:3, cx:288, fy:168, dy:172, stand:[288,130], body:'#1c9a5c', hair:'#222', rol:'Qué vídeos venden y cuándo invertir.', skills:['advertising','gmvmax-testing','analytics-attribution'],
+  {id:'crecimiento-anuncios', n:'Crecimiento', fase:3, cx:288, fy:168, dy:172, stand:[288,130], body:'#1c9a5c', rol:'Qué vídeos venden y cuándo invertir.', skills:['advertising','gmvmax-testing','analytics-attribution'],
    orden:'Hoja de métricas del día 3 por vídeo y reglas para activar GMV Max con tope de gasto.', entrega:'Informe semanal y propuesta de inversión con tope.'}
 ];
+const OFFS=[-33,-11,11,33], HAIRS=['#3b2a1e','#1c1c22','#7a4a22','#e6b422','#5a2d0c','#222'];
+const humano=s=>{s=s.replace(/-/g,' ');return s[0].toUpperCase()+s.slice(1)};
+// trabajadores: todos los agentes que pueden aparecer en la oficina
+const W=[]; const BY={};
+LEADS.forEach((d,i)=>{
+  const lead={id:d.id,n:d.n,tipo:'jefe',equipo:d.id,fase:d.fase,x:d.cx+OFFS[0],fy:d.fy,body:d.body,hair:HAIRS[i%6],rol:d.rol,orden:d.orden,skills:d.skills,entrega:d.entrega,state:'espera'};
+  W.push(lead);BY[lead.id]=lead;
+  Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id).forEach((k,j)=>{
+    const s=SPEC[k],w={id:k,n:humano(k),tipo:'especialista',equipo:d.id,fase:d.fase,x:d.cx+OFFS[j+1],fy:d.fy,body:d.body,hair:HAIRS[(i+j+1)%6],rol:s.mision,orden:s.mision,skills:s.skills,entrega:s.entrega,state:'espera',light:true};
+    W.push(w);BY[k]=w;
+  });
+});
+const QA={id:'auditor-calidad',n:'Control de calidad',tipo:'calidad',equipo:null,fase:0,x:214,fy:112,body:'#c7c7d1',hair:'#222',rol:'Verifica cada entrega antes de abrir una puerta.',orden:'Recalcula cifras, comprueba que cada URL y precio tiene fuente y fecha, y que se cumplen las reglas de CLAUDE.md. Rechaza lo que no se pueda demostrar.',skills:['CLAUDE.md','tienda/trabajo/'],entrega:'tienda/trabajo/calidad/<fase>.md con APROBADO o RECHAZADO por departamento y los fallos exactos.',state:'espera'};
+W.push(QA);BY[QA.id]=QA;
+const DIRW={id:'director',n:'Director',x:176,y:112};
 const DIR_HOME=[176,112], TROFEO=[176,202], CORR=120;
 const ESTADOS=[['espera','Esperando'],['trabaja','Trabajando'],['entregado','Entregado']];
-let activo='cepillos', sel='buscador-producto', est={};
-DEPTS.forEach(d=>est[d.id]='espera');
-try{const s=localStorage.getItem('oficina2');if(s){const o=JSON.parse(s);if(PRODUCTOS[o.p])activo=o.p}}catch(e){}
+let activo='cepillos', sel='buscador-producto', modo='manual'; // modo: manual | demo | real
+try{const s=localStorage.getItem('oficina3');if(s){const o=JSON.parse(s);if(PRODUCTOS[o.p])activo=o.p}}catch(e){}
 const $=id=>document.getElementById(id);
 const cv=$('c'), g=cv.getContext('2d');
 const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
-function guardar(){try{localStorage.setItem('oficina2',JSON.stringify({p:activo}))}catch(e){}}
+function guardar(){try{localStorage.setItem('oficina3',JSON.stringify({p:activo}))}catch(e){}}
 function toast(t){const el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800)}
 function copiar(txt){
   const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Copiado')}catch(e){toast('Selecciona el texto de "Ver prompt"')}ta.remove()};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(()=>toast('Copiado'),fb);else fb();
 }
-function promptDept(d){return `Usa el agente ${d.id} (.claude/agents/${d.id}.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: ${d.orden}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`}
-function promptDir(){return `Eres el director (.claude/agents/director.md). Lee CLAUDE.md primero.\nMisión: dejar listo para lanzar el ${PRODUCTOS[activo].ctx}.\nLanza los departamentos de cada fase en paralelo, revisa cada entrega en su puerta y no pases de fase hasta aprobarla. Al final guarda el resumen en tienda/ y haz commit. Lista aparte lo que solo puede hacer el humano.`}
+function promptW(w){
+  if(w.id==='auditor-calidad')return `Usa el agente auditor-calidad (.claude/agents/auditor-calidad.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: revisa las entregas que haya en tienda/trabajo/ y creativos/ y escribe tu informe en tienda/trabajo/calidad/.`;
+  return `Usa el agente ${w.id} (.claude/agents/${w.id}.md). Lee CLAUDE.md primero.\nProducto: ${PRODUCTOS[activo].ctx}.\nTarea: ${w.orden}\nSi no puedes verificar un dato, ponlo como "no verificado". Guarda el resultado en el repo y haz commit.`;
+}
+function promptDir(){return `Eres el director de la tienda. Sigue al pie de la letra .claude/agents/director.md y lee CLAUDE.md primero.\nMisión: dejar listo para lanzar el ${PRODUCTOS[activo].ctx}.\nLanza con la herramienta Agent (subagent_type igual al nombre del agente) a todos los especialistas de cada fase a la vez, después a los jefes para que consoliden y por último a auditor-calidad. No pases de fase hasta que calidad apruebe. Guarda los resultados en tienda/trabajo/ y el resumen final en tienda/lanzamiento-<producto>.md, haz commit y push. Lista aparte lo que solo puede hacer una persona.`}
 
 /* ---------- dibujo ---------- */
 const R=(c,x,y,w,h)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),w,h)};
 function plant(x,y){R('#8a4a1c',x,y+10,8,6);R('#6d3a15',x,y+10,8,1);[[2,6],[5,5],[1,3],[6,3],[3,0],[4,2]].forEach(([a,b])=>R(b%2?'#2e8b3d':'#3fae52',x+a-1,y+b,4,4))}
 function sofa(x,y){R('#6e7b8f',x,y,40,14);R('#8794a8',x+2,y+2,17,9);R('#8794a8',x+21,y+2,17,9);R('#56627a',x,y+11,40,3)}
-function fondo(t){
+function fondo(){
   for(let ty=3;ty<14;ty++)for(let tx=0;tx<22;tx++){R((tx+ty)&1?'#9c4a42':'#8f423b',tx*16,ty*16,16,16);R('#7a352f',tx*16,ty*16+15,16,1);R('#7a352f',tx*16+15,ty*16,1,16)}
   R('#1b1b1f',0,0,352,8);R('#e8dcc8',0,8,352,32);R('#cdb89a',0,22,352,4);
   for(let x=0;x<352;x+=8)R((x/8)&1?'#d9cfc0':'#b9ad9a',x,40,8,8);
   [112,232].forEach(x=>{R('#8fb6d6',x-14,12,28,22);R('#fff',x-14,22,28,1);R('#fff',x,12,1,22);R('#7a4b2b',x-18,10,8,26);R('#7a4b2b',x+10,10,8,26);R('#5a361d',x-18,10,28,3)});
   [[24,16],[328,16]].forEach(([x,y])=>{R('#4a3320',x-12,y,24,16);R('#e8f0e0',x-10,y+2,20,12);R('#c0463a',x-6,y+5,12,6)});
-  // alfombra del director
   R('#b8862b',124,100,104,38);R('#7e2f24',128,104,96,30);R('#e2bd5c',132,108,88,22);R('#b8862b',136,112,80,14);
-  plant(8,52);plant(336,52);plant(8,200);plant(336,200);sofa(40,196);sofa(272,196);
+  plant(8,52);plant(336,52);plant(8,200);plant(336,200);sofa(40,200);sofa(272,200);
 }
+const LUZ={espera:'#9aa3b2',trabaja:'#ffb020',entregado:'#36e09b'};
 function mesa(d){
-  const e=est[d.id], t=t_;
-  R('#2f3542',d.cx-5,d.fy-9,10,6); // silla detrás
-  R('#a9703f',d.cx-22,d.dy,44,8);R('#7d4f2a',d.cx-22,d.dy+8,44,6);R('#5a361d',d.cx-22,d.dy+13,44,1);
-  const pant=e==='trabaja'?((Math.floor(t*6)&1)?'#5ad7ff':'#3aa8d6'):e==='entregado'?'#36e09b':'#2a2d35';
-  R('#2a2d35',d.cx+4,d.dy-11,16,11);R(pant,d.cx+6,d.dy-9,12,7);R('#2a2d35',d.cx+10,d.dy,4,1);
-  R('#cfd4dc',d.cx+4,d.dy+2,10,3);
-  if(e==='entregado'){R('#fff',d.cx-20,d.dy-6,9,8);R('#cfd4dc',d.cx-20,d.dy+1,9,1);g.strokeStyle='#17a36a';g.lineWidth=1.5;g.beginPath();g.moveTo(d.cx-18,d.dy-2);g.lineTo(d.cx-16,d.dy);g.lineTo(d.cx-12,d.dy-5);g.stroke()}
+  const lead=BY[d.id], t=t_;
+  R('#a9703f',d.cx-46,d.dy,92,8);R('#7d4f2a',d.cx-46,d.dy+8,92,6);R('#5a361d',d.cx-46,d.dy+13,92,1);
+  OFFS.forEach((o,i)=>{
+    const w=i===0?lead:BY[Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id)[i-1]];
+    const e=w.state, x=d.cx+o;
+    const pant=e==='trabaja'?((Math.floor(t*6+i)&1)?'#5ad7ff':'#3aa8d6'):e==='entregado'?'#36e09b':'#2a2d35';
+    R('#2a2d35',x-4,d.dy-6,9,6);R(pant,x-3,d.dy-5,7,4);
+  });
   g.font='bold 7px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText(d.n.toUpperCase(),d.cx,d.dy+11);
 }
-function persona(x,fy,body,hair,anda,teclea,d){
-  const t=t_, bob=anda&&!reduce?(Math.floor(t*8)&1):0, top=fy-21-bob;
+function persona(x,fy,body,hair,anda,teclea,t){
+  const bob=anda&&!reduce?(Math.floor(t*8)&1):0, top=fy-21-bob;
   R('rgba(0,0,0,.25)',x-5,fy-1,10,2);
   const l=anda?(Math.floor(t*8)&1):0;
   R('#2b2b36',x-4,fy-5+(l?0:-1),3,5);R('#2b2b36',x+1,fy-5+(l?-1:0),3,5);
@@ -197,37 +239,51 @@ function burbuja(x,y,txt,col){
   R('#1b1b1f',x-w/2-1,y-1,w+2,13);R(col||'#fff',x-w/2,y,w,11);R(col||'#fff',x-2,y+11,4,2);
   g.fillStyle='#1b1b1f';g.fillText(txt,x,y+8);
 }
+function luz(x,y,estado,t){const c=LUZ[estado];R('#1b1b1f',x-3,y-1,6,6);R(c,x-2,y,4,4);if(estado==='trabaja'&&!reduce&&(Math.floor(t*3)&1))R('#fff',x-1,y+1,2,2)}
 const DIR={x:DIR_HOME[0],y:DIR_HOME[1],q:[],res:[],msg:''};
 let t_=0, listo=false, confeti=[];
+function selMarca(x,y){g.fillStyle='#ffd23f';g.beginPath();g.moveTo(x-4,y);g.lineTo(x+4,y);g.lineTo(x,y+4);g.fill()}
 function dibujar(t){
   t_=t; g.clearRect(0,0,352,224);
-  fondo(t);
-  // trofeo
+  fondo();
   const [tx,ty]=TROFEO;
-  R(listo?'#f6e27a':'#d9cfc0',tx-26,ty-14,52,34);R('#b9ad9a',tx-26,ty+19,52,1);
+  R(listo?'#f6e27a':'#d9cfc0',tx-26,ty-14,52,30);R('#b9ad9a',tx-26,ty+15,52,1);
   const c=listo?'#f2b822':'#8a8f99';
   R(c,tx-6,ty-10,12,9);R(c,tx-9,ty-9,3,5);R(c,tx+6,ty-9,3,5);R(c,tx-2,ty-1,4,5);R(c,tx-6,ty+4,12,3);
-  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#14181f';g.fillText('SALA DE RESULTADO',tx,ty+16);
-  // agentes (orden por fy para que se solapen bien)
-  DEPTS.forEach(d=>{
-    const e=est[d.id];
-    const top=persona(d.cx,d.fy,d.body,d.hair,false,e==='trabaja',d);
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#14181f';g.fillText('SALA DE RESULTADO',tx,ty+13);
+  LEADS.forEach(d=>{
+    OFFS.forEach((o,i)=>{
+      const w=i===0?BY[d.id]:BY[Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id)[i-1]];
+      const top=persona(w.x,w.fy,w.body,w.hair,false,w.state==='trabaja',t+i*.13);
+      w._top=top;
+    });
     mesa(d);
-    const dots='.'.repeat(1+(Math.floor(t*2)%3));
-    if(e==='trabaja')burbuja(d.cx,top-14,dots+' ',' #ffe9a8'.trim());
-    else if(e==='entregado'){burbuja(d.cx,top-14,'LISTO','#b6f5d4')}
-    else burbuja(d.cx,top-14,'Zz','#e6e9ef');
-    if(sel===d.id){g.fillStyle='#ffd23f';g.beginPath();g.moveTo(d.cx-4,top-18);g.lineTo(d.cx+4,top-18);g.lineTo(d.cx,top-14);g.fill()}
+    OFFS.forEach((o,i)=>{
+      const w=i===0?BY[d.id]:BY[Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id)[i-1]];
+      luz(w.x,w._top-6,w.state,t);
+      if(i===0){ // marca de jefe
+        R('#ffd23f',w.x-2,w._top-1,4,2);
+      }
+      if(sel===w.id)selMarca(w.x,w._top-13);
+    });
+    const lead=BY[d.id], e=lead.state;
+    if(e==='trabaja')burbuja(d.cx,lead._top-24,'.'.repeat(1+(Math.floor(t*2)%3))+' ','#ffe9a8');
+    else if(e==='entregado')burbuja(d.cx,lead._top-24,'LISTO','#b6f5d4');
   });
+  // control de calidad
+  const qt=persona(QA.x,QA.fy,QA.body,QA.hair,false,QA.state==='trabaja',t);
+  R('#14181f',QA.x-4,qt+3,8,2);R('#e8dcc8',QA.x+7,qt+11,6,8);R('#14181f',QA.x+8,qt+13,4,1);R('#14181f',QA.x+8,qt+15,4,1);
+  luz(QA.x,qt-6,QA.state,t);
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('CALIDAD',QA.x,QA.fy+8);
+  if(sel==='auditor-calidad')selMarca(QA.x,qt-13);
   // director
   const anda=DIR.q.length>0;
-  const dt=persona(DIR.x,DIR.y,'#14181f','#2a2a2a',anda,false);
-  R('#d6336c',DIR.x-1,dt+11,2,7); // corbata
+  const dt=persona(DIR.x,DIR.y,'#14181f','#2a2a2a',anda,false,t);
+  R('#d6336c',DIR.x-1,dt+11,2,7);
   g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('DIRECTOR',DIR.x,DIR.y+8);
   const msg=DIR.msg||(listo?'Todo aprobado':'');
   if(msg)burbuja(DIR.x,dt-14,msg,'#ffd1e0');
-  if(sel==='director'){g.fillStyle='#ffd23f';g.beginPath();g.moveTo(DIR.x-4,dt-(msg?18:6));g.lineTo(DIR.x+4,dt-(msg?18:6));g.lineTo(DIR.x,dt-(msg?14:2));g.fill()}
-  // confeti
+  if(sel==='director')selMarca(DIR.x,dt-(msg?18:8));
   if(listo&&!reduce){if(confeti.length<40&&Math.random()<.6)confeti.push({x:Math.random()*352,y:-4,v:20+Math.random()*30,c:['#ffd23f','#36e09b','#ff6b9a','#5ad7ff'][Math.floor(Math.random()*4)]});
     confeti.forEach(p=>R(p.c,p.x,p.y,3,3))}
 }
@@ -243,7 +299,7 @@ function tick(ms){
   dibujar(t);
   requestAnimationFrame(tick);
 }
-/* ---------- simulación ---------- */
+/* ---------- movimiento del director ---------- */
 let corrida=0;
 const sleep=(ms,id)=>new Promise((ok,no)=>setTimeout(()=>id===corrida?ok():no('x'),reduce?Math.min(ms,200):ms));
 function ir(x,y,id,via){
@@ -252,73 +308,201 @@ function ir(x,y,id,via){
     DIR.res=[()=>id===corrida?ok():no('x')];
   });
 }
-function poner(id,v){est[id]=v;ficha();contar()}
+function irSuave(x,y){ // en modo real: sin promesa, solo camina si está libre
+  if(DIR.q.length)return;
+  DIR.q=[[DIR.x,CORR],[x,CORR],[x,y]].filter((p,i,a)=>!(i>0&&p[0]===a[i-1][0]&&p[1]===a[i-1][1]));DIR.res=[];
+}
+/* ---------- estado y progreso ---------- */
+function contar(){
+  const n=W.filter(w=>w.state==='entregado').length;
+  $('prog-txt').textContent=n+'/'+W.length+' entregados';$('prog-bar').style.width=(n/W.length*100)+'%';
+  if(n<W.length&&modo!=='real')listo=false;
+}
+function poner(id,v){if(BY[id]){BY[id].state=v;ficha();contar()}}
+function todos(v,ids){(ids||W.map(w=>w.id)).forEach(id=>BY[id].state=v);ficha();contar()}
+/* ---------- ronda simulada ---------- */
 async function ronda(){
-  const id=++corrida;
-  DEPTS.forEach(d=>est[d.id]='espera');listo=false;confeti=[];DIR.msg='';DIR.q=[];contar();ficha();
-  const f=n=>DEPTS.filter(d=>d.fase===n);
+  if(modo==='real'&&realActiva){toast('Hay una sesión real en marcha: reinicia para simular');return}
+  const id=++corrida;modo='demo';
+  todos('espera');listo=false;confeti=[];DIR.msg='';DIR.q=[];
+  const eq=n=>LEADS.filter(d=>d.fase===n);
+  const specs=d=>Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id);
   try{
-    DIR.msg='Fase 1: órdenes';
-    for(const d of f(1)){await ir(d.stand[0],d.stand[1],id);poner(d.id,'trabaja')}
-    await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Esperando entregas';
-    for(const d of f(1)){await sleep(1400,id);poner(d.id,'entregado')}
-    DIR.msg='Puerta 1: revisando';await sleep(1500,id);DIR.msg='Fase 1 aprobada';await sleep(900,id);
-    DIR.msg='Fase 2: órdenes';
-    for(const d of f(2)){await ir(d.stand[0],d.stand[1],id);poner(d.id,'trabaja')}
-    await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Esperando entregas';
-    for(const d of f(2)){await sleep(1400,id);poner(d.id,'entregado')}
-    DIR.msg='Puerta 2: revisando';await sleep(1500,id);DIR.msg='Fase 2 aprobada';await sleep(900,id);
-    DIR.msg='Fase 3: métricas';
-    const c=f(3)[0];await ir(c.stand[0],c.stand[1],id);poner(c.id,'trabaja');
-    await ir(DIR_HOME[0],DIR_HOME[1],id);await sleep(1600,id);poner(c.id,'entregado');
-    DIR.msg='Resumen final';await ir(TROFEO[0],TROFEO[1]+6,id,true);
+    for(const fase of [1,2,3]){
+      DIR.msg='Fase '+fase+': órdenes';
+      for(const d of eq(fase)){await ir(d.stand[0],d.stand[1],id);todos('trabaja',specs(d))}
+      await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Especialistas en paralelo';
+      await sleep(1600,id);
+      for(const d of eq(fase))todos('entregado',specs(d));
+      DIR.msg='Los jefes consolidan';
+      for(const d of eq(fase))poner(d.id,'trabaja');
+      await sleep(1500,id);
+      for(const d of eq(fase))poner(d.id,'entregado');
+      DIR.msg='Puerta '+fase+': calidad';poner('auditor-calidad','trabaja');await sleep(1500,id);
+      DIR.msg='Fase '+fase+' aprobada';await sleep(700,id);
+    }
+    poner('auditor-calidad','entregado');
+    DIR.msg='Resumen final';await ir(TROFEO[0],TROFEO[1]-6,id,true);
     listo=true;DIR.msg='Todo aprobado';toast('Ronda completa (simulación)');
   }catch(e){}
 }
-function contar(){
-  const n=Object.values(est).filter(v=>v==='entregado').length;
-  $('prog-txt').textContent=n+'/6 entregados';$('prog-bar').style.width=(n/6*100)+'%';
-  if(n<6)listo=false;
+/* ---------- sesión real ---------- */
+let realActiva=false, realId=null, mcp=null, pollT=null, cursor=null, started={}, ended={}, ultimoTexto='', primeraVez=0, errsSeguidos=0;
+const clavePayload=p=>{if(typeof p==='string'){try{return JSON.parse(p)}catch(e){return p}}return p};
+function ccr(p){p=clavePayload(p);return (p&&p.ccr)?p.ccr:p}
+function recorre(x,fn){if(Array.isArray(x)){x.forEach(v=>recorre(v,fn))}else if(x&&typeof x==='object'){fn(x);Object.keys(x).forEach(k=>recorre(x[k],fn))}}
+function procesar(eventos){
+  const nuevos=[];
+  recorre(eventos,o=>{
+    if(o.type==='tool_use'&&(o.name==='Agent'||o.name==='Task')&&o.input&&typeof o.input.subagent_type==='string'){
+      if(!started[o.id]){started[o.id]=o.input.subagent_type;nuevos.push(o.input.subagent_type)}
+    }
+    if(o.type==='tool_result'&&typeof o.tool_use_id==='string'&&started[o.tool_use_id])ended[o.tool_use_id]=true;
+    if(o.type==='text'&&typeof o.text==='string'&&o.text.length>3&&!o.signature){/* texto del director lo recoge leerTexto */}
+  });
+  return nuevos;
 }
+function aplicar(nuevos){
+  // estado de cada trabajador a partir de lanzamientos y devoluciones
+  W.forEach(w=>{const ids=Object.keys(started).filter(k=>started[k]===w.id);if(!ids.length)return;w.state=ids.every(k=>ended[k])?'entregado':'trabaja'});
+  nuevos.forEach(n=>{const w=BY[n];if(w&&w.tipo!=='calidad'){const d=LEADS.find(l=>l.id===w.equipo);if(d)irSuave(d.stand[0],d.stand[1])}});
+  contar();ficha();
+  const n=W.filter(w=>w.state==='entregado').length;
+  listo=n===W.length;
+}
+function leerTexto(eventos){
+  let txt='';
+  (Array.isArray(eventos)?eventos:[]).forEach(ev=>{
+    const a=ev&&ev.assistant; if(!a)return;
+    const m=a.internal_anthropic_catchall&&a.internal_anthropic_catchall.message||a.message;
+    if(!m||(a.internal_anthropic_catchall&&a.internal_anthropic_catchall.parent_tool_use_id))return;
+    (m.content||[]).forEach(c=>{if(c&&c.type==='text'&&c.text)txt=c.text});
+  });
+  return txt;
+}
+function errTexto(e){
+  const c=e&&e.code;
+  if(c==='approval_required'||c==='not_in_manifest'||c==='consent_required')return 'Claude necesita tu permiso para abrir sesiones en tu cuenta. Acéptalo cuando te lo pida y vuelve a pulsar el botón.';
+  if(c==='server_not_connected'||c==='needs_reauth')return 'El conector "Claude Code Remote" no está disponible en tu cuenta. Conéctalo en Ajustes → Conectores y vuelve a intentarlo.';
+  if(c==='blocked_by_policy')return 'Tu organización bloquea esta acción.';
+  return 'No se pudo completar la llamada ('+(c||'error')+'). '+(e&&e.message?e.message:'');
+}
+function ponerEstadoReal(txt,clase){const p=$('r-estado');p.textContent=txt;p.className='pill'+(clase?' '+clase:'')}
+function mostrarError(t){const e=$('r-err');e.hidden=!t;e.textContent=t||''}
+async function trabajarReal(){
+  mostrarError('');
+  if(realActiva){toast('Ya hay una sesión real en marcha');return}
+  if(!mcp){mostrarError('Esta vista no puede abrir sesiones (hace falta abrir la oficina en claude.ai con el conector Claude Code Remote). Usa "Copiar orden del director" en una sesión de Claude Code.');return}
+  corrida++;DIR.q=[];DIR.res=[];modo='real';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ultimoTexto='';
+  $('b-trabajar').disabled=true;ponerEstadoReal('Abriendo sesión…','busy');DIR.msg='Abriendo sesión';
+  try{
+    const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,'');
+    const res=await mcp.callTool(SERVER,'create_session',{
+      title:'Ronda del director: '+PRODUCTOS[activo].nombre,
+      source_url:REPO, source_revision:RAMA, permission_mode:'auto',
+      outcome_branch:'claude/ronda-director-'+stamp,
+      prompt:promptDir()
+    },{cache:false});
+    const m=JSON.stringify(res&&(res.payload||res.content)||'').match(/session_[A-Za-z0-9]+/);
+    if(!m)throw {code:'upstream_error',message:'La respuesta no incluyó el id de la sesión.'};
+    realId=m[0];realActiva=true;primeraVez=Date.now();errsSeguidos=0;
+    $('r-link').innerHTML='<a target="_blank" rel="noopener" href="https://claude.ai/code/'+realId+'">Abrir la sesión real</a>';
+    ponerEstadoReal('Sesión arrancando','busy');DIR.msg='Sesión en marcha';
+    sondear();pollT=setInterval(sondear,6000);
+  }catch(e){
+    realActiva=false;modo='manual';DIR.msg='';ponerEstadoReal('Sin sesión real','bad');mostrarError(errTexto(e));
+  }finally{$('b-trabajar').disabled=false}
+}
+async function sondear(){
+  if(!realActiva||!mcp)return;
+  try{
+    const ses=ccr((await mcp.callTool(SERVER,'get_session',{session_id:realId},{cache:false})).payload);
+    const s=(ses&&ses.data&&ses.data[0])||ses||{};
+    const bucket=String(s.status_bucket||s.session_status||'');
+    // eventos: primera lectura = páginas hacia atrás hasta el principio; luego solo los nuevos
+    let eventos=[];
+    if(!cursor){
+      let before=null,pag=0,first=true;
+      for(;;){
+        const inp={session_id:realId,kinds:['assistant','user'],limit:100};if(before)inp.before_id=before;
+        const r=ccr((await mcp.callTool(SERVER,'list_events',inp,{cache:false})).payload)||{};
+        const d=r.data||[];eventos=d.concat(eventos);
+        if(first){cursor=r.last_id||null;first=false}
+        before=r.first_id;pag++;
+        if(!r.has_more||!before||pag>=20)break;
+      }
+    }else{
+      const r=ccr((await mcp.callTool(SERVER,'list_events',{session_id:realId,kinds:['assistant','user'],limit:100,after_id:cursor},{cache:false})).payload)||{};
+      eventos=r.data||[];if(r.last_id)cursor=r.last_id;
+    }
+    errsSeguidos=0;
+    const nuevos=procesar(eventos);aplicar(nuevos);
+    const t=leerTexto(eventos);if(t){ultimoTexto=t;const el=$('r-msg');el.hidden=false;el.textContent='Director: '+t.slice(0,600)}
+    const lanzados=Object.keys(started).length, hechos=Object.keys(ended).length;
+    if(/COMPLETED|REVIEW_READY|IDLE/i.test(bucket)&&lanzados>0&&hechos>=lanzados){ponerEstadoReal('Sesión terminada ('+hechos+' agentes)','ok');DIR.msg=listo?'Todo aprobado':'Sesión terminada';pararSondeo()}
+    else if(/FAILED|failed/.test(bucket)){ponerEstadoReal('La sesión falló','bad');mostrarError('La sesión terminó con error. Ábrela para ver el motivo.');pararSondeo()}
+    else if(lanzados===0){
+      ponerEstadoReal('Sesión en marcha, sin agentes todavía','busy');
+      if(Date.now()-primeraVez>120000)mostrarError('Han pasado 2 minutos y el director aún no ha lanzado a nadie. Abre la sesión para ver qué está haciendo.');
+    }
+    else{ponerEstadoReal('Trabajando: '+hechos+'/'+lanzados+' agentes han devuelto resultado','busy');DIR.msg='Dirigiendo'}
+  }catch(e){
+    errsSeguidos++;
+    if(errsSeguidos>=3){mostrarError('Se perdió la conexión con la sesión: '+errTexto(e));pararSondeo()}
+  }
+}
+function pararSondeo(){clearInterval(pollT);pollT=null;realActiva=false}
 /* ---------- ficha de chat ---------- */
 function ficha(){
-  if(sel==='director'){
+  const w=sel==='director'?null:BY[sel];
+  if(!w){
     $('d-fase').textContent='Director · '+PRODUCTOS[activo].nombre;$('d-nombre').textContent='Director';
-    $('d-estado').textContent=listo?'Todo aprobado.':'Reparte órdenes y aprueba cada puerta.';
-    $('d-orden').textContent='Fase 1 en paralelo (Producto, Márgenes, Cumplimiento) → puerta → Fase 2 en paralelo (Creativos, Creadores) → puerta → Fase 3 (Crecimiento) → resumen final.';
-    $('d-skills').innerHTML='<span class="chip">Agent</span><span class="chip">CLAUDE.md</span>';
+    $('d-estado').textContent=listo?'Todo aprobado.':'Reparte órdenes y abre cada puerta.';
+    $('d-orden').textContent='En cada fase: especialistas en paralelo → jefes consolidan → control de calidad aprueba. Fases: 1 Producto, Márgenes y Cumplimiento → 2 Creativos y Creadores → 3 Crecimiento → resumen final.';
+    $('d-skills').innerHTML='<span class="chip">Agent</span><span class="chip">CLAUDE.md</span><span class="chip">.claude/agents/director.md</span>';
+    $('d-team').innerHTML=LEADS.map(d=>`<button type="button" data-w="${d.id}">${d.n}</button>`).join('')+'<button type="button" data-w="auditor-calidad">Calidad</button>';
     $('d-entrega').textContent='Resumen de lanzamiento en tienda/ con producto, números, qué se publica, qué falta por verificar y qué decide una persona.';
-    $('d-estados').innerHTML='';$('d-prompt').textContent=promptDir();$('b-copiar').onclick=()=>copiar(promptDir());return;
+    $('d-estados').innerHTML='';$('d-estados-label').hidden=true;$('d-prompt').textContent=promptDir();$('b-copiar').onclick=()=>copiar(promptDir());
+    $('d-team').querySelectorAll('button').forEach(b=>b.onclick=()=>{sel=b.dataset.w;ficha()});
+    return;
   }
-  const d=DEPTS.find(x=>x.id===sel);
-  $('d-fase').textContent='Fase '+d.fase+(d.fase<3?' · en paralelo':'')+' · '+PRODUCTOS[activo].nombre;
-  $('d-nombre').textContent=d.n+' · '+d.rol;
-  $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Documento listo para el director.'}[est[d.id]];
-  $('d-orden').textContent=d.orden;
-  $('d-skills').innerHTML=d.skills.map(k=>`<span class="chip">${k}</span>`).join('');
-  $('d-entrega').textContent=d.entrega;
-  $('d-prompt').textContent=promptDept(d);
-  $('d-estados').innerHTML=ESTADOS.map(s=>`<button type="button" data-e="${s[0]}" aria-pressed="${est[d.id]===s[0]}">${s[1]}</button>`).join('');
-  $('d-estados').querySelectorAll('button').forEach(b=>b.onclick=()=>{corrida++;DIR.q=[];DIR.res=[];est[d.id]=b.dataset.e;listo=Object.values(est).every(v=>v==='entregado');contar();ficha()});
-  $('b-copiar').onclick=()=>copiar(promptDept(d));
+  $('d-estados-label').hidden=false;
+  const eq=w.equipo?LEADS.find(l=>l.id===w.equipo):null;
+  $('d-fase').textContent=(w.tipo==='calidad'?'Control de calidad':'Fase '+w.fase+' · '+eq.n+' · '+w.tipo)+' · '+PRODUCTOS[activo].nombre;
+  $('d-nombre').textContent=w.n;
+  $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Entrega lista para el director.'}[w.state];
+  $('d-orden').textContent=w.orden;
+  $('d-skills').innerHTML=w.skills.map(k=>`<span class="chip">${k}</span>`).join('');
+  $('d-entrega').textContent=w.entrega;
+  $('d-prompt').textContent=promptW(w);
+  const miembros=eq?W.filter(x=>x.equipo===eq.id):[];
+  $('d-team').innerHTML=miembros.map(x=>`<button type="button" data-w="${x.id}" ${x.id===w.id?'aria-current="true"':''}>${x.tipo==='jefe'?'★ ':''}${x.n}</button>`).join('');
+  $('d-team').querySelectorAll('button').forEach(b=>b.onclick=()=>{sel=b.dataset.w;ficha()});
+  $('d-estados').innerHTML=ESTADOS.map(s=>`<button type="button" data-e="${s[0]}" aria-pressed="${w.state===s[0]}">${s[1]}</button>`).join('');
+  $('d-estados').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(modo!=='real'){corrida++;DIR.q=[];DIR.res=[];modo='manual'}w.state=b.dataset.e;listo=W.every(x=>x.state==='entregado');contar();ficha()});
+  $('b-copiar').onclick=()=>copiar(promptW(w));
 }
 function pintarBotones(){$('b-rodillo').setAttribute('aria-pressed',activo==='rodillo');$('b-cepillos').setAttribute('aria-pressed',activo==='cepillos')}
 cv.addEventListener('click',ev=>{
   const r=cv.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width*352, y=(ev.clientY-r.top)/r.height*224;
-  let hit=null;
-  if(Math.abs(x-DIR.x)<12&&y>DIR.y-26&&y<DIR.y+10)hit='director';
-  DEPTS.forEach(d=>{if(Math.abs(x-d.cx)<24&&y>d.fy-30&&y<d.dy+16)hit=hit||d.id});
+  let hit=null,mejor=1e9;
+  if(Math.abs(x-DIR.x)<9&&y>DIR.y-26&&y<DIR.y+4){hit='director';mejor=0}
+  W.forEach(w=>{const wx=w.x,wy=w.fy;if(Math.abs(x-wx)<=9&&y>wy-26&&y<wy+4){const d=Math.abs(x-wx);if(d<mejor){mejor=d;hit=w.id}}});
   if(hit){sel=hit;ficha()}
 });
 cv.addEventListener('keydown',ev=>{
-  const ids=['director',...DEPTS.map(d=>d.id)];
+  const ids=['director',...W.map(w=>w.id)];
   if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){ev.preventDefault();const i=ids.indexOf(sel);sel=ids[(i+(ev.key==='ArrowRight'?1:ids.length-1))%ids.length];ficha()}
 });
 $('b-rodillo').onclick=()=>{activo='rodillo';guardar();pintarBotones();ficha()};
 $('b-cepillos').onclick=()=>{activo='cepillos';guardar();pintarBotones();ficha()};
 $('b-dir').onclick=()=>copiar(promptDir());
 $('b-demo').onclick=()=>{ronda()};
-$('b-reset').onclick=()=>{corrida++;DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';DEPTS.forEach(d=>est[d.id]='espera');listo=false;confeti=[];contar();ficha()};
-// estado inicial para la captura: ?demo=1 en el hash lo deja a medias
+$('b-trabajar').onclick=()=>{trabajarReal()};
+$('b-reset').onclick=()=>{corrida++;pararSondeo();modo='manual';DIR.q=[];DIR.res=[];DIR.x=DIR_HOME[0];DIR.y=DIR_HOME[1];DIR.msg='';todos('espera');listo=false;confeti=[];started={};ended={};cursor=null;ponerEstadoReal('Sin sesión real');mostrarError('');$('r-msg').hidden=true;$('r-link').innerHTML=''};
 pintarBotones();ficha();contar();requestAnimationFrame(tick);
+// conector de sesiones: la oficina funciona sin él (ronda simulada y prompts)
+(async()=>{try{mcp=await window.claude.use('mcp')}catch(e){mcp=null}
+  if(!mcp){$('r-nota').textContent='Esta vista no tiene acceso a sesiones: puedes ver la ronda simulada y copiar los prompts. Para trabajo real, abre la oficina en claude.ai o pega la orden del director en una sesión de Claude Code.'}
+})();
 </script>
