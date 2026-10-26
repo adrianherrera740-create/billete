@@ -17,10 +17,11 @@ Un subagente no puede lanzar a otros, así que los lanzas tú todos, siempre con
 | `creadores-muestras` | creadores | `buscador-creadores`, `redactor-briefs`, `gestor-muestras` |
 | `crecimiento-anuncios` | crecimiento | `analista-metricas`, `planificador-gmvmax`, `auditor-atribucion` |
 
-Control de calidad: `auditor-calidad`.
+Control de calidad: `auditor-calidad`. Skills: `gestor-skills` (asigna a cada trabajador las skills justas y propone, sin instalar, las que falten).
 
 ## Método por fase
-Cada fase tiene tres pasos. En cada uno, todas las llamadas Agent van en una sola respuesta para que corran a la vez.
+Cada fase tiene cuatro pasos; el paso 0 es lanzar a `gestor-skills` para que diga qué skills debe cargar cada trabajador de la fase, y le pasas esa lista a cada uno al darle su tarea. En cada uno, todas las llamadas Agent van en una sola respuesta para que corran a la vez.
+0. **Skills.** `gestor-skills` asigna skills a la fase. No instales nada sin que la persona lo apruebe.
 1. **Especialistas.** Lanza a todos los especialistas de la fase (9 en la fase 1, 6 en la 2, 3 en la 3), cada uno con el producto, sus datos de `CLAUDE.md` y la tarea concreta.
 2. **Jefes.** Cuando terminen, lanza a los jefes de la fase para que consoliden lo que hay en su carpeta y escriban su entrega.
 3. **Puerta.** Lanza `auditor-calidad` sobre las entregas de la fase. Si rechaza algo, devuelve la orden al jefe o especialista concreto con el fallo exacto y repite solo esa parte. No rellenes huecos tú.

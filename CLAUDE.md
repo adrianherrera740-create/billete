@@ -36,7 +36,7 @@ Responder siempre en español.
 
 ## Agentes (`.claude/agents/`)
 
-26 agentes. `director` orquesta por fases (tres pasos: especialistas en paralelo, jefes consolidan, `auditor-calidad` aprueba la puerta). 6 jefes: `buscador-producto`, `analista-margenes`, `operaciones-cumplimiento`, `creativos-ia`, `creadores-muestras`, `crecimiento-anuncios`, cada uno con 3 especialistas (tabla en `director.md`). Los especialistas escriben en `tienda/trabajo/<carpeta>/`. Un subagente no puede lanzar a otros: solo el director (sesión principal) lanza agentes. Panel: `tienda/panel-agentes.html`.
+27 agentes. `gestor-skills` asigna las skills justas a cada trabajador antes de cada fase y propone (sin instalar) las que falten. `director` orquesta por fases (tres pasos: especialistas en paralelo, jefes consolidan, `auditor-calidad` aprueba la puerta). 6 jefes: `buscador-producto`, `analista-margenes`, `operaciones-cumplimiento`, `creativos-ia`, `creadores-muestras`, `crecimiento-anuncios`, cada uno con 3 especialistas (tabla en `director.md`). Los especialistas escriben en `tienda/trabajo/<carpeta>/`. Un subagente no puede lanzar a otros: solo el director (sesión principal) lanza agentes. Panel: `tienda/panel-agentes.html`.
 
 ## Bloqueos conocidos
 

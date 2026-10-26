@@ -77,7 +77,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div>
       <div class="label">Tienda dropshipping · TikTok Shop España</div>
       <h1>Oficina de agentes</h1>
-      <p class="sub">Un director, seis equipos con tres especialistas cada uno y un control de calidad: 26 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
+      <p class="sub">Un director, seis equipos con tres especialistas cada uno un control de calidad y un gestor de skills: 27 trabajadores. Trabajan en paralelo por fases y nada avanza sin el visto bueno de calidad. Toca a cualquiera para abrir su chat.</p>
     </div>
     <div class="switch" role="group" aria-label="Producto">
       <button id="b-rodillo" type="button" aria-pressed="false">Rodillo quitapelos</button>
@@ -95,7 +95,7 @@ code{font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1p
     <div class="row">
       <span class="pill" id="r-estado">Sin sesión real</span>
       <span id="r-link"></span>
-      <div class="progress"><span id="prog-txt">0/26 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
+      <div class="progress"><span id="prog-txt">0/27 entregados</span><div class="track"><i id="prog-bar"></i></div></div>
     </div>
     <div class="msg" id="r-msg" hidden></div>
     <div class="err" id="r-err" hidden></div>
@@ -176,6 +176,8 @@ LEADS.forEach((d,i)=>{
 });
 const QA={id:'auditor-calidad',n:'Control de calidad',tipo:'calidad',equipo:null,fase:0,x:214,fy:112,body:'#c7c7d1',hair:'#222',rol:'Verifica cada entrega antes de abrir una puerta.',orden:'Recalcula cifras, comprueba que cada URL y precio tiene fuente y fecha, y que se cumplen las reglas de CLAUDE.md. Rechaza lo que no se pueda demostrar.',skills:['CLAUDE.md','tienda/trabajo/'],entrega:'tienda/trabajo/calidad/<fase>.md con APROBADO o RECHAZADO por departamento y los fallos exactos.',state:'espera'};
 W.push(QA);BY[QA.id]=QA;
+const SK={id:'gestor-skills',n:'Gestor de skills',tipo:'skills',equipo:null,fase:0,x:138,fy:112,body:'#e0a458',hair:'#444',rol:'Asigna a cada trabajador las skills justas y propone, sin instalar, las que falten.',orden:'Antes de cada fase, di qué skills debe cargar cada trabajador, detecta huecos y propón como máximo 2 skills de fuente fiable, leídas enteras. No instales nada sin aprobación de la persona.',skills:['.claude/skills/','SearchSkills','ListSkills'],entrega:'tienda/trabajo/skills/<fase>.md con la tabla trabajador → skills, huecos y propuestas con origen, licencia y riesgos.',state:'espera'};
+W.push(SK);BY[SK.id]=SK;
 const DIRW={id:'director',n:'Director',x:176,y:112};
 const DIR_HOME=[176,112], TROFEO=[176,202], CORR=120;
 const ESTADOS=[['espera','Esperando'],['trabaja','Trabajando'],['entregado','Entregado']];
@@ -276,6 +278,11 @@ function dibujar(t){
   luz(QA.x,qt-6,QA.state,t);
   g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('CALIDAD',QA.x,QA.fy+8);
   if(sel==='auditor-calidad')selMarca(QA.x,qt-13);
+  const st=persona(SK.x,SK.fy,SK.body,SK.hair,false,SK.state==='trabaja',t+.2);
+  R('#fff',SK.x+7,st+11,7,9);R('#e0a458',SK.x+8,st+12,5,2);R('#14181f',SK.x+8,st+15,5,1);R('#14181f',SK.x+8,st+17,5,1);
+  luz(SK.x,st-6,SK.state,t);
+  g.font='bold 6px monospace';g.textAlign='center';g.fillStyle='#fff';g.fillText('SKILLS',SK.x,SK.fy+8);
+  if(sel==='gestor-skills')selMarca(SK.x,st-13);
   // director
   const anda=DIR.q.length>0;
   const dt=persona(DIR.x,DIR.y,'#14181f','#2a2a2a',anda,false,t);
@@ -329,10 +336,10 @@ async function ronda(){
   const specs=d=>Object.keys(SPEC).filter(k=>SPEC[k].lead===d.id);
   try{
     for(const fase of [1,2,3]){
-      DIR.msg='Fase '+fase+': órdenes';
+      DIR.msg='Fase '+fase+': órdenes';poner('gestor-skills','trabaja');
       for(const d of eq(fase)){await ir(d.stand[0],d.stand[1],id);todos('trabaja',specs(d))}
       await ir(DIR_HOME[0],DIR_HOME[1],id);DIR.msg='Especialistas en paralelo';
-      await sleep(1600,id);
+      await sleep(1600,id);poner('gestor-skills','entregado');
       for(const d of eq(fase))todos('entregado',specs(d));
       DIR.msg='Los jefes consolidan';
       for(const d of eq(fase))poner(d.id,'trabaja');
@@ -365,7 +372,7 @@ function procesar(eventos){
 function aplicar(nuevos){
   // estado de cada trabajador a partir de lanzamientos y devoluciones
   W.forEach(w=>{const ids=Object.keys(started).filter(k=>started[k]===w.id);if(!ids.length)return;w.state=ids.every(k=>ended[k])?'entregado':'trabaja'});
-  nuevos.forEach(n=>{const w=BY[n];if(w&&w.tipo!=='calidad'){const d=LEADS.find(l=>l.id===w.equipo);if(d)irSuave(d.stand[0],d.stand[1])}});
+  nuevos.forEach(n=>{const w=BY[n];if(w&&w.equipo){const d=LEADS.find(l=>l.id===w.equipo);if(d)irSuave(d.stand[0],d.stand[1])}});
   contar();ficha();
   const n=W.filter(w=>w.state==='entregado').length;
   listo=n===W.length;
@@ -468,7 +475,7 @@ function ficha(){
   }
   $('d-estados-label').hidden=false;
   const eq=w.equipo?LEADS.find(l=>l.id===w.equipo):null;
-  $('d-fase').textContent=(w.tipo==='calidad'?'Control de calidad':'Fase '+w.fase+' · '+eq.n+' · '+w.tipo)+' · '+PRODUCTOS[activo].nombre;
+  $('d-fase').textContent=(w.tipo==='calidad'?'Control de calidad':w.tipo==='skills'?'Gestor de skills':'Fase '+w.fase+' · '+eq.n+' · '+w.tipo)+' · '+PRODUCTOS[activo].nombre;
   $('d-nombre').textContent=w.n;
   $('d-estado').textContent={espera:'Esperando orden.',trabaja:'Trabajando en su orden…',entregado:'Entrega lista para el director.'}[w.state];
   $('d-orden').textContent=w.orden;
