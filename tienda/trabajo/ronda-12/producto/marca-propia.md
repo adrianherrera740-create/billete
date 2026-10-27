@@ -49,7 +49,7 @@ Partidas con fuente:
 
 | Escenario | Qué cubre | Productos / unidades | Qué NO cubre |
 |---|---|---|---|
-| 500 € | Diseño propio hecho por IA/uno mismo, 1 muestra de pre-producción (supuesto: 30-60 €), 1 tirada mínima de desk mat de 100 uds (~170-340 USD solo producto + flete, ver arriba), packaging simple. Sin registro de marca (solo búsqueda de anterioridades gratuita) | 1 SKU, ~100 uds. Alcanza para ~7-10 pedidos/día no, para ~100 pedidos en total | Sin marca registrada, sin 3PL, sin anuncios, sin stock de seguridad. Probar con 100 uds validaría demanda, no una marca |
+| 500 € | Diseño propio hecho por IA/uno mismo, 1 muestra de pre-producción (supuesto: 30-60 €), 1 tirada mínima de desk mat de 100 uds (~170-340 USD solo producto + flete, ver arriba), packaging simple. Sin registro de marca (solo búsqueda de anterioridades gratuita) | 1 SKU, ~100 uds (unos 100 pedidos en total) | Sin marca registrada, sin 3PL, sin anuncios, sin stock de seguridad. Probar con 100 uds validaría demanda, no una marca |
 | 2.000 € | Registro de marca UE (850 EUR, o ~160 EUR si el fondo PYME aplicara; verificar), 2-3 SKU con tirada mínima de 100-150 uds (desk mat + calcetines + pack), muestras, packaging impreso, GPSR (representante/etiqueta, coste no verificado) | 2-3 SKU, 100-150 uds por SKU (~300-450 uds en total) | Sin 3PL (el envío lo haces tú), poco o nada para publicidad de pago |
 | 5.000 € | Marca UE + diseño comunitario, 3-4 SKU con 200-300 uds cada uno, 3PL en España (tarifa no verificada), packaging de pack, fondo para creadores/afiliados y GMV Max en lo que funcione | 3-4 SKU, ~600-1.000 uds | Tiempo: 4-6 semanas de producción y tránsito antes de vender (marítimo 25-45 días + producción no verificada) |
 
