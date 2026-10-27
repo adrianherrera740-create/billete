@@ -39,3 +39,9 @@ Actualizado: 2026-10-27 (cierre ronda 12). Sustituye las secciones de abajo para
 9. [auditor-calidad] Aplicar correcciones de `calidad/ronda-12-puerta-1.md` y marcar el estado de cada informe.
 10. [pmo-operaciones + curador-cerebro] Calendario de 30 días; aplicar propuestas de OKR/proceso solo cuando la persona las apruebe.
 - Se deja de hacer: rondas de producto sin lectura del canal, matrices SÍ/NO, recalcular márgenes de producto concreto, hablar de proveedores sin catálogo ni plazo verificado.
+
+## Ronda 13 (solo proveedores, 27/10/2026): cierre
+- [Persona] Ampliar Network access del entorno (bigbuy.eu, cjdropshipping.com, printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com, globomatik.com, dmi.es, faire.com) O hacer las 8 comprobaciones de 0 EUR de `tienda/trabajo/calidad/ronda-13-proveedores.md` 7.2 (1-4 de Seller Center bloquean todo lo demas) y guardar capturas/enlaces en `tienda/trabajo/ronda-13/proveedores/`.
+- [Persona] Cuenta gratuita CJ: SKU gaming/coche/streetwear con stock en DE/PL, precio, plazo a ES, dispute-policy; BigBuy: razon social, VAT (VIES) y cuota real. Sin pagar.
+- [auditor-calidad + autores] Aplicar las correcciones de `ronda-13-proveedores.md` 6 a dropshipping-ue, mayoristas-es, fabricantes-marca-blanca, pod-textil-ue y protocolo-homologacion.
+- [Agentes] No lanzar mas busquedas de proveedores por blog hasta tener acceso o respuestas de la persona (aprendizaje 30).

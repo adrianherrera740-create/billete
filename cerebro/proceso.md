@@ -73,3 +73,11 @@ Añadir una puerta M ("marca") sin sustituir las puertas de producto, que siguen
 - M2 (26/11/2026): "SOLO SI" a-f: (a) hoja de canal, (b) origen y plazo admitidos, (c) 2 cotizaciones con coste puesto en España <= 40 % del PVP leído, (d) alta fiscal, (e) capital confirmado, (f) >= 10 reservas pagadas o 1 pedido B2B con anticipo.
 Criterios de parada: B2B < 2 respuestas de 15 (un ajuste, luego cerrar); preventa < 10 reservas en 14 días (un ajuste, luego cerrar); afiliación sin venta ni vídeo > 5.000 vistas en 21 días; gasto > 30 € sin nueva respuesta; persona < 3 h/semana: pausar.
 Fuente: `tienda/trabajo/ronda-12/decision-ceo.md` §4.
+
+## 9. Protocolo de homologacion de proveedores (ronda 13, 27/10/2026) - herramienta, no decision
+Fuente: `tienda/trabajo/ronda-13/proveedores/protocolo-homologacion.md` con las correcciones de `calidad/ronda-13-proveedores.md` 7.3.
+- Fase 0 (sin puntos, eliminatoria): red flags rojas (p. ej. sin razon social ni CIF/VAT en el aviso legal) y validacion VIES.
+- Puerta previa de plataforma: origen del stock admitido, plazo, conector ES y alta en Seller Center; si fallan, el proveedor no se puntua.
+- 15 comprobaciones puntuadas sobre 30; minimo 24/30 para homologar. Cada punto exige dato [OFICIAL] (cita literal, URL, fecha); [BLOG] puntua 0.
+- Anadir coste de importacion (derecho de 3 EUR, IVA de importacion, aduana) cuando el origen no es UE.
+- Estado: CJ corregido a 4/30 (red flag roja 1 activa, punto 4 con /service-fee, punto 13 a 0); BigBuy y resto sin puntuar (sin acceso). Ningun proveedor homologado.

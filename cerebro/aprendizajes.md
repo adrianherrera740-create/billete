@@ -37,3 +37,9 @@
 26. Un CPA fijado como porcentaje del equilibrio del propio producto es circular ("gana dinero" porque el CPA se fijó para que gane): usar CPA medido o rango externo marcado como supuesto.
 27. No cambiar de modelo sin leer antes el canal: una matriz SÍ/NO sobre supuestos no es un resultado. El cuello de botella es la ejecución de la persona (pre-mortem A3), no la búsqueda.
 28. Un informe con columna "leído" cuyo contenido es un resumen de buscador se rechaza (refuerza la 20). Si dos informes de la misma ronda se contradicen (POD "escala mejor" frente a PARAR), el director no decide con ambos: calidad los reconcilia o rechaza.
+
+## Proveedores y fuentes (ronda 13)
+29. Etiquetar cada dato de proveedor [OFICIAL] (pagina leida, con cita literal, URL y fecha de consulta; en tablas, confirmar la cabecera de columnas) o [BLOG]/[NO VERIFICADO]. Un resumen de buscador o un enlace sin abrir no es lectura.
+30. Si el entorno no llega a la fuente oficial (DNS, 403), parar y pedir acceso a la persona (dominios concretos o comprobaciones de 0 EUR con URL) en vez de repetir busquedas por blog: mas busquedas por blog no cambian la confianza.
+31. Los almacenes del servicio de stock propio de CJ (DE, PL: el vendedor envia stock, MOQ 100) no prueban dropshipping desde la UE. Distinguir siempre "almacen de stock propio del vendedor" de "almacen del catalogo de dropshipping".
+32. Devoluciones 0,10 frente a 0,15 en `margen_es.py`: declarar siempre cual se usa (ronda 13 usa 0,10; ronda 12, 0,15: +4,53 EUR frente a +5,87 EUR a 34,90 EUR) y no comparar cifras con supuestos distintos (refuerza la 23).

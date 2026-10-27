@@ -1,11 +1,14 @@
 # Estado actual (actualizar al terminar cada sesión)
-Última actualización: 2026-10-27 (cierre ronda 12)
+Última actualización: 2026-10-27 (cierre ronda 13, solo proveedores)
 
 ## Objetivo
 Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €/mes (qué significa exactamente, sin definir), sin comprar muestras, vídeos hechos con IA. Público: gamers, coches, streetwear (sin usar la marca de GTA). Las reglas de `CLAUDE.md` NO han cambiado: solo la persona puede levantarlas (ver preguntas pendientes).
 
 ## Dónde estamos
-- NO hay producto ganador ni ruta aprobada. Doce rondas, 0 € gastados, 0 vídeos, 0 precios leídos en TikTok Shop ES.
+- NO hay producto ganador ni ruta aprobada. Trece rondas, 0 € gastados, 0 vídeos, 0 precios leídos en TikTok Shop ES.
+- Ronda 13 (27/10/2026, solo proveedores): NINGUN proveedor homologado. El cuello de botella real es de ACCESO, no de busqueda: el entorno en la nube no resuelve DNS de proveedores ni de Seller Center (Printful, Gelato, Printify, seller-es.tiktok.com...). Calidad: `tienda/trabajo/calidad/ronda-13-proveedores.md`; informes en `tienda/trabajo/ronda-13/proveedores/`.
+- Unico legible: CJ Dropshipping (13 datos [OFICIAL] leidos: tarifas de servicio, MOQ 10/100, sin NIF exigido en el acuerdo, almacenes DE y PL SOLO del stock que envia el vendedor, no prueba catalogo de dropshipping UE; pagina TikTok sin mencionar Espana y con botones a TikTok_US). Sin razon social ni VAT visibles: red flag roja 1, puntua 4/30, descartado hasta aclarar. BigBuy: 403. Plazo 2 dias y comision 4 %/9 % siguen SIN confirmar. Margenes de ronda 13 con devoluciones 0,10 (ronda 12: 0,15).
+- Via de desbloqueo: la persona puede ampliar Network access del entorno con bigbuy.eu, cjdropshipping.com, printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com, globomatik.com, dmi.es, faire.com (ver `red-y-limites.md`), o hacer las 8 comprobaciones de 0 EUR con URL de `calidad/ronda-13-proveedores.md` 7.2.
 - Ronda 12 (27/10/2026), puerta 1: NINGUNA ruta pasa. NO se compromete capital (ni 2.000 ni 5.000 €). Decisión: `tienda/trabajo/ronda-12/decision-ceo.md`; calidad: `tienda/trabajo/calidad/ronda-12-puerta-1.md`; crítico: `ronda-12/critica/pre-mortem.md`.
 - Marca propia + 3PL: AGUANTAR sin presupuesto (destino condicionado "SOLO SI" a-f, en `decision-ceo.md` §4). Su GO teórico del 33 % sale de asumir PVP 39,90 €, sin dato medido.
 - POD de marca y dropshipping simple: CERRAR como motor de anuncios (camiseta POD 34,90 € = +4,53 €/pedido, a 14,90 € = -7,86 €; `margen_es.py`, crítico, 27/10).
@@ -28,8 +31,8 @@ Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €
 5. ¿Levantas "sin stock propio" (a) y "sin comprar muestras" (b)? Recomendación del CEO: solo tras M2 y con tope tuyo.
 
 ## Próximo paso
-Persona: preguntas anteriores + lectura de canal + (opcional) cuentas gratuitas BigBuy/CJ y descargar CSV. Agentes: 10 tareas de 0 €, lotes <= 10 (`backlog.md`). Nada de gasto > 30 € sin respuesta.
+Persona: (a) ampliar Network access o hacer las 8 comprobaciones de la ronda 13; (b) preguntas anteriores + lectura de canal + (opcional) cuentas gratuitas BigBuy/CJ y descargar CSV. Agentes: 10 tareas de 0 €, lotes <= 10 (`backlog.md`). Nada de gasto > 30 € sin respuesta.
 
 ## Bloqueos vivos
-Sin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no abren desde la nube. Alta fiscal sin cubrir. Plazo (2 vs 5 días hábiles) y comisión (4/5/9 %) sin resolver hasta leer Seller Center. Derecho de 3 € y flete de importación no verificados y fuera de `margen_es.py`. Ejecución de la persona = riesgo principal (crítico, juicio propio).
+Entorno sin DNS de proveedores ni Seller Center (ronda 13). Sin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no abren desde la nube. Alta fiscal sin cubrir. Plazo (2 vs 5 días hábiles) y comisión (4/5/9 %) sin resolver hasta leer Seller Center. Derecho de 3 € y flete de importación no verificados y fuera de `margen_es.py`. Ejecución de la persona = riesgo principal (crítico, juicio propio).
 Propuestas de OKR y proceso: marcadas "pendiente de aprobación de la persona" en `okrs.md` y `proceso.md`.

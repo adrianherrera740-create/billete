@@ -96,11 +96,20 @@ actualizado: 2026-10-27
 - [[tienda/trabajo/ronda-12/producto/metodo-busqueda]]
 - [[tienda/trabajo/ronda-12/producto/modelos-alternativos]]
 - [[tienda/trabajo/ronda-12/producto/proveedores-serios]]
+### ronda-13
+- [[tienda/trabajo/ronda-13/CONTEXTO]]
+- [[tienda/trabajo/ronda-13/proveedores/dropshipping-ue]]
+- [[tienda/trabajo/ronda-13/proveedores/fabricantes-marca-blanca]]
+- [[tienda/trabajo/ronda-13/proveedores/mayoristas-es]]
+- [[tienda/trabajo/ronda-13/proveedores/pod-textil-ue]]
+- [[tienda/trabajo/ronda-13/proveedores/protocolo-homologacion]]
+- [[tienda/trabajo/ronda-13/proveedores/reglas-tiktok-shop-oficial]]
 
 ## Otros informes
 - [[tienda/trabajo/calidad/fase-1]]
 - [[tienda/trabajo/calidad/ronda-11-puerta-1]]
 - [[tienda/trabajo/calidad/ronda-12-puerta-1]]
+- [[tienda/trabajo/calidad/ronda-13-proveedores]]
 - [[tienda/trabajo/calidad/ronda-5-fase-1]]
 - [[tienda/trabajo/cumplimiento/entrega-jefe]]
 - [[tienda/trabajo/cumplimiento/revisor-contenido-ia]]
@@ -118,6 +127,7 @@ actualizado: 2026-10-27
 - [[tienda/trabajo/ronda-11/decision-ceo]]
 - [[tienda/trabajo/ronda-12/CONTEXTO]]
 - [[tienda/trabajo/ronda-12/decision-ceo]]
+- [[tienda/trabajo/ronda-13/CONTEXTO]]
 - [[tienda/trabajo/ronda-8/barrido-aliexpress-es]]
 - [[tienda/trabajo/skills/ronda-4]]
 - [[tienda/trabajo/skills/ronda-5]]

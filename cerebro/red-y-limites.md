@@ -1,4 +1,4 @@
-# Qué se puede hacer desde cada entorno (26/10/2026)
+# Qué se puede hacer desde cada entorno (actualizado 27/10/2026, ronda 13)
 
 ## Entorno en la nube de Claude Code (donde se ha trabajado hasta ahora)
 - Solo responde AliExpress ES. Búsqueda con `.claude/skills/proveedor-es/scripts/aliexpress_es.js "término" ...` (filtro de envío desde España, ordenado por ventas). Se puede barrer en masa: 4 procesos en paralelo con ~12 términos cada uno, sin captcha casi nunca. Salida: `- URL | precio | vendidos | estrellas | título | etiquetas`.
@@ -8,6 +8,14 @@
 - WebSearch funciona (resúmenes); WebFetch falla con DNS en muchos dominios.
 - Un agente no puede lanzar a otros; solo la sesión principal (director).
 - Límite de uso de la cuenta: salta con rondas de 25+ agentes. Reanudar con SendMessage.
+
+## Detalle por dominio (ronda 13, 27/10/2026)
+- DNS no resuelve (WebFetch falla): printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com y, segun el ultimo intento, las rutas internas de Seller Center. Sin acceso = nada [OFICIAL].
+- 403: bigbuy.eu (Cloudflare).
+- Legible: cjdropshipping.com (sin www): /service-fee, /integrations/tiktok-shop, /user-agreement, /privacyPolicy, portada, /customPackaging. NO legibles (redirigen a login en frontend.cjdropshipping.com): /dispute-policy.html, /global-warehouses.
+- No probados / sin lectura: globomatik.com, dmi.es, faire.com (se piden en la ampliacion).
+- Que abre ampliar Network access (la persona, en la configuracion del entorno): bigbuy.eu, cjdropshipping.com, printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com, globomatik.com, dmi.es, faire.com. Abriria leer ayuda oficial de comisiones, plazo y alta, y catalogos. NO abre: cuentas con login (CJ global-warehouses), FastMoss (429), fichas de AliExpress (anti-bot), ni precios de TikTok Shop ES.
+- Un WebSearch NO es lectura: no se puede marcar [OFICIAL].
 
 ## Entorno local de la persona (por ejemplo con Free Claude Code)
 Ver `USAR-EN-FCC.md`. No verificado: si la red local alcanza fichas de AliExpress, CJ o BigBuy. Si es así, el barrido y la comprobación de proveedores mejoran mucho.
