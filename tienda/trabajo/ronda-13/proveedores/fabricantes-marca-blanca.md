@@ -66,7 +66,7 @@ Variante para agentes 1688: sustituir los puntos 1-8 por: "Adjunto 2-3 enlaces d
 
 ## 5. Recuento de etiquetas de fuente
 - [OFICIAL]: 0 (ninguna web de proveedor se pudo abrir).
-- [BLOG]: ver bloque de cierre, recuento por conteo de etiquetas "[BLOG" en este archivo.
+- [BLOG]: 37 apariciones de la etiqueta en el archivo (grep 27/10/2026), incluidas unas 3 en este recuento; unos 34 datos etiquetados.
 - NO VERIFICADO: la mayoría de celdas de MOQ, plazo, muestras y envío de los n.º 3, 4, 5, 6, 8, 11 y 12.
 
 ## Datos clave
