@@ -40,3 +40,14 @@ Fichas = AliExpress ES con filtro de envío desde España salvo que se diga lo c
 | C. Cepillo de fregadero (NO era "tira de pelo") | 1005013082078464 | 7,39 € | no verificado | NO, no identificado | El ID es un cepillo de fregadero, no el desatascador de pelo puntuado; margen del investigador omitía IVA (6,17 frente a 1,55 €) | ronda-11 |
 | D. Escurridor de silicona | 1005013072263315 / 1005013081620383 | 11,99 / 8,08 € | 9,90–12,90 € | NO | -3,76 / -0,38 €/pedido a 12,90 € | ronda-11 |
 | E. Removedor (sin definir) | 1005013080916611 / 1005013071313766 | 6,09 / 10,29 € | no verificado | NO, sin definir | Producto y contenido sin confirmar; sin precio ES leído | ronda-11 |
+
+## Ronda 12 (27/10/2026): modelos de negocio, no productos. Ninguno con GO. Cifras de `margen_es.py` (crítico y calidad); costes supuestos, sin cotización
+| Modelo / producto | Ficha | Coste | PVP | Veredicto | Motivo principal | Carpeta |
+|---|---|---|---|---|---|---|
+| Marca propia + 3PL (hipótesis) | no aplica | 9 € supuesto (desk mat 5 €; Alibaba 1,70-3,40 USD sin envío/aranceles) | 39,90 € propuesto, sin ancla leída (Nilox 10,99 €, calcetines marca 26-28 €) | AGUANTAR sin presupuesto | +10,88 €/pedido (dev. 12 %, com. 9 %), pero el PVP es supuesto; a 39,90 € un dropshipping da +10,95 €; necesita 3.157 € de caja a etapa 1.000 | ronda-12 `modelos-y-escalas.md` |
+| POD de marca (camiseta) (hipótesis) | printify.com/app/products/6 | 12,50 € supuesto | 34,90 € propuesto; mercado ES 6-14 € (FastMoss abril 2026) | CERRAR como motor de anuncios | +4,53 €/pedido; +0,85 € con afiliado 15 %; -7,86 € a 14,90 €; plazo POD 3 días contra regla de 2 | ronda-12 |
+| Dropshipping UE genérico | no aplica | 8 € + 3,90 € envío supuestos | 24,90 € propuesto | CERRAR como motor | +2,65 €/pedido sin anuncios; pierde con CPA 5-12 € | ronda-12 |
+| Ventosa B2 | 1005013071285711 | 5,89 € | 12,90-14,90 € | AGUANTAR congelada, sin presupuesto | Ver ronda 11; solo dato de lectura | ronda-11 |
+| Preventa / B2B / curación-afiliación | no aplica | por cotizar | por probar (>= 25 €) | GO a PRUEBA (tope 30 €) | Prueban demanda sin stock; éxito/fracaso en `decision-ceo.md` §2 y §4 | ronda-12 |
+
+Los informes `marca-propia.md` y `modelos-alternativos.md` están RECHAZADOS por calidad: sus PVP "leídos" eran resúmenes de buscador. Los candidatos de `metodo-busqueda.md` (barrido b1, 128 IDs, 33 filtrados) quedan como NO puntuados; los IDs con marca ajena o mal descritos no sirven de ficha.

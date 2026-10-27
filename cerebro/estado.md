@@ -1,27 +1,35 @@
 # Estado actual (actualizar al terminar cada sesión)
-Última actualización: 2026-10-26 (cierre ronda 11)
+Última actualización: 2026-10-27 (cierre ronda 12)
 
 ## Objetivo
-Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €/mes (qué significa exactamente, sin definir), sin comprar muestras, vídeos hechos con IA. Público: gamers, coches, streetwear (tirón de GTA VI, sin usar la marca). Quiere un producto llamativo, anunciable, que resuelva un problema de todos.
+Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €/mes (qué significa exactamente, sin definir), sin comprar muestras, vídeos hechos con IA. Público: gamers, coches, streetwear (sin usar la marca de GTA). Las reglas de `CLAUDE.md` NO han cambiado: solo la persona puede levantarlas (ver preguntas pendientes).
 
 ## Dónde estamos
-- NO hay producto ganador verificado. Once rondas (`tienda/trabajo/ronda-*`), ninguna con GO. Detalle por producto en `productos.md`.
-- Ronda 11, puerta 1 (26/10/2026): NO GO a los 5 finalistas (A kit altavoz, B extractor, C, D escurridor, E). Auditor, crítico y CEO coinciden. Decisión en `tienda/trabajo/ronda-11/decision-ceo.md`.
-- Línea "envío desde España + utilidad + demostrar sin muestra": PIVOTAR (congelada, sin nuevas rondas hasta tener datos de la persona). No se cierra: 0 € gastados y nunca se midió el precio del canal real ni la política de origen de Seller Center.
-- Ventosa B2 (1005013071285711, 5,89 €): AGUANTAR para validación manual, no GO. +3,05 €/pedido a PVP máx. 14,90 € sin anuncios; con CPA 8 € pierde ~5 €. Producto de entrada, no ganador. PVP 19,90–24,90 € de la ronda 9 queda descartado.
-- C era un cepillo de fregadero (ID mal identificado) y E nunca se definió. Mercado según resúmenes de búsqueda (no verificado en TikTok Shop ES): 8–15 € por estos objetos.
-- Franco: hoy el cerebro no tiene un ganador llamativo que cumpla las reglas. Otros canales (ronda 7): pack digital y afiliación, sin probar.
-- Empresa: 33 agentes, proceso y puertas en `proceso.md`; tareas en `backlog.md`; `escalado.py`, `barrido.py`. Oficina: `tienda/panel-agentes.html`.
+- NO hay producto ganador ni ruta aprobada. Doce rondas, 0 € gastados, 0 vídeos, 0 precios leídos en TikTok Shop ES.
+- Ronda 12 (27/10/2026), puerta 1: NINGUNA ruta pasa. NO se compromete capital (ni 2.000 ni 5.000 €). Decisión: `tienda/trabajo/ronda-12/decision-ceo.md`; calidad: `tienda/trabajo/calidad/ronda-12-puerta-1.md`; crítico: `ronda-12/critica/pre-mortem.md`.
+- Marca propia + 3PL: AGUANTAR sin presupuesto (destino condicionado "SOLO SI" a-f, en `decision-ceo.md` §4). Su GO teórico del 33 % sale de asumir PVP 39,90 €, sin dato medido.
+- POD de marca y dropshipping simple: CERRAR como motor de anuncios (camiseta POD 34,90 € = +4,53 €/pedido, a 14,90 € = -7,86 €; `margen_es.py`, crítico, 27/10).
+- Ventosa B2 (1005013071285711): AGUANTAR congelada, sin presupuesto, solo como dato de lectura.
+- GO a PRUEBA con tope total 30 € / 30 días: preventa (14 días, <= 30 €), B2B (7 días, 0 €), curación/afiliación (21 días, 0 €, condicionada a requisitos del programa).
+- Informes `producto/marca-propia.md` y `producto/modelos-alternativos.md` RECHAZADOS por calidad: no citarlos como evidencia. `metodo-busqueda.md` y `modelos-y-escalas.md` solo con sus correcciones.
+- Único dato de canal: FastMoss abril 2026 (blog, no verificado en TikTok Shop): vende ropa y belleza a 4-14 €, sin gaming/coche/hogar en el top 5.
 
-## Próximo paso: 3 acciones de la persona (~2 h, 0 €), detalle en `backlog.md`
-1. Mirar precio y ventas reales en TikTok Shop ES de 5 términos (extractor/ventosa, limpiador altavoz, cepillo desagüe, escurridor).
-2. Abrir las fichas B2 y B1 (y C si hay tiempo) y apuntar contenido, plazo de preparación, precio final y reseñas malas.
-3. Leer Seller Center (origen admitido, plazo, comisión real) y decir qué es "500 €/mes".
-Mientras tanto, los agentes preparan solo la prueba orgánica (5 vídeos, tope 30 €) y una lista de nicho sin costes inventados.
-Revisión: 02/11/2026. Sin respuesta ese día: no se lanza la ronda 12 y se propone pausar.
+## Calendario (puertas de la ruta "demanda primero")
+- M0 02/11/2026: respuestas de la persona + lectura de canal hecha. Si no: PAUSAR todo.
+- M1 09/11/2026: ancla leída (>= 3 fichas con PVP >= 25 € y >= 500 ventas) y Seller Center no bloquea stock propio/plazo. Si falla: se archiva marca propia como canal consumidor.
+- M2 26/11/2026: medición y decisión (condiciones a-f). Black Friday (27/11) no se aprovecha: asumido.
 
-## Lo que decide la persona
-Hacer las 3 acciones; si acepta un pedido de prueba de 5–15 € (por defecto no); qué es "500 €/mes"; si prueba el pack digital.
+## PREGUNTAS PENDIENTES de la persona (responder con la letra antes del 02/11; detalle en `decision-ceo.md` §6)
+0. ¿Haces la lectura de canal de 2-3 h (4 búsquedas en TikTok Shop ES + Seller Center)? Recomendado: sí.
+1. Capital real que podrías perder en 90 días (<100 / 100-500 / 500-2.000 / 2.000-5.000 / >5.000 €).
+2. Qué son los "500 €/mes" (tope de anuncios / gasto total mensual / beneficio / capital total de 90 días).
+3. Horas por semana con constancia (<3 / 3-6 / 6-10 / >10). Menos de 3: se pausa.
+4. Alta fiscal: ¿ya hecha, antes del 10/11, no puedo/quiero, o necesito gestoría?
+5. ¿Levantas "sin stock propio" (a) y "sin comprar muestras" (b)? Recomendación del CEO: solo tras M2 y con tope tuyo.
+
+## Próximo paso
+Persona: preguntas anteriores + lectura de canal + (opcional) cuentas gratuitas BigBuy/CJ y descargar CSV. Agentes: 10 tareas de 0 €, lotes <= 10 (`backlog.md`). Nada de gasto > 30 € sin respuesta.
 
 ## Bloqueos vivos
-Sin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no se abren desde la nube y la persona lleva sin abrirlas desde la ronda 9 (riesgo principal de fracaso según el crítico, juicio propio). Alta fiscal sin cubrir. Plazos de proveedor y política de Seller Center sin leer.
+Sin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no abren desde la nube. Alta fiscal sin cubrir. Plazo (2 vs 5 días hábiles) y comisión (4/5/9 %) sin resolver hasta leer Seller Center. Derecho de 3 € y flete de importación no verificados y fuera de `margen_es.py`. Ejecución de la persona = riesgo principal (crítico, juicio propio).
+Propuestas de OKR y proceso: marcadas "pendiente de aprobación de la persona" en `okrs.md` y `proceso.md`.

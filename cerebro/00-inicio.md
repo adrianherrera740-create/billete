@@ -1,6 +1,6 @@
 ---
 tags: [indice]
-actualizado: 2026-10-26
+actualizado: 2026-10-27
 ---
 
 # Cerebro: inicio
@@ -22,6 +22,7 @@ actualizado: 2026-10-26
 - [[cerebro/red-y-limites]] — Qué se puede hacer desde cada entorno
 
 ## Diario
+- [[cerebro/diario/2026-10-27]]
 - [[cerebro/diario/2026-10-26]]
 
 ## Informes por ronda
@@ -84,10 +85,22 @@ actualizado: 2026-10-26
 - [[tienda/trabajo/ronda-11/producto/buscador-proveedores]]
 - [[tienda/trabajo/ronda-11/producto/investigador-tendencias]]
 - [[tienda/trabajo/ronda-11/producto/verificador-fichas]]
+### ronda-12
+- [[tienda/trabajo/ronda-12/CONTEXTO]]
+- [[tienda/trabajo/ronda-12/critica/pre-mortem]]
+- [[tienda/trabajo/ronda-12/cumplimiento/requisitos-escalar]]
+- [[tienda/trabajo/ronda-12/decision-ceo]]
+- [[tienda/trabajo/ronda-12/escalado/modelos-y-escalas]]
+- [[tienda/trabajo/ronda-12/producto/barrido/b1]]
+- [[tienda/trabajo/ronda-12/producto/marca-propia]]
+- [[tienda/trabajo/ronda-12/producto/metodo-busqueda]]
+- [[tienda/trabajo/ronda-12/producto/modelos-alternativos]]
+- [[tienda/trabajo/ronda-12/producto/proveedores-serios]]
 
 ## Otros informes
 - [[tienda/trabajo/calidad/fase-1]]
 - [[tienda/trabajo/calidad/ronda-11-puerta-1]]
+- [[tienda/trabajo/calidad/ronda-12-puerta-1]]
 - [[tienda/trabajo/calidad/ronda-5-fase-1]]
 - [[tienda/trabajo/cumplimiento/entrega-jefe]]
 - [[tienda/trabajo/cumplimiento/revisor-contenido-ia]]
@@ -103,6 +116,8 @@ actualizado: 2026-10-26
 - [[tienda/trabajo/producto/verificador-fichas]]
 - [[tienda/trabajo/ronda-11/barrido]]
 - [[tienda/trabajo/ronda-11/decision-ceo]]
+- [[tienda/trabajo/ronda-12/CONTEXTO]]
+- [[tienda/trabajo/ronda-12/decision-ceo]]
 - [[tienda/trabajo/ronda-8/barrido-aliexpress-es]]
 - [[tienda/trabajo/skills/ronda-4]]
 - [[tienda/trabajo/skills/ronda-5]]

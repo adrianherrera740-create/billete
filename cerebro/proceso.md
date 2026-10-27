@@ -65,3 +65,11 @@ Asignar el modelo más fuerte a quien decide y uno más barato y rápido a quien
 | Medio | Jefes y especialistas de producto, márgenes, cumplimiento, creativos y crecimiento | Análisis y redacción con fuentes |
 | Rápido/barato | `pmo-operaciones`, `curador-cerebro`, `gestor-skills`, barridos con `barrido.py` | Tareas de orden y recogida mecánica |
 Hasta medirlo, no se cambia el modelo de ningún agente: está sin probar qué nivel da menos errores en cada rol.
+
+## PROPUESTA del CEO (27/10/2026) - PENDIENTE DE APROBACIÓN DE LA PERSONA (no vigente)
+Añadir una puerta M ("marca") sin sustituir las puertas de producto, que siguen para el dropshipping residual:
+- M0 (02/11/2026): respuestas de la persona + lectura de canal. Si no, PAUSAR.
+- M1 (09/11/2026): ancla leída (>= 3 fichas PVP >= 25 € y >= 500 ventas) y Seller Center no bloquea stock propio/plazo. Si falla, se archiva marca propia como canal consumidor.
+- M2 (26/11/2026): "SOLO SI" a-f: (a) hoja de canal, (b) origen y plazo admitidos, (c) 2 cotizaciones con coste puesto en España <= 40 % del PVP leído, (d) alta fiscal, (e) capital confirmado, (f) >= 10 reservas pagadas o 1 pedido B2B con anticipo.
+Criterios de parada: B2B < 2 respuestas de 15 (un ajuste, luego cerrar); preventa < 10 reservas en 14 días (un ajuste, luego cerrar); afiliación sin venta ni vídeo > 5.000 vistas en 21 días; gasto > 30 € sin nueva respuesta; persona < 3 h/semana: pausar.
+Fuente: `tienda/trabajo/ronda-12/decision-ceo.md` §4.

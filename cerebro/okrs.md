@@ -10,3 +10,11 @@
 - KR1: ningún producto descartado reaparece sin dato nuevo (se mide contra `productos.md`).
 - KR2: todo informe termina con "Datos clave" y calidad no encuentra contradicciones sin resolver.
 - KR3: cada sesión empieza leyendo el cerebro y acaba actualizándolo.
+
+## PROPUESTA del CEO (27/10/2026) - PENDIENTE DE APROBACIÓN DE LA PERSONA (no vigente; los OKR de arriba siguen siendo los activos)
+Objetivo del trimestre: demostrar demanda propia antes de comprar stock.
+- KR1: hoja de canal TikTok Shop ES leída. Hoy: 0.
+- KR2: >= 10 reservas pagadas o 1 pedido B2B con anticipo. Hoy: 0.
+- KR3: puerta M2 decidida el 26/11/2026. Hoy: no hecha.
+- KR4: alta fiscal decidida. Hoy: sin empezar.
+Los KR de producto/piloto de 15-25 vídeos se archivarían hasta que haya producto.

@@ -11,3 +11,8 @@
 | H7 | El canal real (TikTok Shop ES) paga >= 20 € por estos productos | Acción 1 de la persona: buscar 5 términos y anotar precio/ventas | Sin probar; decide la línea |
 | H8 | Seller Center permite entrega al cliente con plazo mayor / otro origen (si basta entregar al transportista en 2 días laborables) | Acción 3 de la persona: leer política de envío para vendedores de España | Sin probar; si es falsa, muere la estrategia de origen China |
 | H9 | Un vídeo orgánico de objeto de identidad llega a >= 5.000 vistas y >= 10 comentarios de compra en 14 días | 5 vídeos orgánicos con etiqueta de IA, tope 30 € (umbral de partida) | Sin probar |
+| H10 | B2B: clubes eSports, tuning, detailing y gaming cafés piden presupuesto de merchandising (propuesta del CEO, 27/10) | 15 mensajes con 2 maquetas etiquetadas; éxito >= 2 respuestas y >= 1 rango aceptado; 7 días, 0 € | Sin probar |
+| H11 | Preventa: >= 10 reservas pagadas (o >= 40 con depósito) a >= 25 € en 14 días (CEO) | 5 vídeos IA etiquetados con maqueta y lista de espera; tope 30 € | Sin probar; sin alta fiscal solo lista sin pago |
+| H12 | El programa de afiliados/creadores admite la cuenta y da 1 venta atribuida y 1 vídeo > 5.000 vistas en 21 días (CEO) | 10 vídeos de curación; 0 € | Sin probar; requisito ~2.000 seguidores no verificado |
+| H13 | TikTok Shop ES paga >= 25 € por objetos de identidad con >= 500 ventas (CEO; amplía H7) | Hoja de lectura: 4 búsquedas x 5 resultados | Sin probar; dato FastMoss abril 2026 apunta a 4-14 € |
+| H14 | Seller Center admite stock propio con plazo viable (CEO; amplía H8) | Lectura de Seller Center por la persona | Sin probar |

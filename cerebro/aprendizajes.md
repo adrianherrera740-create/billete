@@ -28,3 +28,12 @@
 16. Calidad ha cazado contradicciones reales (p. ej. recomendar una ficha solo válida para volante en forma D): no saltarse la puerta.
 17. Si un dato no se puede leer (fichas, FastMoss, otros proveedores), decirlo y no rellenar con estimaciones.
 18. Si salta el límite de uso: parar, hacer commit y push, y decir hasta dónde se llegó. Reanudar el agente con SendMessage.
+
+## Modelos de negocio y comparación (ronda 12)
+22. No puntuar ni comparar un modelo con un PVP supuesto: sin ancla leída en el canal el "GO" es artefacto del supuesto (marca propia a 39,90 € = +10,88 €; dropshipping a 39,90 € = +10,95 €; la ventaja era el ticket, no la marca).
+23. Antes de comparar rutas, tabla única de supuestos (comisión 9 % y 4 % bonus, afiliado 0 y 15 %, devoluciones, CPA 5/8/12 €) y declarar cuál usa cada cifra. Informes con comisión/afiliado distintos no son comparables.
+24. Plazo de entrega: 2 días laborables (CLAUDE.md) frente a 5 días hábiles frente a 72 h (blogs): no se resuelve hasta leer Seller Center. Mientras, mandan 2 días y 9 % en los cálculos.
+25. `margen_es.py` NO incluye el derecho de 3 € por envío (desde 1/07/2026, no verificado), ni flete, aranceles o IVA de importación: todo margen con origen China o importación es optimista hasta añadirlos.
+26. Un CPA fijado como porcentaje del equilibrio del propio producto es circular ("gana dinero" porque el CPA se fijó para que gane): usar CPA medido o rango externo marcado como supuesto.
+27. No cambiar de modelo sin leer antes el canal: una matriz SÍ/NO sobre supuestos no es un resultado. El cuello de botella es la ejecución de la persona (pre-mortem A3), no la búsqueda.
+28. Un informe con columna "leído" cuyo contenido es un resumen de buscador se rechaza (refuerza la 20). Si dos informes de la misma ronda se contradicen (POD "escala mejor" frente a PARAR), el director no decide con ambos: calidad los reconcilia o rechaza.

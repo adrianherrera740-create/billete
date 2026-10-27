@@ -1,5 +1,5 @@
 # Backlog (lo mantiene `pmo-operaciones`)
-Actualizado: 2026-10-26 (cierre ronda 11). Responsable "Persona" = lo único que no pueden hacer los agentes.
+Actualizado: 2026-10-27 (cierre ronda 12). Sustituye las secciones de abajo para la ruta 'demanda primero' (la anterior queda como histórico). Responsable "Persona" = lo único que no pueden hacer los agentes.
 
 ## Ahora (persona, ~2 h, 0 €; revisión 02/11/2026)
 - [Persona] 1. Precio real en TikTok Shop ES (30 min): buscar "extractor abolladuras coche", "ventosa abolladuras", "limpiador altavoz móvil", "cepillo desagüe pelo ducha", "escurridor"; anotar precio, ventas visibles, nº de vendedores y si se vende por encima de 20 €. Si ve objetos de identidad (gamer, coche, streetwear) a 25–35 €, 3 enlaces.
@@ -20,3 +20,22 @@ Actualizado: 2026-10-26 (cierre ronda 11). Responsable "Persona" = lo único que
 
 ## Hecho
 - Rondas 1–11 de búsqueda (ronda 11: NO GO a A–E); oficina de agentes; cerebro; roles de dirección, finanzas, escalado, PMO y crítico.
+
+## Ronda 12: ruta "demanda primero" (27/10/2026, tope total 30 €; puertas M0 02/11, M1 09/11, M2 26/11)
+### Persona (lo único que no pueden hacer los agentes)
+- [Persona] Responder las preguntas 0-5b de `estado.md` antes del 02/11 (si no, PAUSAR).
+- [Persona] Lectura de canal 2-3 h: 4 búsquedas en TikTok Shop ES (alfombrilla gaming XXL, calcetines diseño, camiseta gamer, organizador maletero), >= 5 resultados cada una; y Seller Center (origen admitido, plazo 2 o 5 días, POD, marca, comisión de tienda nueva, digital).
+- [Persona] 03-09/11: elegir UN público y UN gancho; decidir alta fiscal; enviar 15 mensajes B2B; cuentas gratuitas BigBuy/CJ y CSV (15 min; si piden cuota, no se paga).
+- [Persona] 10-23/11: publicar vídeos de preventa y curación.
+### Agentes, 0 € (el director las lanza, lotes <= 10)
+1. [buscador-producto + investigador-tendencias] Hoja plantilla de lectura de canal y propuesta de UN público/gancho (9 criterios/40, sin marcas).
+2. [operaciones-cumplimiento + revisor-normativa-ue] Preguntas para Seller Center y gestoría; normativa de preventa y desistimiento (no verificado hasta fuente oficial).
+3. [cfo-finanzas] Tabla única de supuestos, tope de 30 €, propuesta de parámetro de derechos/flete/IVA para `margen_es.py` (sin tocar el script sin visto bueno del CEO).
+4. [analista-escalado] Corregir `modelos-y-escalas.md` (4 puntos de calidad, MOQ 100 en 2.000 €, contraste circular) y añadir escenario preventa.
+5. [creativos-ia + guionista-videos] Guion de 5 vídeos de preventa y 10 de curación con etiqueta IA y maqueta etiquetada (esperar a la hoja 1).
+6. [buscador-creadores + redactor-briefs] Lista de 40 contactos B2B públicos, 2 mensajes y brief de maqueta; sin precios inventados.
+7. [buscador-proveedores] Borradores de petición de cotización (textil UE/Alibaba y 3 3PL en España); los envía la persona.
+8. [buscador-creadores] Requisitos del programa de afiliados de TikTok Shop ES con fuente oficial.
+9. [auditor-calidad] Aplicar correcciones de `calidad/ronda-12-puerta-1.md` y marcar el estado de cada informe.
+10. [pmo-operaciones + curador-cerebro] Calendario de 30 días; aplicar propuestas de OKR/proceso solo cuando la persona las apruebe.
+- Se deja de hacer: rondas de producto sin lectura del canal, matrices SÍ/NO, recalcular márgenes de producto concreto, hablar de proveedores sin catálogo ni plazo verificado.
