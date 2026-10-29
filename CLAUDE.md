@@ -1,6 +1,6 @@
 # Proyecto: tienda dropshipping en TikTok Shop España
 
-Responde siempre en español. **Antes de nada lee `cerebro/estado.md` y `cerebro/aprendizajes.md`** (un hook los imprime al abrir la sesión). El cerebro (`cerebro/`) es la memoria del proyecto; al terminar, actualízalo (ver `cerebro/README.md`). `AGENTS.md` tiene las mismas instrucciones para otras herramientas.
+Responde siempre en español. **Antes de nada lee `cerebro/condiciones.md`, `cerebro/estado.md` y `cerebro/aprendizajes.md`** (un hook los imprime al abrir la sesión). Todo trabajo pasa antes por las 13 condiciones de `cerebro/condiciones.md` (plan y luz verde, fases, un commit por cambio, cero secretos, verificar, lo generado por IA nunca nace verificado...); vienen del prompt maestro de La Nave de la persona (`cerebro/la-nave-prompt-maestro.md`). El cerebro (`cerebro/`) es la memoria del proyecto; al terminar, actualízalo (ver `cerebro/README.md`). `AGENTS.md` tiene las mismas instrucciones para otras herramientas.
 
 ## Objetivo
 Primera tienda de dropshipping en TikTok Shop España, sin stock propio, 500 €/mes, sin comprar muestras, vídeos con IA. Mes 1 sin anuncios (vídeos propios y microcreadores); mes 2 GMV Max solo en vídeos que ya venden. Público: gamers, coches, streetwear (sin usar la marca de GTA).

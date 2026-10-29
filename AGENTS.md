@@ -3,7 +3,7 @@
 Proyecto: tienda de dropshipping en TikTok Shop España. Responde siempre en español.
 
 ## Antes de hacer nada
-1. Lee `cerebro/README.md`, `cerebro/estado.md`, `cerebro/aprendizajes.md` y `cerebro/usuario.md`.
+1. Lee `cerebro/condiciones.md` (13 condiciones por las que pasa todo trabajo; origen: `cerebro/la-nave-prompt-maestro.md`), `cerebro/README.md`, `cerebro/estado.md`, `cerebro/aprendizajes.md` y `cerebro/usuario.md`.
 2. Antes de proponer un producto, busca en `cerebro/productos.md`: si ya está con veredicto NO o HOLD, no lo repitas sin datos nuevos.
 3. Mira `cerebro/red-y-limites.md` para saber qué se puede hacer desde tu entorno.
 

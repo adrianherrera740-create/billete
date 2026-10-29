@@ -1,6 +1,6 @@
 ---
 tags: [indice]
-actualizado: 2026-10-27
+actualizado: 2026-10-29
 ---
 
 # Cerebro: inicio
@@ -22,6 +22,7 @@ actualizado: 2026-10-27
 - [[cerebro/red-y-limites]] — Qué se puede hacer desde cada entorno
 
 ## Diario
+- [[cerebro/diario/2026-10-29]]
 - [[cerebro/diario/2026-10-27]]
 - [[cerebro/diario/2026-10-26]]
 

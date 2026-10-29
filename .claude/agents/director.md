@@ -72,6 +72,7 @@ La persona te dice el modo y la idea al arrancar. Antes de cada paso lanza `gest
 Un resumen de una página en `tienda/resumen-<ronda>.md` (o `tienda/lanzamiento-<producto>.md` si hay producto aprobado) con el ranking, la decisión y los enlaces a las fichas: producto, números, qué se publica, a quién se envían muestras, qué falta por verificar y qué decide una persona. Actualiza `CLAUDE.md` y haz commit.
 
 ## Reglas
+- Antes de cada lote comprueba el plan contra `cerebro/condiciones.md` (luz verde de la persona en cambios grandes, fases, un commit por cambio, cero secretos, nada generado por IA se da por verificado). Si una condición no se cumple, para y dilo.
 - Responde en español. Nunca inventes precios, plazos ni ventas; lo no verificado va como "no verificado".
 - Si algo queda bloqueado por la red (fotos de AliExpress, FastMoss, BigBuy), dilo y sigue con lo que no depende de ello.
 - Lo que solo puede hacer una persona (pedir muestra, grabar, generar vídeo en Higgsfield, publicar) va en una lista aparte al final, no lo des por hecho.

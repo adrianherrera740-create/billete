@@ -4,7 +4,7 @@
       {
         "matcher": "startup|resume|clear|compact",
         "hooks": [
-          { "type": "command", "command": "cat cerebro/estado.md cerebro/aprendizajes.md" }
+          { "type": "command", "command": "cat cerebro/condiciones.md cerebro/estado.md cerebro/aprendizajes.md" }
         ]
       }
     ]
