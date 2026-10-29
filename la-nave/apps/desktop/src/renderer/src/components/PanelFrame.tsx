@@ -5,6 +5,7 @@ import type { Panel } from '@nave/shared';
 import { moveRect, resizeRect } from '../board/geometry';
 import { useNave } from '../store';
 import { GlassButton } from './GlassButton';
+import { ClaudePanel } from './ClaudePanel';
 import { StickyPanel } from './StickyPanel';
 import { TerminalPanel } from './TerminalPanel';
 
@@ -72,7 +73,8 @@ export function PanelFrame({ panel, zoom, readOnly, onDelete }: Props) {
       <div className="panel-body">
         {panel.kind === 'sticky' && <StickyPanel panel={panel} readOnly={readOnly} />}
         {panel.kind === 'terminal' && <TerminalPanel panel={panel} readOnly={readOnly} />}
-        {panel.kind !== 'sticky' && panel.kind !== 'terminal' && <p className="muted">{t('panel.soon', { kind: panel.kind })}</p>}
+        {panel.kind === 'claude' && <ClaudePanel panel={panel} readOnly={readOnly} />}
+        {panel.kind !== 'sticky' && panel.kind !== 'terminal' && panel.kind !== 'claude' && <p className="muted">{t('panel.soon', { kind: panel.kind })}</p>}
       </div>
       {!readOnly && <div className="resize" aria-hidden="true" onPointerDown={(e) => begin('resize', e)} onPointerMove={move} onPointerUp={end} onPointerCancel={end} />}
     </section>

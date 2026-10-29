@@ -41,3 +41,12 @@
 - Detección de shells sin asumir nada: PowerShell, PowerShell 7, CMD, Git Bash y cada distribución de WSL (`wsl -l -q` decodificado de UTF-16). Lo que falta no aparece.
 - **No verificado en Windows real:** la detección se prueba con un sistema de ficheros simulado y la terminal con un shell Linux (bash). ConPTY, PowerShell y WSL hay que probarlos en el PC de la persona.
 - Los canales `terminal:*` están `forbidden` en remoto (un shell no se expone al móvil).
+
+## Notas de F4 (29/10/2026)
+- Se ejecuta el `claude` real en un panel `kind='claude'` (no se reimplementa). Opciones verificadas con `claude --help` (v2.1.312): `--settings <archivo>`, `--session-id <uuid>` y `--resume <id>`. Así La Nave asigna el id de sesión desde el principio.
+- Hooks: servidor en `127.0.0.1` (puerto aleatorio) con token aleatorio por ejecución en cabecera `Authorization`, comparado en tiempo constante. Rechaza `Origin` (navegadores), `Host` ajeno (DNS rebinding), cuerpos > 256 KB, JSON roto y eventos fuera de {SessionStart, UserPromptSubmit, Notification, Stop, SessionEnd}. Responde siempre 204 sin cuerpo, así que los hooks solo observan.
+- El token viaja en la variable de entorno `NAVE_HOOK_TOKEN` del proceso; el archivo de ajustes y los argumentos solo contienen `$NAVE_HOOK_TOKEN`. Nunca se pasa `--dangerously-skip-permissions` (test + comprobación en el lanzador).
+- El contenido de los hooks (prompts, herramientas) no se registra: solo el nombre del evento y el estado.
+- Historial: lectura de solo lectura del `.jsonl` bajo `~/.claude/projects`, sin seguir enlaces simbólicos, con parser tolerante, últimos 50 mensajes y secretos redactados.
+- Un panel con sesión previa no abre otra sola al arrancar la app: pregunta Reanudar o Nueva sesión.
+- **No verificado con un `claude` real autenticado:** el e2e usa `fake-claude` (`apps/desktop/e2e/fixtures`), que imita la ejecución de hooks (JSON por stdin, comando con `sh -c`). Falta confirmar con Claude Code real, en Windows, que la herencia del entorno y `curl` funcionan igual en el shell que use para los hooks.

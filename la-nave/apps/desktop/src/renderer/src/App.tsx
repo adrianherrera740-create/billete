@@ -16,6 +16,8 @@ export function App() {
     void load();
   }, [load]);
 
+  useEffect(() => window.nave.onClaude((event) => useNave.getState().applyClaude(event)), []);
+
   return (
     <div className="app" data-testid="app" data-ready={ready}>
       <Sidebar />

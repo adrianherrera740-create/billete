@@ -12,7 +12,7 @@ import type { Panel, TerminalEvent } from '@nave/shared';
  * - copiar al seleccionar, pegar (Ctrl+V / Ctrl+Shift+V), scroll y foco los gestiona xterm + este panel;
  * - en la visión general la entrada se desactiva.
  */
-export function TerminalPanel({ panel, readOnly }: { panel: Panel; readOnly: boolean }) {
+export function TerminalPanel({ panel, readOnly, mode = 'new' }: { panel: Panel; readOnly: boolean; mode?: 'new' | 'resume' }) {
   const { t } = useTranslation();
   const host = useRef<HTMLDivElement>(null);
   const term = useRef<Terminal | null>(null);
@@ -57,7 +57,9 @@ export function TerminalPanel({ panel, readOnly }: { panel: Panel; readOnly: boo
       }
     });
 
-    void window.nave.invoke('terminal:start', { panelId, cols: terminal.cols, rows: terminal.rows }).then((res) => {
+    const size = { panelId, cols: terminal.cols, rows: terminal.rows };
+    const started = mode === 'resume' ? window.nave.invoke('claude:resume', size) : window.nave.invoke('terminal:start', size);
+    void started.then((res) => {
       if (disposed) return;
       if (!res.ok) {
         setNotice(res.error.message);
@@ -100,7 +102,7 @@ export function TerminalPanel({ panel, readOnly }: { panel: Panel; readOnly: boo
       terminal.dispose();
       term.current = null;
     };
-  }, [panel.id, t]);
+  }, [panel.id, mode, t]);
 
   useEffect(() => {
     if (term.current) term.current.options.disableStdin = readOnly;

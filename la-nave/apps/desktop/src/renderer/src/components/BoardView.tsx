@@ -93,6 +93,9 @@ export function BoardView() {
         <GlassButton data-testid="add-terminal-btn" disabled={overview || shells.length === 0} title={shells.length === 0 ? t('terminal.none') : undefined} onClick={() => void addPanel('terminal', t('terminal.title', { n: board.panels.length + 1 }))}>
           {t('terminal.add')}
         </GlassButton>
+        <GlassButton data-testid="add-claude-btn" disabled={overview} onClick={() => void addPanel('claude', t('claude.title', { n: board.panels.length + 1 }))}>
+          {t('claude.add')}
+        </GlassButton>
         <GlassButton data-testid="add-note-btn" disabled={overview} onClick={() => void addPanel('sticky', t('board.noteTitle', { n: board.panels.length + 1 }))}>
           {t('board.addNote')}
         </GlassButton>

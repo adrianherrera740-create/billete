@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, Panel, PanelKind, Project, ShellOption } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, ClaudeEvent, ClaudeState, Panel, PanelKind, Project, ShellOption } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
   const res = await window.nave.invoke(channel, input);
@@ -8,7 +8,7 @@ async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): 
   return res.data;
 }
 
-const SIZES: Record<string, { w: number; h: number }> = { sticky: { w: 280, h: 200 }, terminal: { w: 640, h: 380 } };
+const SIZES: Record<string, { w: number; h: number }> = { sticky: { w: 280, h: 200 }, terminal: { w: 640, h: 380 }, claude: { w: 720, h: 460 } };
 const DEFAULT_SIZE = { w: 400, h: 280 };
 let cameraTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -17,6 +17,7 @@ interface State {
   showArchived: boolean;
   shells: ShellOption[];
   shellId: string | null;
+  claudeStates: Record<string, { state: ClaudeState; sessionId: string | null }>;
   activeId: string | null;
   board: Board | null;
   viewport: { w: number; h: number };
@@ -27,6 +28,7 @@ interface State {
   load(): Promise<void>;
   setShowArchived(value: boolean): Promise<void>;
   setShellId(id: string): void;
+  applyClaude(event: ClaudeEvent): void;
   select(id: string): Promise<void>;
   createProject(input: ChannelInput<'project:create'>): Promise<void>;
   archiveProject(id: string, archived: boolean): Promise<void>;
@@ -62,6 +64,7 @@ export const useNave = create<State>((set, get) => {
     showArchived: false,
     shells: [],
     shellId: null,
+    claudeStates: {},
     activeId: null,
     board: null,
     viewport: { w: 1000, h: 700 },
@@ -87,6 +90,8 @@ export const useNave = create<State>((set, get) => {
     },
 
     setShellId: (id) => set({ shellId: id }),
+
+    applyClaude: (event) => set({ claudeStates: { ...get().claudeStates, [event.panelId]: { state: event.state, sessionId: event.sessionId } } }),
 
     select: (id) => guard(() => loadBoard(id)),
 
@@ -137,7 +142,7 @@ export const useNave = create<State>((set, get) => {
         const size = SIZES[kind] ?? DEFAULT_SIZE;
         const at = spawnPosition(board.camera, viewport, size, board.panels.length);
         const { shellId } = get();
-        const config = kind === 'terminal' ? (shellId ? { shell: shellId } : {}) : { text: '' };
+        const config = kind === 'terminal' ? (shellId ? { shell: shellId } : {}) : kind === 'claude' ? {} : { text: '' };
         const panel = await call('panel:create', { projectId: board.projectId, kind, title, ...at, ...size, config });
         const current = get().board;
         if (current) set({ board: { ...current, panels: [...current.panels, panel] } });

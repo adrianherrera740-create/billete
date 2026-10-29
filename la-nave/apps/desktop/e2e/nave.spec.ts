@@ -168,3 +168,70 @@ test('terminal real: ejecuta un comando en la carpeta del proyecto y se cierra c
   expect(after).toMatchObject({ ok: false });
   await app.close();
 });
+
+test('Claude: estado por hooks, historial de solo lectura y reanudar la misma sesión', async () => {
+  test.skip(process.platform === 'win32', 'El falso claude es un script de Unix');
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const home = mkdtempSync(join(tmpdir(), 'nave-home-'));
+  const env = { HOME: home, NAVE_CLAUDE_BIN: join(__dirname, 'fixtures', 'fake-claude.mjs') };
+  const launchWith = (): Promise<ElectronApplication> =>
+    electron.launch({
+      args: [join(__dirname, '../out/main/index.js'), '--no-sandbox'],
+      env: { ...process.env, ...env, NAVE_NO_RELAUNCH: '1', NAVE_USER_DATA: dataDir }
+    });
+
+  let app = await launchWith();
+  let page = await ready(app);
+  await createProject(page, 'Con Claude');
+  await page.getByTestId('add-claude-btn').click();
+  const panelId = (await page.getByTestId('panel').getAttribute('data-panel-id')) ?? '';
+
+  // 1) La sesión nueva arranca sola (no había ninguna) y el hook SessionStart la deja "Inactivo".
+  await expect(page.getByTestId('claude-state')).toHaveText('Inactivo', { timeout: 15_000 });
+  await expect.poll(() => replayOf(page, panelId), { timeout: 15_000 }).toContain('mode=new');
+  const sessionId = /session=([0-9a-f-]{36})/.exec(await replayOf(page, panelId))?.[1] ?? '';
+  expect(sessionId).toHaveLength(36);
+
+  // 2) Un mensaje: el hook UserPromptSubmit lo pone "Trabajando" y Stop lo devuelve a "Inactivo".
+  await page.locator('.xterm-helper-textarea').focus();
+  await page.keyboard.type('hola nave\n');
+  await expect(page.getByTestId('claude-state')).toHaveText('Trabajando');
+  await expect(page.getByTestId('claude-state')).toHaveText('Inactivo', { timeout: 15_000 });
+
+  // 3) Historial de solo lectura, leído del .jsonl.
+  await page.getByTestId('claude-history-btn').click();
+  await expect(page.getByTestId('claude-history')).toContainText('hola nave');
+  await expect(page.getByTestId('claude-history')).toContainText('eco: hola nave');
+  await page.getByTestId('claude-history-btn').click();
+
+  // 4) La sesión termina y se puede reanudar con el MISMO id.
+  await page.locator('.xterm-helper-textarea').focus();
+  await page.keyboard.type('exit\n');
+  await expect(page.getByTestId('claude-state')).toHaveText('Terminada', { timeout: 15_000 });
+  await page.getByTestId('claude-resume-btn').click();
+  await expect.poll(() => replayOf(page, panelId), { timeout: 15_000 }).toContain(`mode=resume session=${sessionId}`);
+  await page.waitForTimeout(500);
+  await app.close();
+
+  // 5) Tras reiniciar la app NO se abre otra sesión sola: pregunta qué hacer y conserva el id.
+  app = await launchWith();
+  page = await ready(app);
+  await expect(page.getByTestId('claude-choose')).toBeVisible();
+  await page.getByTestId('claude-resume-btn').click();
+  const again = page.getByTestId('panel').getAttribute('data-panel-id');
+  await expect.poll(async () => replayOf(page, (await again) ?? ''), { timeout: 15_000 }).toContain(`mode=resume session=${sessionId}`);
+  await app.close();
+});
+
+test('Claude: sin claude instalado el panel lo explica', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const app = await electron.launch({
+    args: [join(__dirname, '../out/main/index.js'), '--no-sandbox'],
+    env: { ...process.env, PATH: '/nada', NAVE_CLAUDE_BIN: '/no/existe', NAVE_NO_RELAUNCH: '1', NAVE_USER_DATA: dataDir }
+  });
+  const page = await ready(app);
+  await createProject(page, 'Sin Claude');
+  await page.getByTestId('add-claude-btn').click();
+  await expect(page.getByRole('status')).toContainText('No se ha encontrado Claude Code');
+  await app.close();
+});

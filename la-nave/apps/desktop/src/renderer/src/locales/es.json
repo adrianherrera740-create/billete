@@ -36,5 +36,25 @@
     "shell": "Shell de la nueva terminal",
     "none": "No se ha encontrado ningún shell en este equipo.",
     "exited": "El proceso terminó (código {{code}}). Cierra el panel y abre otro para empezar de nuevo."
+  },
+  "claude": {
+    "add": "Añadir Claude",
+    "title": "Claude {{n}}",
+    "state": {
+      "unknown": "Sin iniciar",
+      "idle": "Inactivo",
+      "working": "Trabajando",
+      "waiting": "Espera tu respuesta",
+      "ended": "Terminada"
+    },
+    "resume": "Reanudar sesión",
+    "fresh": "Nueva sesión",
+    "history": "Historial",
+    "hideHistory": "Volver al terminal",
+    "historyTitle": "Historial de la sesión (solo lectura)",
+    "historyEmpty": "Todavía no hay mensajes en esta sesión.",
+    "choose": "Este panel ya tuvo una sesión de Claude. ¿La reanudas o empiezas otra?",
+    "you": "Tú",
+    "claude": "Claude"
   }
 }
