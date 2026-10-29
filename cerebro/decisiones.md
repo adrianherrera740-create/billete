@@ -10,3 +10,6 @@ La persona elige este negocio a partir del informe PDF. Se vende como servicio b
 
 ## 2026-10-29 — Calendario de ventas de 12 semanas (propuesta, pendiente de la persona)
 Del 02/11/2026 al 24/01/2027, sin conversaciones nuevas del 21/12 al 03/01; el piloto cae en la semana 10 y la decisión de retainer hacia febrero de 2027. Umbrales de éxito y precios son hipótesis hasta calibrarlos en las conversaciones. Ver `negocio/trabajo/ventas/`.
+
+## 2026-10-29 — Demo: recomendación A para los borradores (pendiente de la persona)
+Recomendación del arquitecto, no decisión: la IA no recibe `gmail.compose` (el token solo lee); los borradores viven en el panel de aprobación y el humano los copia. Es más segura aunque más incómoda. La opción B (compose en credencial separada) añade riesgo de envío y posible evaluación de seguridad de Google, sin verificar. Prototipo en `negocio/trabajo/demo/prototipo/` (62 pruebas con modelo simulado, no con un LLM real).

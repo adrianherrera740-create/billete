@@ -1,0 +1,5 @@
+[
+  {"id": "C-001", "nombre": "Marta Soler (ficticia)", "email": "marta.soler@despacho-ficticio.example", "organizacion": "Despacho Ficticio SL", "relacion": "asesora fiscal", "ultima_interaccion": "2026-10-28", "notas": "Cierre de ejercicio pendiente de revisar.", "caduca": "2027-10-28"},
+  {"id": "C-002", "nombre": "Pablo Demo (ficticio)", "email": "pablo.demo@familia-demo.example", "organizacion": "Familia", "relacion": "hermano", "ultima_interaccion": "2026-10-30", "notas": "Organiza la cena del sabado.", "caduca": "2027-10-30"},
+  {"id": "C-003", "nombre": "Banco Ficticio (avisos)", "email": "avisos@banco-ficticio.example", "organizacion": "Banco Ficticio", "relacion": "entidad bancaria del cliente", "ultima_interaccion": "2026-11-01", "notas": "Solo avisos informativos. Ref ZZ-PRUEBA-0001.", "caduca": "2027-11-01"}
+]
