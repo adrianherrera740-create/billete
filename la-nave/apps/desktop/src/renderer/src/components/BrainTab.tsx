@@ -121,7 +121,7 @@ function NodeRow({ node, snippet, onOpen }: { node: BrainNode; snippet?: string;
 
 export function BrainTab() {
   const { t } = useTranslation();
-  const { brain, activeId, board, loadBrain, addBrain, openBrain, searchBrain, contextBrain, pasteToClaude } = useNave();
+  const { brain, activeId, board, loadBrain, addBrain, openBrain, searchBrain, contextBrain, pasteToClaude, focusBrain, clearFocusBrain } = useNave();
   const [title, setTitle] = useState('');
   const [query, setQuery] = useState('');
   const [result, setResult] = useState<BrainHit[] | null>(null);
@@ -133,6 +133,13 @@ export function BrainTab() {
   useEffect(() => {
     void loadBrain();
   }, [loadBrain, activeId]);
+
+  // Venimos de la búsqueda global o de un atajo: abrir directamente el nodo pedido.
+  useEffect(() => {
+    if (!focusBrain) return;
+    void openBrain(focusBrain).then(setDetail);
+    clearFocusBrain();
+  }, [focusBrain, openBrain, clearFocusBrain]);
 
   useEffect(() => {
     if (!query.trim()) return;

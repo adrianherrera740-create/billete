@@ -257,10 +257,15 @@ export class ClaudeService {
 
   /** Cuando el proceso termina (cierre, error), la sesión queda como terminada aunque no llegue SessionEnd. */
   markEnded(panelId: string): void {
-    const current = this.session(panelId);
-    if (!current || current.state === 'ended') return;
-    this.save(panelId, current.session_id, 'ended', null);
-    this.publish(panelId, 'ended', current.session_id);
+    try {
+      const current = this.session(panelId);
+      if (!current || current.state === 'ended') return;
+      this.save(panelId, current.session_id, 'ended', null);
+      this.publish(panelId, 'ended', current.session_id);
+    } catch (error) {
+      // Al cerrar la app la BD puede estar ya cerrada: no es un error que deba tumbar el proceso.
+      this.deps.log.warn('No se pudo marcar la sesión de Claude como terminada', { panelId, motivo: error instanceof Error ? error.message : String(error) });
+    }
   }
 
   status(panelId: string, running: boolean): ClaudeStatus {

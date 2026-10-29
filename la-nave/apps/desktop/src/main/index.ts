@@ -57,6 +57,10 @@ function createWindow(current: NaveCore): BrowserWindow {
 }
 
 let core: NaveCore | undefined;
+
+// Un fallo inesperado se registra en vez de abrir un diálogo de error que podría bloquear el cierre de la app.
+process.on('uncaughtException', (error) => core?.log.app.error('Excepción no controlada en el proceso principal', error));
+process.on('unhandledRejection', (reason) => core?.log.app.error('Promesa rechazada sin tratar', reason));
 let terminals: TerminalManager | undefined;
 let claude: ClaudeService | undefined;
 

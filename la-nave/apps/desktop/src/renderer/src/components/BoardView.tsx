@@ -79,7 +79,7 @@ export function BoardView() {
   return (
     <main className="board" style={{ '--accent': project.color } as React.CSSProperties}>
       <header className="toolbar glass">
-        <span className="board-title">
+        <span className="board-title" data-testid="board-title">
           <span aria-hidden="true">{project.icon}</span> {project.name}
         </span>
         <span className="spacer" />

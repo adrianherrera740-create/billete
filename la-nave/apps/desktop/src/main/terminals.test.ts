@@ -165,6 +165,17 @@ describe('TerminalManager', () => {
     expect(ptys).toHaveLength(2);
   });
 
+  it('REGRESIÓN: si el proceso termina DESPUÉS de matarlo (cierre de la app), no se repite el aviso de salida', () => {
+    const { manager, ptys, busEvents, pushed } = setup();
+    manager.start('p1', 80, 24);
+    manager.kill('p1');
+    expect(busEvents).toEqual(['started', 'exited:null']);
+    const before = pushed.length;
+    ptys[0]?.exit(0); // el sistema avisa tarde, cuando la base de datos ya puede estar cerrada
+    expect(busEvents).toEqual(['started', 'exited:null']);
+    expect(pushed).toHaveLength(before);
+  });
+
   it('killAll cierra todas', () => {
     const { manager, ptys } = setup();
     manager.start('p1', 80, 24);

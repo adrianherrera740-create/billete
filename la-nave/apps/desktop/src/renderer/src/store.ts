@@ -1,12 +1,16 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, BrainContext, BrainDetail, BrainHit, BrainKind, BrainNode, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ShellOption, Task, TaskStatus } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, BrainContext, BrainDetail, BrainHit, BrainKind, BrainNode, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ProjectSummary, SearchResult, Settings, ShellOption, Task, TaskStatus } from '@nave/shared';
+import { DEFAULT_SETTINGS } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
   const res = await window.nave.invoke(channel, input);
   if (!res.ok) throw new Error(res.error.message);
   return res.data;
 }
+
+export type SideTab = 'tasks' | 'notes' | 'inbox' | 'brain';
+export type DialogId = 'search' | 'palette' | 'settings' | 'new-project' | null;
 
 const SIZES: Record<string, { w: number; h: number }> = { sticky: { w: 280, h: 200 }, terminal: { w: 640, h: 380 }, claude: { w: 720, h: 460 } };
 const DEFAULT_SIZE = { w: 400, h: 280 };
@@ -24,6 +28,12 @@ interface State {
   inbox: Note[];
   brain: BrainNode[];
   sideOpen: boolean;
+  settings: Settings;
+  view: 'board' | 'center';
+  sideTab: SideTab;
+  dialog: DialogId;
+  focusBrain: string | null;
+  summary: ProjectSummary[];
   info: string | null;
   board: Board | null;
   viewport: { w: number; h: number };
@@ -36,6 +46,15 @@ interface State {
   setShellId(id: string): void;
   applyClaude(event: ClaudeEvent): void;
   toggleSide(): void;
+  loadSettings(): Promise<void>;
+  updateSettings(patch: ChannelInput<'settings:update'>): Promise<void>;
+  setView(view: 'board' | 'center'): void;
+  setSideTab(tab: SideTab): void;
+  setDialog(dialog: DialogId): void;
+  clearFocusBrain(): void;
+  loadSummary(): Promise<void>;
+  goTo(result: Pick<SearchResult, 'kind' | 'id' | 'projectId'>): Promise<void>;
+  openBrainTab(): void;
   loadSide(): Promise<void>;
   addTask(title: string): Promise<void>;
   setTaskStatus(id: string, status: TaskStatus): Promise<void>;
@@ -96,6 +115,12 @@ export const useNave = create<State>((set, get) => {
     inbox: [],
     brain: [],
     sideOpen: true,
+    settings: DEFAULT_SETTINGS,
+    view: 'board',
+    sideTab: 'tasks',
+    dialog: null,
+    focusBrain: null,
+    summary: [],
     info: null,
     board: null,
     viewport: { w: 1000, h: 700 },
@@ -106,6 +131,7 @@ export const useNave = create<State>((set, get) => {
 
     load: () =>
       guard(async () => {
+        await get().loadSettings();
         const projects = await call('project:list', { includeArchived: get().showArchived });
         const shells = await call('terminal:shells', undefined);
         set({ projects, shells, shellId: get().shellId ?? shells[0]?.id ?? null, ready: true });
@@ -127,7 +153,10 @@ export const useNave = create<State>((set, get) => {
 
     applyClaude: (event) => set({ claudeStates: { ...get().claudeStates, [event.panelId]: { state: event.state, sessionId: event.sessionId } } }),
 
-    select: (id) => guard(() => loadBoard(id)),
+    select: (id) => guard(async () => {
+      await loadBoard(id);
+      set({ view: 'board' });
+    }),
 
     createProject: (input) =>
       guard(async () => {
@@ -219,7 +248,39 @@ export const useNave = create<State>((set, get) => {
         if (board) set({ board: { ...board, panels: board.panels.filter((p) => p.id !== id) } });
       }),
 
-    toggleSide: () => set({ sideOpen: !get().sideOpen }),
+    toggleSide: () => {
+      const sideOpen = !get().sideOpen;
+      set({ sideOpen });
+      void get().updateSettings({ sideOpen });
+    },
+
+    loadSettings: () =>
+      guard(async () => {
+        const settings = await call('settings:get', undefined);
+        set({ settings, sideOpen: settings.sideOpen });
+      }),
+
+    updateSettings: (patch) =>
+      guard(async () => {
+        set({ settings: await call('settings:update', patch) });
+      }),
+
+    setView: (view) => set({ view }),
+    setSideTab: (sideTab) => set({ sideTab }),
+    setDialog: (dialog) => set({ dialog }),
+    clearFocusBrain: () => set({ focusBrain: null }),
+    openBrainTab: () => set({ view: 'board', sideOpen: true, sideTab: 'brain' }),
+
+    loadSummary: () =>
+      guard(async () => {
+        set({ summary: await call('overview:summary', undefined) });
+      }),
+
+    goTo: async (result) => {
+      if (result.projectId) await get().select(result.projectId);
+      const tab: SideTab = result.kind === 'task' ? 'tasks' : result.kind === 'note' ? (result.projectId ? 'notes' : 'inbox') : result.kind === 'brain' ? 'brain' : get().sideTab;
+      set({ view: 'board', dialog: null, sideOpen: result.kind === 'project' ? get().sideOpen : true, sideTab: tab, focusBrain: result.kind === 'brain' ? result.id : null });
+    },
 
     loadSide: async () => {
       const { activeId } = get();

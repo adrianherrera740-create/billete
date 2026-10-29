@@ -117,5 +117,54 @@
     "contextEmpty": "No hay nada relevante en el Brain para esa consulta.",
     "contextInfo": "{{count}} nodo(s) relevantes de este proyecto, con tope de tamaño.",
     "contextTruncated": "Se ha recortado para no pasar de ese tope."
+  },
+  "search": {
+    "title": "Buscar en todo",
+    "placeholder": "Busca proyectos, tareas, notas y Brain…",
+    "empty": "No hay nada que coincida.",
+    "kind": { "project": "Proyecto", "task": "Tarea", "note": "Nota", "brain": "Brain" }
+  },
+  "palette": {
+    "title": "Paleta de comandos",
+    "placeholder": "Escribe un comando…",
+    "empty": "Ningún comando coincide.",
+    "shortcuts": "Atajos: Ctrl+K buscar · Ctrl+Shift+P comandos · Ctrl+Shift+T terminal · Ctrl+Shift+A agente (Claude) · Ctrl+Shift+B Brain"
+  },
+  "commands": {
+    "newProject": "Nuevo proyecto",
+    "addTerminal": "Añadir terminal a la pizarra",
+    "addClaude": "Añadir Claude a la pizarra",
+    "addNote": "Añadir nota a la pizarra",
+    "center": "Abrir el Command Center",
+    "overview": "Visión general de la pizarra",
+    "toggleSide": "Mostrar u ocultar el panel de tareas y notas",
+    "tasks": "Ir a las tareas",
+    "notes": "Ir a las notas",
+    "brain": "Ir al Brain",
+    "search": "Buscar en todo",
+    "settings": "Abrir los ajustes",
+    "themeDark": "Tema oscuro",
+    "themeLight": "Tema claro",
+    "themeSystem": "Tema del sistema"
+  },
+  "settings": {
+    "open": "Ajustes",
+    "title": "Ajustes",
+    "theme": "Tema",
+    "themes": { "dark": "Oscuro", "light": "Claro", "system": "Como el sistema" },
+    "notifications": "Avisarme cuando Claude espere o termine",
+    "notificationsHint": "Solo se muestran con La Nave en segundo plano y nunca incluyen el contenido de la conversación."
+  },
+  "center": {
+    "open": "Command Center",
+    "title": "Command Center",
+    "attention": "Claude ahora",
+    "calm": "Ningún Claude está trabajando ni esperando respuesta.",
+    "tasks_one": "{{count}} tarea abierta ({{doing}} en curso)",
+    "tasks_other": "{{count}} tareas abiertas ({{doing}} en curso)",
+    "review_one": "{{count}} pendiente de revisar en el Brain",
+    "review_other": "{{count}} pendientes de revisar en el Brain",
+    "noClaude": "Sin paneles de Claude",
+    "empty": "Todavía no hay proyectos."
   }
 }

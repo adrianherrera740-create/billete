@@ -1,19 +1,19 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlassButton } from './GlassButton';
-import { NewProjectDialog } from './NewProjectDialog';
 import { useNave } from '../store';
 
 export function Sidebar() {
   const { t } = useTranslation();
-  const { projects, activeId, showArchived, select, archiveProject, setShowArchived } = useNave();
-  const [creating, setCreating] = useState(false);
+  const { projects, activeId, showArchived, select, archiveProject, setShowArchived, view, setView, setDialog } = useNave();
 
   return (
     <aside className="sidebar glass">
       <h1 className="brand">{t('app.name')}</h1>
-      <GlassButton variant="primary" data-testid="new-project-btn" onClick={() => setCreating(true)}>
+      <GlassButton variant="primary" data-testid="new-project-btn" onClick={() => setDialog('new-project')}>
         {t('project.new')}
+      </GlassButton>
+      <GlassButton data-testid="center-btn" aria-pressed={view === 'center'} onClick={() => setView(view === 'center' ? 'board' : 'center')}>
+        {t('center.open')}
       </GlassButton>
       <ul className="projects" aria-label={t('project.list')}>
         {projects.map((p) => (
@@ -34,11 +34,13 @@ export function Sidebar() {
           </li>
         ))}
       </ul>
+      <GlassButton data-testid="settings-btn" onClick={() => setDialog('settings')}>
+        {t('settings.open')}
+      </GlassButton>
       <label className="check">
         <input type="checkbox" checked={showArchived} onChange={(e) => void setShowArchived(e.target.checked)} />
         {t('project.showArchived')}
       </label>
-      {creating && <NewProjectDialog onClose={() => setCreating(false)} />}
     </aside>
   );
 }

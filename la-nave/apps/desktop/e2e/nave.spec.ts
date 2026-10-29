@@ -385,3 +385,142 @@ test('Brain: nodos, enlaces, búsqueda, revisión de lo propuesto por Claude y c
   await expect(page.getByTestId('brain-hits')).toContainText('No hay resultados');
   await app.close();
 });
+
+type Doc = { document: { documentElement: { dataset: Record<string, string | undefined> } } };
+const theme = (page: Page): Promise<string | undefined> => page.evaluate(() => (globalThis as unknown as Doc).document.documentElement.dataset['theme']);
+
+test('atajos fijos y paleta de comandos; Ctrl+N no hace nada', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const app = await launch(dataDir);
+  const page = await ready(app);
+  await createProject(page, 'Atajos');
+
+  await page.keyboard.press('Control+k');
+  await expect(page.getByTestId('global-search-input')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('global-search-input')).toHaveCount(0);
+
+  await page.keyboard.press('Control+Shift+P');
+  await expect(page.getByTestId('palette-input')).toBeVisible();
+  await page.getByTestId('palette-input').fill('tema claro');
+  await page.keyboard.press('Enter');
+  await expect.poll(() => theme(page)).toBe('light');
+  await page.keyboard.press('Control+Shift+P');
+  await page.getByTestId('palette-input').fill('anadir terminal'); // sin acento: también lo encuentra
+  await expect(page.getByTestId('palette-item')).toHaveCount(1);
+  await page.keyboard.press('Escape');
+
+  await page.keyboard.press('Control+Shift+T');
+  await expect(page.getByTestId('terminal')).toBeVisible();
+  await page.keyboard.press('Control+Shift+A');
+  await expect(page.getByTestId('panel')).toHaveCount(2);
+  await page.getByTestId('tab-tasks').click();
+  await page.keyboard.press('Control+Shift+B');
+  await expect(page.getByTestId('brain-search')).toBeVisible();
+
+  // Ctrl+N no existe: ni diálogo de proyecto nuevo ni paneles nuevos.
+  await page.keyboard.press('Control+n');
+  await page.keyboard.press('Control+Shift+N');
+  await expect(page.getByTestId('project-name-input')).toHaveCount(0);
+  await expect(page.getByTestId('panel')).toHaveCount(2);
+  await app.close();
+});
+
+test('el tema se guarda en ajustes y sigue al reiniciar', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  let app = await launch(dataDir);
+  let page = await ready(app);
+  expect(await theme(page)).toBe('dark');
+  await page.getByTestId('settings-btn').click();
+  await page.getByTestId('theme-select').selectOption('light');
+  await expect.poll(() => theme(page)).toBe('light');
+  await page.getByTestId('notifications-check').uncheck();
+  await app.close();
+
+  app = await launch(dataDir);
+  page = await ready(app);
+  await expect.poll(() => theme(page)).toBe('light');
+  await page.getByTestId('settings-btn').click();
+  await expect(page.getByTestId('notifications-check')).not.toBeChecked();
+  await app.close();
+  const db = new DatabaseSync(join(dataDir, 'nave.db'));
+  expect(db.prepare("SELECT value FROM settings WHERE key = 'theme'").get()).toEqual({ value: '"light"' });
+  db.close();
+});
+
+test('Command Center: resumen de todos los proyectos y salto a uno', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const app = await launch(dataDir);
+  const page = await ready(app);
+  await createProject(page, 'Alfa');
+  await page.getByTestId('task-input').fill('Una');
+  await page.getByTestId('task-add-btn').click();
+  await page.getByTestId('task-input').fill('Dos');
+  await page.getByTestId('task-add-btn').click();
+  await page.getByTestId('task-status').first().click(); // pendiente -> en curso
+  await createProject(page, 'Beta');
+
+  await page.getByTestId('center-btn').click();
+  await expect(page.getByTestId('command-center')).toBeVisible();
+  await expect(page.getByTestId('center-card')).toHaveCount(2);
+  const alfa = page.getByTestId('center-card').filter({ hasText: 'Alfa' });
+  await expect(alfa.getByTestId('center-tasks')).toHaveText('2 tareas abiertas (1 en curso)');
+  await expect(page.getByTestId('center-card').filter({ hasText: 'Beta' }).getByTestId('center-tasks')).toHaveText('0 tareas abiertas (0 en curso)');
+  await expect(page.getByTestId('center-card').filter({ hasText: 'Beta' }).getByTestId('center-review')).toHaveText('0 pendientes de revisar en el Brain');
+  await expect(page.getByTestId('center-calm')).toBeVisible();
+
+  await alfa.click();
+  await expect(page.getByTestId('command-center')).toHaveCount(0);
+  await expect(page.getByTestId('task')).toHaveCount(2);
+  await app.close();
+});
+
+test('búsqueda global (Ctrl+K): encuentra en otros proyectos y navega hasta el resultado', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const app = await launch(dataDir);
+  const page = await ready(app);
+  await createProject(page, 'Tienda');
+  await page.getByTestId('task-input').fill('Revisar proveedores de gorras');
+  await page.getByTestId('task-add-btn').click();
+  await page.getByTestId('tab-brain').click();
+  await page.getByTestId('brain-new-title').fill('Criterio de margen');
+  await page.getByTestId('brain-add').click();
+  await createProject(page, 'La Nave');
+
+  await page.keyboard.press('Control+k');
+  await page.getByTestId('global-search-input').fill('gorras');
+  await expect(page.getByTestId('global-search-item')).toHaveCount(1);
+  await expect(page.getByTestId('global-search-item')).toContainText('Tarea');
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('board-title')).toContainText('Tienda');
+  await expect(page.getByTestId('task')).toContainText('Revisar proveedores de gorras');
+
+  // Un resultado del Brain abre el nodo directamente, y el texto hostil no rompe la búsqueda.
+  await page.keyboard.press('Control+k');
+  await page.getByTestId('global-search-input').fill('margen');
+  await page.getByTestId('global-search-item').filter({ hasText: 'Brain' }).click();
+  await expect(page.getByTestId('brain-title')).toHaveValue('Criterio de margen');
+  await page.keyboard.press('Control+k');
+  await page.getByTestId('global-search-input').fill('" ( NOT * % _ ' + String.fromCharCode(92)); // comillas, operadores, comodines y una barra invertida
+  await expect(page.getByTestId('error-toast')).toHaveCount(0);
+  await app.close();
+});
+
+test('la ventana recuerda su tamaño y posición', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  let app = await launch(dataDir);
+  await ready(app);
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]?.setBounds({ x: 40, y: 30, width: 1111, height: 703 }));
+  await new Promise((resolve) => setTimeout(resolve, 900)); // el guardado va con retardo
+  await app.close();
+  const db = new DatabaseSync(join(dataDir, 'nave.db'));
+  const saved = JSON.parse((db.prepare("SELECT value FROM settings WHERE key = 'window'").get() as { value: string }).value) as { width: number; height: number };
+  db.close();
+  expect(saved).toMatchObject({ width: 1111, height: 703 });
+
+  app = await launch(dataDir);
+  await ready(app);
+  const bounds = await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]?.getBounds());
+  expect(bounds).toMatchObject({ width: 1111, height: 703 });
+  await app.close();
+});

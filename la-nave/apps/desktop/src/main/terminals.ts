@@ -146,7 +146,9 @@ export class TerminalManager {
       this.deps.emit({ type: 'data', panelId, data, end: entry.end });
     });
     pty.onExit(({ exitCode }) => {
-      if (this.running.get(panelId) === entry) this.running.delete(panelId);
+      // Si ya se retiró a propósito (kill, cierre de la app) el aviso de salida ya se dio y la BD puede estar cerrada.
+      if (this.running.get(panelId) !== entry) return;
+      this.running.delete(panelId);
       this.deps.log.info('Terminal terminada', { panelId, exitCode });
       this.deps.bus.emit('terminal.process_exited', { panelId, exitCode });
       this.deps.emit({ type: 'exit', panelId, exitCode });
