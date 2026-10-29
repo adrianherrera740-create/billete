@@ -12,7 +12,7 @@
 - Mercado: ningún competidor español claro (indicio débil); 2–5 clientes de retainer bastan para 5.000 €/mes (aritmética propia). Falta acceso de red para leer fuentes (`negocio/trabajo/mercado/`).
 
 ## Próximo paso
-Esperar el análisis de seguridad (tarea 3) y lanzar 4, 5 y 6. Si la persona amplía el acceso de red (eur-lex, citigroup, ubs, pwc.es, rankiapro, Meta), repetir 1 y 2 con lectura primaria.
+Tareas 1 a 6 hechas, todo NO VERIFICADO. PENDIENTE: puerta de calidad de la ronda 1 (`auditor-calidad`, se cortó por el límite de uso; relanzar pasadas las 10:10 UTC) y decisiones de la persona: gmail.compose (recomendación A), canal de aprobación, calendario con parón de Navidad. Si la persona amplía el acceso de red (eur-lex, citigroup, ubs, pwc.es, rankiapro, Meta), repetir 1 y 2 con lectura primaria.
 
 ## Solo la persona
 Abogado de protección de datos antes de firmar nada, las 20 conversaciones, cuentas/servicios de pago (n8n, LLM, hosting) y decisión sobre WhatsApp.
