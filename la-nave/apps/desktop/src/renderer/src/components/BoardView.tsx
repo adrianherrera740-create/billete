@@ -76,7 +76,7 @@ export function BoardView() {
           <span aria-hidden="true">{project.icon}</span> {project.name}
         </span>
         <span className="spacer" />
-        <GlassButton data-testid="add-note-btn" disabled={overview} onClick={() => void addPanel('sticky')}>
+        <GlassButton data-testid="add-note-btn" disabled={overview} onClick={() => void addPanel('sticky', t('board.noteTitle', { n: board.panels.length + 1 }))}>
           {t('board.addNote')}
         </GlassButton>
         <GlassButton data-testid="overview-btn" aria-pressed={overview} onClick={toggleOverview}>

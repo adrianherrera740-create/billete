@@ -19,6 +19,7 @@
     "pick": "Crea o elige un proyecto para abrir su pizarra.",
     "empty": "La pizarra está vacía. Añade una nota para empezar.",
     "addNote": "Añadir nota",
+    "noteTitle": "Nota {{n}}",
     "overview": "Visión general",
     "exitOverview": "Salir de la visión general"
   },

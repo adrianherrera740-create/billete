@@ -29,7 +29,7 @@ interface State {
   setViewport(viewport: { w: number; h: number }): void;
   setCamera(camera: Camera): void;
   toggleOverview(): void;
-  addPanel(kind: PanelKind): Promise<void>;
+  addPanel(kind: PanelKind, title: string): Promise<void>;
   patchPanel(id: string, patch: Partial<Pick<Panel, 'x' | 'y' | 'w' | 'h' | 'z'>>): void;
   commitPanel(id: string): Promise<void>;
   bringToFront(id: string): Promise<void>;
@@ -121,12 +121,12 @@ export const useNave = create<State>((set, get) => {
       }
     },
 
-    addPanel: (kind) =>
+    addPanel: (kind, title) =>
       guard(async () => {
         const { board, viewport } = get();
         if (!board) return;
         const at = spawnPosition(board.camera, viewport, NOTE_SIZE, board.panels.length);
-        const panel = await call('panel:create', { projectId: board.projectId, kind, ...at, ...NOTE_SIZE, config: { text: '' } });
+        const panel = await call('panel:create', { projectId: board.projectId, kind, title, ...at, ...NOTE_SIZE, config: { text: '' } });
         const current = get().board;
         if (current) set({ board: { ...current, panels: [...current.panels, panel] } });
       }),
