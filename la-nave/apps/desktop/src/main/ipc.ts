@@ -18,9 +18,9 @@ export function registerIpc(
   isTrusted: (event: unknown) => boolean = () => true
 ): void {
   for (const channel of Object.keys(CHANNELS) as ChannelName[]) {
-    ipc.handle(channel, (event, raw) => {
+    ipc.handle(channel, async (event, raw) => {
       if (!isTrusted(event)) return { ok: false, error: { code: 'FORBIDDEN', message: 'Esta petición no viene de la ventana de La Nave.' } };
-      return run(channel, handlers[channel] as Handler<typeof channel>, raw, onError);
+      return await run(channel, handlers[channel] as Handler<typeof channel>, raw, onError);
     });
   }
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, BrainContext, BrainDetail, BrainHit, BrainKind, BrainNode, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ProjectSummary, SearchResult, Settings, ShellOption, Task, TaskStatus } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, BrainContext, BrainDetail, BrainHit, BrainKind, BrainNode, ClaudeEvent, ClaudeState, DataChange, Note, Panel, PanelKind, Project, ProjectSummary, SearchResult, Settings, ShellOption, Task, TaskStatus } from '@nave/shared';
 import { DEFAULT_SETTINGS } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
@@ -34,6 +34,7 @@ interface State {
   dialog: DialogId;
   focusBrain: string | null;
   summary: ProjectSummary[];
+  changeTick: number;
   info: string | null;
   board: Board | null;
   viewport: { w: number; h: number };
@@ -72,6 +73,7 @@ interface State {
   searchBrain(query: string): Promise<BrainHit[]>;
   contextBrain(query: string): Promise<BrainContext | null>;
   clearInfo(): void;
+  changedOutside(change: DataChange): Promise<void>;
   select(id: string): Promise<void>;
   createProject(input: ChannelInput<'project:create'>): Promise<void>;
   archiveProject(id: string, archived: boolean): Promise<void>;
@@ -121,6 +123,7 @@ export const useNave = create<State>((set, get) => {
     dialog: null,
     focusBrain: null,
     summary: [],
+    changeTick: 0,
     info: null,
     board: null,
     viewport: { w: 1000, h: 700 },
@@ -404,6 +407,11 @@ export const useNave = create<State>((set, get) => {
     },
 
     clearInfo: () => set({ info: null }),
+
+    changedOutside: async (change) => {
+      set({ changeTick: get().changeTick + 1 });
+      if (change.scope === 'tasks' || change.scope === 'notes') await get().loadSide();
+    },
 
     clearError: () => set({ error: null })
   };

@@ -9,10 +9,11 @@ export function CommandCenter() {
   const loadSummary = useNave((s) => s.loadSummary);
   const goTo = useNave((s) => s.goTo);
   const claudeStates = useNave((s) => s.claudeStates);
+  const changeTick = useNave((s) => s.changeTick);
 
   useEffect(() => {
     void loadSummary();
-  }, [loadSummary, claudeStates]);
+  }, [loadSummary, claudeStates, changeTick]);
 
   const attention = summary.flatMap((s) => s.claude.filter((c) => c.state === 'waiting' || c.state === 'working').map((c) => ({ ...c, project: s.project })));
 

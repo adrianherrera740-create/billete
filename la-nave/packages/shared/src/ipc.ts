@@ -15,7 +15,7 @@ import {
 import type { Parser } from './parse';
 import { parseSettingsPatch } from './settings';
 import { BRAIN_KINDS, PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, TASK_STATUSES, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { BackupInfo, ProjectSummary, SearchResult, Settings, BrainContext, BrainDetail, BrainHit, BrainNode, Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
+import type { BackupInfo, DataChange, MobileDevice, MobileStatus, PairingInfo, ProjectSummary, SearchResult, Settings, BrainContext, BrainDetail, BrainHit, BrainNode, Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -144,6 +144,13 @@ export const CHANNELS = {
   // Copias de seguridad: se identifican por NOMBRE (nunca por ruta); main solo busca dentro de su carpeta de copias.
   'backup:list': { remote: 'forbidden', input: nothing },
   'backup:create': { remote: 'forbidden', input: nothing },
+  // Gestión del acceso móvil: SOLO desde el PC (un móvil no puede emparejar a otro ni activar nada).
+  'mobile:status': { remote: 'forbidden', input: nothing },
+  'mobile:set-enabled': { remote: 'forbidden', input: object({ enabled: bool }) },
+  'mobile:pair-start': { remote: 'forbidden', input: nothing },
+  'mobile:devices': { remote: 'forbidden', input: nothing },
+  'mobile:revoke': { remote: 'forbidden', input: object({ id }) },
+  'mobile:publish': { remote: 'forbidden', input: nothing },
   'backup:restore': { remote: 'forbidden', input: object({ name: pattern(/^nave-\d{8}-\d{6}-[a-z0-9-]{1,40}\.db$/i, 'no es el nombre de una copia de seguridad') }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
@@ -192,6 +199,12 @@ export interface ChannelOutputs {
   'backup:list': BackupInfo[];
   'backup:create': BackupInfo;
   'backup:restore': null;
+  'mobile:status': MobileStatus;
+  'mobile:set-enabled': MobileStatus;
+  'mobile:pair-start': PairingInfo;
+  'mobile:devices': MobileDevice[];
+  'mobile:revoke': null;
+  'mobile:publish': { ok: boolean; output: string };
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';
@@ -212,8 +225,12 @@ export type TerminalSubscribe = (handler: (event: TerminalEvent) => void) => Uns
 
 export type ClaudeSubscribe = (handler: (event: ClaudeEvent) => void) => Unsubscribe;
 
+export type ChangeSubscribe = (handler: (change: DataChange) => void) => Unsubscribe;
+
 export interface NaveApi {
   readonly platform: string;
+  /** Algo cambió fuera de esta ventana (p. ej. una tarea creada desde el móvil). */
+  onChanged: ChangeSubscribe;
   /** Cambios de estado de las sesiones de Claude (main empuja). */
   onClaude: ClaudeSubscribe;
   invoke<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<Result<ChannelOutputs[C]>>;
@@ -226,10 +243,12 @@ export function createApi(
   platform: string,
   transport: Transport,
   onTerminal: TerminalSubscribe = () => () => undefined,
-  onClaude: ClaudeSubscribe = () => () => undefined
+  onClaude: ClaudeSubscribe = () => () => undefined,
+  onChanged: ChangeSubscribe = () => () => undefined
 ): NaveApi {
   return {
     platform,
+    onChanged,
     onTerminal,
     onClaude,
     invoke: async (channel, input) => (await transport(channel, input)) as Result<ChannelOutputs[typeof channel]>

@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { CHANNELS, createApi } from '@nave/shared';
-import type { ChannelName, ClaudeEvent, Result, TerminalEvent } from '@nave/shared';
+import type { ChannelName, ClaudeEvent, DataChange, Result, TerminalEvent } from '@nave/shared';
 
 // El preload solo deja pasar canales declarados en @nave/shared; main vuelve a validar cada entrada.
 const api = createApi(
@@ -21,6 +21,13 @@ const api = createApi(
     ipcRenderer.on('claude:event', listener);
     return () => {
       ipcRenderer.removeListener('claude:event', listener);
+    };
+  },
+  (handler) => {
+    const listener = (_event: unknown, payload: DataChange): void => handler(payload);
+    ipcRenderer.on('data:changed', listener);
+    return () => {
+      ipcRenderer.removeListener('data:changed', listener);
     };
   }
 );

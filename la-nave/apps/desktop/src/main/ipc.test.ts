@@ -25,7 +25,8 @@ const services = (projects: Projects, terminals: TerminalManager, tasks: Tasks):
   settings: {} as Services['settings'],
   overview: {} as Services['overview'],
   search: {} as Services['search'],
-  backups: {} as Services['backups']
+  backups: {} as Services['backups'],
+  mobile: {} as Services['mobile']
 });
 
 // electron no se carga en vitest: el módulo importa ipcMain, así que lo simulamos.
@@ -44,7 +45,7 @@ const stubTerminals = (projects: Projects): TerminalManager =>
     log: { debug: () => undefined, info: () => undefined, warn: () => undefined, error: () => undefined }
   });
 
-function setup(): { call: (channel: ChannelName, input: unknown) => Result<unknown>; errors: unknown[]; channels: string[] } {
+function setup(): { call: (channel: ChannelName, input: unknown) => Promise<Result<unknown>>; errors: unknown[]; channels: string[] } {
   const db = openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc-')), 'nave.db'));
   migrate(db);
   const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
@@ -53,50 +54,50 @@ function setup(): { call: (channel: ChannelName, input: unknown) => Result<unkno
   const projects = new Projects(db, new EventBus<EventMap>());
   registerIpc(handlersFor(services(projects, stubTerminals(projects), new Tasks(db, new EventBus<EventMap>()))), (e) => errors.push(e), fake);
   return {
-    call: (channel, input) => registered.get(channel)?.({}, input) as Result<unknown>,
+    call: (channel, input) => registered.get(channel)?.({}, input) as Promise<Result<unknown>>,
     errors,
     channels: [...registered.keys()]
   };
 }
 
 describe('registro único de IPC', () => {
-  it('registra exactamente los canales de @nave/shared', () => {
+  it('registra exactamente los canales de @nave/shared', async () => {
     expect(setup().channels.sort()).toEqual(Object.keys(CHANNELS).sort());
   });
 
-  it('flujo completo por IPC: crear proyecto, panel y leer la pizarra', () => {
+  it('flujo completo por IPC: crear proyecto, panel y leer la pizarra', async () => {
     const { call } = setup();
-    const created = call('project:create', { name: 'Mi proyecto' });
+    const created = await call('project:create', { name: 'Mi proyecto' });
     expect(created.ok).toBe(true);
     const id = (created as { ok: true; data: { id: string } }).data.id;
-    expect(call('panel:create', { projectId: id, kind: 'sticky', x: 0, y: 0, w: 300, h: 200 }).ok).toBe(true);
-    const board = call('board:get', { projectId: id }) as { ok: true; data: { panels: unknown[] } };
+    expect(((await call('panel:create', { projectId: id, kind: 'sticky', x: 0, y: 0, w: 300, h: 200 })) as { ok: boolean }).ok).toBe(true);
+    const board = (await call('board:get', { projectId: id })) as { ok: true; data: { panels: unknown[] } };
     expect(board.data.panels).toHaveLength(1);
   });
 
-  it('entradas inválidas: error VALIDATION en español y sin tocar la BD', () => {
+  it('entradas inválidas: error VALIDATION en español y sin tocar la BD', async () => {
     const { call } = setup();
     for (const bad of [{ name: '' }, { name: 'x', color: 'rojo' }, { name: 'x', otro: 1 }, null, 'texto', []]) {
-      const res = call('project:create', bad);
+      const res = await call('project:create', bad);
       expect(res).toMatchObject({ ok: false, error: { code: 'VALIDATION' } });
     }
-    expect(call('project:list', { includeArchived: false })).toEqual({ ok: true, data: [] });
+    expect(await call('project:list', { includeArchived: false })).toEqual({ ok: true, data: [] });
   });
 
-  it('rechaza peticiones que no vienen de nuestra página', () => {
+  it('rechaza peticiones que no vienen de nuestra página', async () => {
     const db = openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc3-')), 'nave.db'));
     migrate(db);
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
     const projects = new Projects(db, new EventBus<EventMap>());
     registerIpc(handlersFor(services(projects, stubTerminals(projects), new Tasks(db, new EventBus<EventMap>()))), () => undefined, { handle: (c, l) => void registered.set(c, l) }, (e) => (e as { ok?: boolean }).ok === true);
     const input = { includeArchived: false };
-    expect(registered.get('project:list')?.({ ok: false }, input)).toMatchObject({ ok: false, error: { code: 'FORBIDDEN' } });
-    expect(registered.get('project:list')?.({ ok: true }, input)).toEqual({ ok: true, data: [] });
+    expect(await registered.get('project:list')?.({ ok: false }, input)).toMatchObject({ ok: false, error: { code: 'FORBIDDEN' } });
+    expect(await registered.get('project:list')?.({ ok: true }, input)).toEqual({ ok: true, data: [] });
   });
 
-  it('un id inexistente devuelve NOT_FOUND y un fallo interno no filtra detalles', () => {
+  it('un id inexistente devuelve NOT_FOUND y un fallo interno no filtra detalles', async () => {
     const { call, errors } = setup();
-    expect(call('board:get', { projectId: 'x' })).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });
+    expect(await call('board:get', { projectId: 'x' })).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });
     // Provocamos un fallo interno real: color válido pero BD cerrada no es sencillo; usamos un manejador que lanza.
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
     const projects2 = new Projects(openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc2-')), 'a.db')), new EventBus<EventMap>());
@@ -105,7 +106,7 @@ describe('registro único de IPC', () => {
       (e) => errors.push(e),
       { handle: (c, l) => void registered.set(c, l) }
     );
-    const res = registered.get('project:list')?.({}, { includeArchived: false }) as Result<unknown>;
+    const res = (await registered.get('project:list')?.({}, { includeArchived: false })) as Result<unknown>;
     expect(res).toMatchObject({ ok: false, error: { code: 'INTERNAL' } });
     expect(JSON.stringify(res)).not.toContain('secreta');
     expect(errors).toHaveLength(1);

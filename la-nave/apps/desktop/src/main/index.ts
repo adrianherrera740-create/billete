@@ -7,7 +7,10 @@ import { APP_NAME } from '@nave/shared';
 import type { ClaudeState, Theme } from '@nave/shared';
 import { ClaudeService } from './claude';
 import { handlersFor, registerIpc } from './ipc';
+import type { Handlers } from './ipc';
 import { startCore } from './nave';
+import { MobileService } from './mobile/service';
+import { Tailscale, realTailscaleDeps } from './mobile/tailscale';
 import { createNotifier } from './notifier';
 import { detectShells, realDeps } from './shells';
 import { TerminalManager } from './terminals';
@@ -63,6 +66,7 @@ process.on('uncaughtException', (error) => core?.log.app.error('Excepción no co
 process.on('unhandledRejection', (reason) => core?.log.app.error('Promesa rechazada sin tratar', reason));
 let terminals: TerminalManager | undefined;
 let claude: ClaudeService | undefined;
+let mobile: MobileService | undefined;
 
 /** Solo se atienden peticiones que vienen de nuestra propia página (archivo local o servidor de desarrollo). */
 function isOwnPage(event: unknown): boolean {
@@ -144,12 +148,46 @@ void app.whenReady().then(async () => {
     now: () => Date.now()
   });
   current.bus.on('claude.session_state_changed', ({ panelId, state }) => notifier.onState(panelId, state as ClaudeState));
-  registerIpc(
-    handlersFor({ projects: current.projects, terminals: manager, claude: claudeService, tasks: current.tasks, brain: current.brain, settings: current.settings, overview: current.overview, search: current.search, backups: current.backups }),
-    (error) => core?.log.app.error('Fallo interno en un canal IPC', error),
-    undefined,
-    isOwnPage
-  );
+  // Los manejadores se crean después del servicio móvil, que los necesita al atender peticiones.
+  const ref: { handlers?: Handlers } = {};
+  const onError = (error: unknown): void => core?.log.app.error('Fallo interno en un canal IPC', error);
+  const mobileService = new MobileService({
+    db: current.db,
+    bus: current.bus,
+    settings: current.settings,
+    log: current.log.app,
+    tailscale: new Tailscale(realTailscaleDeps()),
+    // La web del móvil queda en out/mobile, junto al código de main (out/main).
+    staticDir: join(__dirname, '../mobile'),
+    handlers: () => {
+      if (!ref.handlers) throw new Error('Los manejadores todavía no están listos');
+      return ref.handlers;
+    },
+    onError
+  });
+  mobile = mobileService;
+  const handlers = handlersFor({
+    projects: current.projects,
+    terminals: manager,
+    claude: claudeService,
+    tasks: current.tasks,
+    brain: current.brain,
+    settings: current.settings,
+    overview: current.overview,
+    search: current.search,
+    backups: current.backups,
+    mobile: mobileService
+  });
+  ref.handlers = handlers;
+  registerIpc(handlers, onError, undefined, isOwnPage);
+  // Lo que cambia fuera de esta ventana (por ejemplo una tarea creada desde el móvil) se empuja al renderer.
+  const push = (scope: 'tasks' | 'notes' | 'devices', projectId?: string | null): void => {
+    for (const win of BrowserWindow.getAllWindows()) win.webContents.send('data:changed', { scope, ...(projectId !== undefined ? { projectId } : {}) });
+  };
+  for (const name of ['task.created', 'task.updated', 'task.deleted'] as const) current.bus.on(name, (e) => push('tasks', e.projectId));
+  for (const name of ['note.created', 'note.updated', 'note.deleted'] as const) current.bus.on(name, (e) => push('notes', e.projectId));
+  for (const name of ['mobile.paired', 'mobile.revoked'] as const) current.bus.on(name, () => push('devices'));
+  void mobileService.autostart();
   createWindow(current);
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow(current);
@@ -159,6 +197,7 @@ void app.whenReady().then(async () => {
 app.on('before-quit', () => {
   terminals?.killAll();
   void claude?.stop();
+  void mobile?.stop();
   core?.close();
   core = undefined;
 });

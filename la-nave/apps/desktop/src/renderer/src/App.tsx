@@ -74,6 +74,7 @@ export function App() {
   }, [load]);
 
   useEffect(() => window.nave.onClaude((event) => useNave.getState().applyClaude(event)), []);
+  useEffect(() => window.nave.onChanged((change) => void useNave.getState().changedOutside(change)), []);
   useEffect(() => registerDefaultCommands(), []);
 
   return (

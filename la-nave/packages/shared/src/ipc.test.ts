@@ -21,7 +21,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review|restore)$/.test(name) && !REMOTE_CAPTURE.includes(name)) {
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review|restore|set-enabled|pair-start|revoke|publish)$/.test(name) && !REMOTE_CAPTURE.includes(name)) {
         expect(CHANNELS[name].remote, name).toBe('forbidden');
       }
     }
@@ -150,6 +150,20 @@ describe('copias de seguridad (seguridad)', () => {
     for (const bad of ['../nave-20261029-100000-manual.db', 'C:\\Windows\\system.db', '/etc/passwd', 'nave-20261029-100000-manual.db/../x', 'nave.db', 'nave-1-2-x.db', 'otra.db', '']) {
       expect(() => p({ name: bad }), bad).toThrow();
     }
+  });
+});
+
+describe('gestión del acceso móvil (seguridad)', () => {
+  it('ningún canal mobile:* es accesible desde el móvil: ni emparejar, ni activar, ni revocar', () => {
+    const names = (Object.keys(CHANNELS) as ChannelName[]).filter((n) => n.startsWith('mobile:'));
+    expect(names).toEqual(['mobile:status', 'mobile:set-enabled', 'mobile:pair-start', 'mobile:devices', 'mobile:revoke', 'mobile:publish']);
+    for (const name of names) expect(CHANNELS[name].remote, name).toBe('forbidden');
+  });
+
+  it('revocar exige un id y set-enabled un booleano', () => {
+    expect(() => CHANNELS['mobile:revoke'].input({})).toThrow(/falta/);
+    expect(() => CHANNELS['mobile:set-enabled'].input({ enabled: 'si' })).toThrow(/verdadero o falso/);
+    expect(CHANNELS['mobile:set-enabled'].input({ enabled: true })).toEqual({ enabled: true });
   });
 });
 

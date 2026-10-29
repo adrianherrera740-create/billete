@@ -36,6 +36,8 @@ export interface MobileServerDeps {
   extraHosts(): string[];
   log: Logger;
   onError(error: unknown): void;
+  /** Aviso al PC de que un móvil acaba de emparejarse. */
+  onPaired?(device: MobileDevice): void;
   pairLimiter: RateLimiter;
   deviceLimiter: RateLimiter;
 }
@@ -151,8 +153,7 @@ export class MobileServer {
           return this.send(res, 400, fail('VALIDATION', 'El cuerpo no es JSON válido.'));
         }
       }
-      const result = run(channel, this.deps.handlers[channel] as Handler<typeof channel>, input, this.deps.onError);
-      this.send(res, 200, result);
+      void run(channel, this.deps.handlers[channel] as Handler<typeof channel>, input, this.deps.onError).then((result) => this.send(res, 200, result));
     });
   }
 
@@ -178,6 +179,7 @@ export class MobileServer {
     }
     const { device, token } = this.deps.devices.add(typeof body.name === 'string' ? body.name : 'Móvil');
     this.deps.log.info('Móvil emparejado', { dispositivo: device.name });
+    this.deps.onPaired?.(device);
     this.send(res, 200, { ok: true, data: { token, deviceId: device.id, name: device.name } });
   }
 

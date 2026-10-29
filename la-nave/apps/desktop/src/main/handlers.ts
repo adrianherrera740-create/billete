@@ -7,10 +7,11 @@ import type { Brain } from './brain';
 import type { ClaudeService } from './claude';
 import type { Overview, GlobalSearch } from './shell';
 import type { SettingsStore } from './settings';
+import type { MobileService } from './mobile/service';
 import type { Tasks } from './tasks';
 import type { TerminalManager } from './terminals';
 
-export type Handler<C extends ChannelName> = (input: ChannelInput<C>) => ChannelOutputs[C];
+export type Handler<C extends ChannelName> = (input: ChannelInput<C>) => ChannelOutputs[C] | Promise<ChannelOutputs[C]>;
 export type Handlers = { [C in ChannelName]: Handler<C> };
 
 export interface IpcLike {
@@ -18,10 +19,10 @@ export interface IpcLike {
 }
 
 /** Traduce cualquier excepción a un Result con mensaje en español; nunca filtra trazas ni rutas internas. */
-export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw: unknown, onError: (error: unknown) => void): Result<ChannelOutputs[C]> {
+export async function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw: unknown, onError: (error: unknown) => void): Promise<Result<ChannelOutputs[C]>> {
   try {
     const input = CHANNELS[channel].input(raw) as ChannelInput<C>;
-    return { ok: true, data: handler(input) };
+    return { ok: true, data: await handler(input) };
   } catch (error) {
     if (error instanceof ValidationError) return { ok: false, error: { code: 'VALIDATION', message: `Datos no válidos (${error.message}).` } };
     if (error instanceof NaveError) return { ok: false, error: { code: error.code, message: error.message } };
@@ -40,9 +41,10 @@ export interface Services {
   overview: Overview;
   search: GlobalSearch;
   backups: Backups;
+  mobile: MobileService;
 }
 
-export function handlersFor({ projects, terminals, claude, tasks, brain, settings, overview, search, backups }: Services): Handlers {
+export function handlersFor({ projects, terminals, claude, tasks, brain, settings, overview, search, backups, mobile }: Services): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -87,7 +89,13 @@ export function handlersFor({ projects, terminals, claude, tasks, brain, setting
     'search:global': (i) => search.search(i.query),
     'backup:list': () => backups.list(),
     'backup:create': () => backups.create(),
-    'backup:restore': (i) => backups.restore(i.name)
+    'backup:restore': (i) => backups.restore(i.name),
+    'mobile:status': () => mobile.status(),
+    'mobile:set-enabled': (i) => mobile.setEnabled(i.enabled),
+    'mobile:pair-start': () => mobile.startPairing(),
+    'mobile:devices': () => mobile.listDevices(),
+    'mobile:revoke': (i) => mobile.revoke(i.id),
+    'mobile:publish': () => mobile.publish()
   };
 }
 

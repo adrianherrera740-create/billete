@@ -198,3 +198,26 @@ export interface MobileDevice {
   lastSeenAt: string | null;
   revokedAt: string | null;
 }
+
+export interface MobileStatus {
+  enabled: boolean;
+  running: boolean;
+  port: number | null;
+  localUrl: string | null;
+  /** Solo si la persona ya publicó el servidor con Tailscale Serve y se conoce el nombre de su equipo. */
+  publicUrl: string | null;
+  tailscale: { installed: boolean; running: boolean; dnsName: string | null };
+}
+
+export interface PairingInfo {
+  /** Dirección que lleva el QR. El código va en el fragmento (#), que el navegador no envía al servidor. */
+  url: string;
+  expiresAt: string;
+  via: 'tailscale' | 'local';
+}
+
+/** Aviso de main al renderer de que algo cambió (por ejemplo desde el móvil) y hay que recargar. */
+export interface DataChange {
+  scope: 'tasks' | 'notes' | 'devices';
+  projectId?: string | null;
+}

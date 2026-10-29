@@ -28,6 +28,8 @@ export interface EventMap {
   'brain.node_updated': { id: string; projectId: string };
   'brain.node_deleted': { id: string; projectId: string };
   'brain.node_reviewed': { id: string; projectId: string; confidence: string };
+  'mobile.paired': { deviceId: string };
+  'mobile.revoked': { deviceId: string };
 }
 export type EventName = keyof EventMap;
 export type EventNamesAreDotted = EventName extends `${string}.${string}` ? true : never;
