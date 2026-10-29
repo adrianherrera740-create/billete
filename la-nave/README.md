@@ -2,7 +2,7 @@
 
 Tu escritorio de proyectos con IA para Windows 11: proyectos con pizarra, terminales reales, Claude Code, tareas, notas y un Brain con búsqueda.
 
-**Estado:** fases F0 a F8 construidas y probadas en el contenedor de desarrollo (Linux): 180 tests unitarios y 17 pruebas e2e sobre Electron real. **Pendiente de verificar en un Windows real** (ver abajo). Plan por fases en el prompt de la persona (`../cerebro/la-nave-prompt-maestro.md`) y decisiones en `docs/adr/`.
+**Estado:** fases F0 a F8 construidas y probadas en el contenedor de desarrollo (Linux): 232 tests unitarios y 18 pruebas e2e (Electron real y un navegador con forma de móvil). **Acceso desde el móvil construido** (ver abajo). **Pendiente de verificar en un Windows real** (ver abajo). Plan por fases en el prompt de la persona (`../cerebro/la-nave-prompt-maestro.md`) y decisiones en `docs/adr/`.
 
 ## Requisitos
 - Node 22 o superior y Git. Windows 11 para la app final.
@@ -53,7 +53,17 @@ docs/adr          decisiones importantes
 - **El instalador `.exe`:** la configuración (`apps/desktop/electron-builder.yml`) se validó hasta la carpeta `win-unpacked` (ejecutable x64, `node-pty` con binarios de Windows fuera del `.asar`); el NSIS final debe generarse en Windows.
 - **Claude Code real con sesión iniciada:** los hooks se probaron con un `claude` falso que imita su comportamiento.
 - **Notificaciones nativas:** se prueba la lógica, no cómo se ven en Windows.
-- **Fuera de V1** (preparado, no implementado): vault de carpetas con watcher, grafo, MCP, SSH, navegador en pizarra, notas adhesivas avanzadas, Ollama y acceso desde el móvil.
+- **Tailscale real:** `tailscale serve` se probó con un Tailscale simulado; no se ha ejecutado contra uno real.
+- **Móvil real:** la web móvil se probó en Chromium con viewport 390x844 y agente de usuario de móvil, no en un teléfono; la instalación como app (PWA) y el uso de la cámara para el QR dependen de tu móvil.
+- **Fuera de V1** (preparado, no implementado): vault de carpetas con watcher, grafo, MCP, SSH, navegador en pizarra, notas adhesivas avanzadas y Ollama.
+
+## Acceso desde el móvil
+1. Instala Tailscale en el PC y en el móvil (misma cuenta). Es lo que evita abrir nada a internet.
+2. En La Nave: Ajustes → Acceso desde el móvil → activar → **Publicar con Tailscale** (ejecuta `tailscale serve`; `tailscale serve reset` quita todo lo que tengas publicado).
+3. **Emparejar un móvil** y escanear el QR con la cámara. El código es de un solo uso y caduca; cada móvil tiene su propia llave y se revoca desde la misma lista.
+4. Desde el móvil: resumen de proyectos, captura rápida a la bandeja, tareas y notas. Lo que cambies aparece al momento en el PC. Terminales, Claude, copias y ajustes **no** se pueden usar desde el móvil (lista cerrada de canales; el resto da 403).
+Diseño y amenazas: `docs/adr/ADR-002-acceso-movil.md`. Capturas: `docs/movil-*.png`.
+Pruebas e2e en Linux: `NAVE_E2E_CHROMIUM=/ruta/a/chromium npm run test:e2e`.
 
 ## Reglas de trabajo
 Fases PHASE → PLAN → IMPLEMENT → TEST → VERIFY → DOCUMENT → NEXT, un commit por cambio, nunca secretos en el repo. Atajos fijos: Ctrl+K, Ctrl+Shift+P, Ctrl+Shift+T, Ctrl+Shift+A, Ctrl+Shift+B (sin Ctrl+N).

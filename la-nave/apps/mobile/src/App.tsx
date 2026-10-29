@@ -21,6 +21,15 @@ export function App() {
   const [projectId, setProjectId] = useState<string | null>(null);
   const api = useMemo(() => createMobileApi({ onUnauthorized: () => setGate('revoked'), offlineMessage: t('common.offline') }), [t]);
 
+  // Si se abre un enlace de emparejamiento con la web ya cargada, el navegador solo cambia el fragmento.
+  useEffect(() => {
+    const onHash = (): void => {
+      if (codeFromHash(window.location.hash)) setGate('pairing');
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
   // Canjea el código del QR (viaja en el fragmento) por el token de este móvil y limpia la dirección.
   useEffect(() => {
     if (gate !== 'pairing') return;

@@ -20,3 +20,11 @@
 ## Consecuencias
 - Un servidor local más en el proceso principal: más superficie. Por eso la lista cerrada, el desactivado por defecto y los tests de seguridad.
 - Desde el móvil no se puede ejecutar nada en el PC: es consulta y captura.
+
+## Notas de implementación (M4–M6, 29/10/2026)
+- Web móvil: `apps/mobile` (React + vite), se compila a `apps/desktop/out/mobile` dentro del `build` del escritorio y va en el paquete (`out/**`). Reutiliza `createApi('mobile', …)` de `@nave/shared`, así que usa exactamente los mismos canales y validaciones.
+- El enlace de emparejamiento lleva el código en el fragmento (`#`); la web lo canjea por el token, lo guarda en `localStorage` y limpia la barra. Escucha `hashchange` porque, si la web ya estaba abierta, el navegador no la recarga.
+- Ajustes de escritorio (`MobileAccess.tsx`): activar, estado de Tailscale, publicar, QR (`qrcode`), dispositivos y revocar. El QR desaparece al caducar el código.
+- e2e `mobile.spec.ts`: empareja, captura a la bandeja, crea y cambia una tarea (aparece en el PC por `data:changed`), comprueba 401 sin token y 403 en un canal solo-PC con token válido, revoca y verifica la pantalla «ya no emparejado».
+- Hallado por el e2e: el diálogo de Ajustes no se desplazaba con contenido alto (botón Revocar fuera de pantalla) → `overflow-y: auto`.
+- Sin verificar: Tailscale real, teléfono real, instalación como PWA.
