@@ -113,4 +113,25 @@ select option { background: #161c2a; }
 .note-actions select { max-width: 130px; }
 .toast.info { background: rgba(20, 70, 120, 0.9); }
 
+.side-body input[type='search'], .brain-editor input, .brain-editor textarea { padding: 7px 9px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.06); color: var(--text); font: inherit; min-width: 0; }
+.brain-h { margin: 6px 0 4px; font-size: 12px; color: var(--muted); font-weight: 600; }
+.brain-node { display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+.brain-node-main { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: none; border: 0; text-align: left; cursor: pointer; padding: 0; }
+.brain-node-title { font-weight: 600; overflow-wrap: anywhere; }
+.brain-node.deprecated .brain-node-title { text-decoration: line-through; color: var(--muted); }
+.snippet { flex-basis: 100%; font-size: 12px; color: var(--muted); }
+.brain-review { display: flex; gap: 6px; flex-wrap: wrap; }
+.brain-review .glass-btn { padding: 3px 10px; font-size: 12px; }
+.badge { padding: 1px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; background: rgba(255, 255, 255, 0.12); }
+.badge.verified { background: #15803d; }
+.badge.unverified { background: #b45309; }
+.badge.deprecated { background: #475569; }
+.badge.claude { background: #6d28d9; }
+.brain-editor { display: flex; flex-direction: column; gap: 8px; }
+.brain-editor-head { display: flex; gap: 6px; align-items: center; }
+.brain-editor textarea { min-height: 160px; resize: vertical; }
+.brain-links { margin: 0; font-size: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.link { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 12px; }
+pre.context { max-height: 320px; overflow: auto; padding: 10px; border-radius: 10px; background: rgba(0, 0, 0, 0.35); white-space: pre-wrap; font-size: 12px; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

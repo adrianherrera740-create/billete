@@ -1,4 +1,5 @@
 import { existsSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
+import { DatabaseSync } from 'node:sqlite';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { _electron as electron, expect, test } from '@playwright/test';
@@ -317,5 +318,70 @@ test('enviar una nota a Claude la pega sin Intro; la persona decide cuándo envi
   await expect(page.getByTestId('claude-state')).toHaveText('Inactivo', { timeout: 15_000 });
   await page.getByTestId('claude-history-btn').click();
   await expect(page.getByTestId('claude-history')).toContainText('revisa el plan de proveedores');
+  await app.close();
+});
+
+test('Brain: nodos, enlaces, búsqueda, revisión de lo propuesto por Claude y contexto acotado', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const app = await launch(dataDir);
+  const page = await ready(app);
+  await createProject(page, 'Tienda');
+  await page.getByTestId('tab-brain').click();
+
+  // Dos nodos de la persona, enlazados con [[ ]].
+  for (const title of ['Plan CJ', 'Seller Center']) {
+    await page.getByTestId('brain-new-title').fill(title);
+    await page.getByTestId('brain-add').click();
+  }
+  await expect(page.getByTestId('brain-node')).toHaveCount(2);
+  await expect(page.getByTestId('brain-section-verified')).toBeVisible();
+  await page.getByTestId('brain-node').filter({ hasText: 'Plan CJ' }).getByRole('button').first().click();
+  await page.getByTestId('brain-body').fill('Almacén en Alemania y Polonia. Antes hay que leer [[Seller Center]] y [[Nada]].');
+  await page.getByTestId('brain-save').click();
+  await page.getByTestId('brain-node').filter({ hasText: 'Seller Center' }).getByRole('button').first().click();
+  await expect(page.getByTestId('brain-backlinks')).toContainText('Plan CJ');
+  await page.getByRole('button', { name: 'Cerrar' }).first().click();
+  await page.getByTestId('brain-node').filter({ hasText: 'Plan CJ' }).getByRole('button').first().click();
+  await expect(page.getByTestId('brain-links')).toContainText('Seller Center');
+  await expect(page.getByTestId('brain-links')).toContainText('Nada?'); // enlace sin resolver
+  await page.getByRole('button', { name: 'Cerrar' }).first().click();
+
+  // Búsqueda: acentos, prefijo y fragmento; el texto hostil no rompe nada.
+  await page.getByTestId('brain-search').fill('almacen aleman');
+  await expect(page.getByTestId('brain-hits')).toContainText('Plan CJ');
+  await page.getByTestId('brain-search').fill(String.raw`" ( NOT * title:x`);
+  await expect(page.getByTestId('brain-hits')).toContainText('No hay resultados');
+  await expect(page.getByTestId('error-toast')).toHaveCount(0);
+  await page.getByTestId('brain-search').fill('');
+
+  // Lo que propone Claude (aquí, insertado en la BD como lo haría MCP) llega SIN verificar.
+  const db = new DatabaseSync(join(dataDir, 'nave.db'));
+  const projectId = (db.prepare('SELECT id FROM projects').get() as { id: string }).id;
+  const insert = db.prepare("INSERT INTO brain_nodes (id, project_id, title, body, confidence, source, created_at, updated_at) VALUES (?, ?, ?, ?, 'unverified', 'claude', 't', 't')");
+  insert.run('c1', projectId, 'Suposición de plazos', 'Los plazos de CJ serían de 5 días', );
+  insert.run('c2', projectId, 'Dato dudoso', 'CJ exige factura de alta');
+  db.close();
+  await page.getByTestId('tab-tasks').click();
+  await page.getByTestId('tab-brain').click();
+  await expect(page.getByTestId('brain-section-unverified')).toContainText('Pendientes de revisión (2)');
+  await expect(page.getByTestId('brain-section-unverified').getByText('Propuesto por Claude')).toHaveCount(2);
+
+  // El contexto marca lo dudoso y deja claro que es de este proyecto.
+  await page.getByTestId('brain-search').fill('plazos CJ');
+  await page.getByTestId('brain-context-btn').click();
+  await expect(page.getByTestId('brain-context-text')).toContainText('«Tienda»');
+  await expect(page.getByTestId('brain-context-text')).toContainText('Suposición de plazos [sin verificar]');
+  await page.getByRole('button', { name: 'Cerrar' }).last().click();
+  await page.getByTestId('brain-search').fill('');
+
+  // Aceptar uno y rechazar otro.
+  await page.getByTestId('brain-node').filter({ hasText: 'Suposición de plazos' }).getByTestId('brain-accept').click();
+  await page.getByTestId('brain-node').filter({ hasText: 'Dato dudoso' }).getByTestId('brain-reject').click();
+  await expect(page.getByTestId('brain-section-unverified')).toHaveCount(0);
+  await expect(page.getByTestId('brain-section-deprecated')).toContainText('Dato dudoso');
+  await expect(page.getByTestId('brain-section-verified')).toContainText('Suposición de plazos');
+  // Lo obsoleto no sale en las búsquedas.
+  await page.getByTestId('brain-search').fill('factura');
+  await expect(page.getByTestId('brain-hits')).toContainText('No hay resultados');
   await app.close();
 });

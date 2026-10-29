@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ShellOption, Task, TaskStatus } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, BrainContext, BrainDetail, BrainHit, BrainKind, BrainNode, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ShellOption, Task, TaskStatus } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
   const res = await window.nave.invoke(channel, input);
@@ -22,6 +22,7 @@ interface State {
   tasks: Task[];
   notes: Note[];
   inbox: Note[];
+  brain: BrainNode[];
   sideOpen: boolean;
   info: string | null;
   board: Board | null;
@@ -43,6 +44,14 @@ interface State {
   saveNote(id: string, patch: { title?: string; body?: string; projectId?: string | null }): Promise<void>;
   removeNote(id: string): Promise<void>;
   pasteToClaude(panelId: string, text: string): Promise<void>;
+  loadBrain(): Promise<void>;
+  openBrain(id: string | null): Promise<BrainDetail | null>;
+  addBrain(title: string): Promise<void>;
+  saveBrain(id: string, patch: { title?: string; body?: string; kind?: BrainKind }): Promise<void>;
+  reviewBrain(id: string, action: 'accept' | 'reject' | 'restore'): Promise<void>;
+  removeBrain(id: string): Promise<void>;
+  searchBrain(query: string): Promise<BrainHit[]>;
+  contextBrain(query: string): Promise<BrainContext | null>;
   clearInfo(): void;
   select(id: string): Promise<void>;
   createProject(input: ChannelInput<'project:create'>): Promise<void>;
@@ -85,6 +94,7 @@ export const useNave = create<State>((set, get) => {
     tasks: [],
     notes: [],
     inbox: [],
+    brain: [],
     sideOpen: true,
     info: null,
     board: null,
@@ -267,6 +277,70 @@ export const useNave = create<State>((set, get) => {
         const title = get().board?.panels.find((p) => p.id === panelId)?.title ?? 'Claude';
         set({ info: `Pegado en «${title}». Revísalo y pulsa Intro dentro de Claude para enviarlo.` });
       }),
+
+    loadBrain: () =>
+      guard(async () => {
+        const { activeId } = get();
+        set({ brain: activeId ? await call('brain:list', { projectId: activeId }) : [] });
+      }),
+
+    openBrain: async (id) => {
+      if (id === null) return null;
+      try {
+        return await call('brain:get', { id });
+      } catch (error) {
+        set({ error: error instanceof Error ? error.message : String(error) });
+        return null;
+      }
+    },
+
+    addBrain: (title) =>
+      guard(async () => {
+        const { activeId } = get();
+        if (!activeId) return;
+        await call('brain:create', { projectId: activeId, title });
+        await get().loadBrain();
+      }),
+
+    saveBrain: (id, patch) =>
+      guard(async () => {
+        await call('brain:update', { id, ...patch });
+        await get().loadBrain();
+      }),
+
+    reviewBrain: (id, action) =>
+      guard(async () => {
+        await call('brain:review', { id, action });
+        await get().loadBrain();
+      }),
+
+    removeBrain: (id) =>
+      guard(async () => {
+        await call('brain:delete', { id });
+        await get().loadBrain();
+      }),
+
+    searchBrain: async (query) => {
+      const { activeId } = get();
+      if (!activeId) return [];
+      try {
+        return await call('brain:search', { projectId: activeId, query });
+      } catch (error) {
+        set({ error: error instanceof Error ? error.message : String(error) });
+        return [];
+      }
+    },
+
+    contextBrain: async (query) => {
+      const { activeId } = get();
+      if (!activeId) return null;
+      try {
+        return await call('brain:context', { projectId: activeId, query });
+      } catch (error) {
+        set({ error: error instanceof Error ? error.message : String(error) });
+        return null;
+      }
+    },
 
     clearInfo: () => set({ info: null }),
 

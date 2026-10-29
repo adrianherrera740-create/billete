@@ -56,3 +56,10 @@
 - Enviar texto a Claude (`claude:paste`) solo PEGA: bracketed paste, sin Intro, y únicamente en paneles `kind='claude'` en marcha. El texto se filtra de caracteres de control (ESC, ^C, ^D...) para que no pueda cerrar el pegado antes de tiempo ni inyectar órdenes; hay un test con un texto hostil.
 - Canales de lectura (`task:list`, `note:list`) permitidos en remoto; todos los que modifican datos, no.
 - Limitación conocida: el e2e usa un `fake-claude` en modo línea; en el Claude real el salto de línea dentro de un pegado forma parte del pegado (por eso el e2e envía una sola línea).
+
+## Notas de F6 (29/10/2026)
+- Brain por proyecto: nodos con `confidence` (verified / unverified / deprecated), `source` (user / claude), `source_ref` y enlaces `[[Título]]`. Lo escrito por la persona nace verificado; **lo propuesto por Claude (`Brain.propose`) nace siempre sin verificar**, y el renderer no puede fijar `source` ni `confidence` (un test del parser lo exige). Editar un nodo sin verificar equivale a revisarlo; aceptar lo verifica; rechazar lo deja obsoleto.
+- FTS5 con `rowid = 1e12 + rid` y `rid INTEGER PRIMARY KEY` (VACUUM no lo renumera). El índice se mantiene con disparadores que operan SOLO por rowid; nunca por columnas. Tests: el rowid sobrevive a `VACUUM INTO`, el borrado en cascada de un proyecto no deja huérfanos y con 8.000 nodos borrar cuesta < 20 ms.
+- `buildFtsQuery` es la única puerta de texto hacia FTS (extrae palabras y las entrecomilla; ignora operadores, `columna:`, paréntesis, `*`). Un test demuestra que la misma entrada cruda SÍ rompe FTS5 y la saneada no.
+- El contexto para la IA (`brain:context`) es de UN proyecto, con tope de 8 nodos y 4.000 caracteres, lo verificado primero, lo dudoso marcado «[sin verificar]» y los secretos redactados. Nunca el Brain entero.
+- Fuera de V1 (preparado, no implementado): vault de carpetas con watcher, grafo (d3-force), vista previa de Markdown, MCP `brain_remember`. Hoy los enlaces se resuelven por título y hay retroenlaces; el índice `brain_links` se reconstruye al arrancar.

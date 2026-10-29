@@ -59,7 +59,7 @@
   },
   "side": {
     "toggle": "Tareas y notas",
-    "tab": { "tasks": "Tareas", "notes": "Notas", "inbox": "Bandeja" },
+    "tab": { "tasks": "Tareas", "notes": "Notas", "inbox": "Bandeja", "brain": "Brain" },
     "noProject": "Elige un proyecto para ver sus tareas y notas.",
     "newTask": "Nueva tarea…",
     "add": "Añadir",
@@ -82,5 +82,40 @@
     "deleteNote": "Borrar nota",
     "deleteNoteTitle": "¿Borrar esta nota?",
     "deleteNoteBody": "No se puede deshacer."
+  },
+  "brain": {
+    "search": "Buscar en el Brain…",
+    "noHits": "No hay resultados en este proyecto.",
+    "newNode": "Nuevo nodo (título)…",
+    "empty": "El Brain de este proyecto está vacío. Aquí se guarda lo que ya sabéis, con su nivel de confianza.",
+    "confidence": { "verified": "Verificado", "unverified": "Sin verificar", "deprecated": "Obsoleto" },
+    "section": {
+      "unverified": "Pendientes de revisión ({{count}})",
+      "verified": "Verificados ({{count}})",
+      "deprecated": "Obsoletos ({{count}})"
+    },
+    "byClaude": "Propuesto por Claude",
+    "accept": "Aceptar",
+    "edit": "Editar",
+    "reject": "Rechazar",
+    "restore": "Restaurar",
+    "title": "Título del nodo",
+    "kind": "Tipo de nodo",
+    "kinds": { "note": "Nota", "decision": "Decisión", "fact": "Dato", "source": "Fuente" },
+    "body": "Contenido del nodo",
+    "bodyHint": "Escribe aquí. Enlaza otros nodos con [[Título]].",
+    "links": "Enlaza a:",
+    "backlinks": "Le enlazan:",
+    "unresolved": "No existe ningún nodo con este título en el proyecto",
+    "save": "Guardar",
+    "saveAndVerify": "Guardar y verificar",
+    "delete": "Borrar nodo",
+    "deleteTitle": "¿Borrar este nodo?",
+    "deleteBody": "Se borra del Brain y de la búsqueda. No se puede deshacer.",
+    "context": "Ver contexto para Claude",
+    "contextTitle": "Contexto que se enviaría a Claude",
+    "contextEmpty": "No hay nada relevante en el Brain para esa consulta.",
+    "contextInfo": "{{count}} nodo(s) relevantes de este proyecto, con tope de tamaño.",
+    "contextTruncated": "Se ha recortado para no pasar de ese tope."
   }
 }

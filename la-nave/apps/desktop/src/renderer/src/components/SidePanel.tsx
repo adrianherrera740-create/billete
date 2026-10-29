@@ -3,10 +3,11 @@ import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Note, Task, TaskStatus } from '@nave/shared';
 import { useNave } from '../store';
+import { BrainTab } from './BrainTab';
 import { Dialog } from './Dialog';
 import { GlassButton } from './GlassButton';
 
-type Tab = 'tasks' | 'notes' | 'inbox';
+type Tab = 'tasks' | 'notes' | 'inbox' | 'brain';
 const NEXT: Record<TaskStatus, TaskStatus> = { todo: 'doing', doing: 'done', done: 'todo' };
 
 function TaskRow({ task }: { task: Task }) {
@@ -143,7 +144,7 @@ function Notes({ scope }: { scope: 'project' | 'inbox' }) {
 export function SidePanel() {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('tasks');
-  const tabs: Tab[] = ['tasks', 'notes', 'inbox'];
+  const tabs: Tab[] = ['tasks', 'notes', 'inbox', 'brain'];
   return (
     <aside className="side glass" data-testid="side-panel">
       <div className="tabs" role="tablist">
@@ -157,6 +158,7 @@ export function SidePanel() {
         {tab === 'tasks' && <Tasks />}
         {tab === 'notes' && <Notes scope="project" />}
         {tab === 'inbox' && <Notes scope="inbox" />}
+        {tab === 'brain' && <BrainTab />}
       </div>
     </aside>
   );
