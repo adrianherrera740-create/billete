@@ -10,6 +10,6 @@
 | 7 | Abogado de protección de datos revisa borradores | **la persona** | 5 | por hacer |
 | 8 | Las 20 conversaciones (asistentes, family offices, banca privada, abogados, fundadores) | **la persona** | 6 | por hacer |
 | 9 | Decidir canal de mensajería tras comprobar las condiciones oficiales de WhatsApp | **la persona** + 1 | 1 | por hacer |
-| 10 | Ronda 2: crítica de la idea y mejora de la oferta | `critico-escepticismo` + `ceo-estratega` | ronda 1 | en curso |
+| 10 | Ronda 2: crítica de la idea y mejora de la oferta | `critico-escepticismo` + `ceo-estratega` | ronda 1 | hecho (pendiente de calidad y de decisión de la persona) |
 | 11 | Ronda 2: diseño de la interfaz de entrega al empresario (canales, aprobaciones, voz, privacidad) | `arquitecto-agentes` | ronda 1 | en curso |
 | 12 | Ronda 2: automatizaciones mejoradas por persona (empresario, asistente, family office) | `estratega-ventas-confianza` | ronda 1 | hecho (pendiente de calidad) |
