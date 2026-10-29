@@ -18,6 +18,12 @@ export interface EventMap {
   'terminal.process_started': { panelId: string; shell: string };
   'terminal.process_exited': { panelId: string; exitCode: number | null };
   'claude.session_state_changed': { panelId: string; state: string };
+  'task.created': { id: string; projectId: string };
+  'task.updated': { id: string; projectId: string };
+  'task.deleted': { id: string; projectId: string };
+  'note.created': { id: string; projectId: string | null };
+  'note.updated': { id: string; projectId: string | null };
+  'note.deleted': { id: string; projectId: string | null };
 }
 export type EventName = keyof EventMap;
 export type EventNamesAreDotted = EventName extends `${string}.${string}` ? true : never;

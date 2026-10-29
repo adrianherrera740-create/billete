@@ -3,7 +3,7 @@ import { CHANNELS, REMOTE_ALLOWED, REMOTE_FORBIDDEN, createApi } from './ipc';
 import type { ChannelName } from './ipc';
 
 // Revisar a mano: añadir un canal a esta lista es decidir que el móvil puede usarlo.
-const REMOTE_ALLOWED_REVIEWED: ChannelName[] = ['project:list', 'board:get'];
+const REMOTE_ALLOWED_REVIEWED: ChannelName[] = ['project:list', 'board:get', 'task:list', 'note:list'];
 
 describe('clasificación de canales para acceso remoto (seguridad)', () => {
   it('cada canal está clasificado como permitido o prohibido en remoto', () => {
@@ -19,7 +19,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 });
@@ -69,6 +69,29 @@ describe('terminales (seguridad)', () => {
     const p = CHANNELS['terminal:input'].input;
     expect(() => p({ panelId: 'x', data: 'a'.repeat(70_000) })).toThrow();
     expect(() => p({ panelId: 'x', data: '' })).toThrow();
+  });
+});
+
+describe('tareas y notas', () => {
+  it('una tarea siempre lleva proyecto; una nota puede ir sin proyecto (null)', () => {
+    expect(() => CHANNELS['task:create'].input({ title: 'x' })).toThrow(/falta este campo/);
+    expect(() => CHANNELS['task:create'].input({ projectId: null, title: 'x' })).toThrow();
+    expect(CHANNELS['note:create'].input({ projectId: null, body: 'hola' })).toEqual({ projectId: null, body: 'hola' });
+    expect(CHANNELS['note:list'].input({ projectId: null })).toEqual({ projectId: null });
+  });
+
+  it('límites de tamaño y estados válidos', () => {
+    expect(() => CHANNELS['task:create'].input({ projectId: 'p', title: 'x'.repeat(201) })).toThrow();
+    expect(() => CHANNELS['task:update'].input({ id: 'a', status: 'hecha' })).toThrow(/uno de/);
+    expect(CHANNELS['task:update'].input({ id: 'a', status: 'done' })).toEqual({ id: 'a', status: 'done' });
+    expect(() => CHANNELS['note:update'].input({ id: 'a', body: 'x'.repeat(20_001) })).toThrow();
+  });
+
+  it('claude:paste no admite texto vacío ni gigante, ni campos extra como "enter"', () => {
+    const p = CHANNELS['claude:paste'].input;
+    expect(() => p({ panelId: 'a', text: '' })).toThrow();
+    expect(() => p({ panelId: 'a', text: 'x'.repeat(20_001) })).toThrow();
+    expect(() => p({ panelId: 'a', text: 'hola', enter: true })).toThrow(/desconocido/);
   });
 });
 

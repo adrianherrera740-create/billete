@@ -12,8 +12,8 @@ import {
   str
 } from './parse';
 import type { Parser } from './parse';
-import { PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Panel, Project, ShellOption, TerminalEvent, TerminalStarted } from './domain';
+import { PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, TASK_STATUSES, ZOOM_MAX, ZOOM_MIN } from './domain';
+import type { Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -92,7 +92,30 @@ export const CHANNELS = {
     remote: 'forbidden',
     input: object({ panelId: id, cols: num({ min: 20, max: 500, int: true }), rows: num({ min: 5, max: 200, int: true }) })
   },
-  'claude:history': { remote: 'forbidden', input: object({ panelId: id }) }
+  'claude:history': { remote: 'forbidden', input: object({ panelId: id }) },
+  // Enviar texto a Claude solo lo PEGA (bracketed paste, sin Intro) y solo en paneles de Claude.
+  'claude:paste': { remote: 'forbidden', input: object({ panelId: id, text: str({ min: 1, max: 20_000 }) }) },
+  'task:list': { remote: 'allowed', input: object({ projectId: id }) },
+  'task:create': { remote: 'forbidden', input: object({ projectId: id, title: str({ min: 1, max: 200, trim: true }) }) },
+  'task:update': {
+    remote: 'forbidden',
+    input: objectWith(
+      { id },
+      { title: str({ min: 1, max: 200, trim: true }), status: oneOf(TASK_STATUSES), position: num({ min: 0, max: 1e9 }) }
+    )
+  },
+  'task:delete': { remote: 'forbidden', input: object({ id }) },
+  // projectId null = la bandeja de entrada (notas sin proyecto).
+  'note:list': { remote: 'allowed', input: object({ projectId: nullable(id) }) },
+  'note:create': {
+    remote: 'forbidden',
+    input: objectWith({ projectId: nullable(id) }, { title: str({ max: 120, trim: true }), body: str({ max: 20_000 }) })
+  },
+  'note:update': {
+    remote: 'forbidden',
+    input: objectWith({ id }, { title: str({ max: 120, trim: true }), body: str({ max: 20_000 }), projectId: nullable(id) })
+  },
+  'note:delete': { remote: 'forbidden', input: object({ id }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
 export type ChannelName = keyof typeof CHANNELS;
@@ -116,6 +139,15 @@ export interface ChannelOutputs {
   'claude:status': ClaudeStatus;
   'claude:resume': TerminalStarted;
   'claude:history': HistoryEntry[];
+  'claude:paste': null;
+  'task:list': Task[];
+  'task:create': Task;
+  'task:update': Task;
+  'task:delete': null;
+  'note:list': Note[];
+  'note:create': Note;
+  'note:update': Note;
+  'note:delete': null;
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';

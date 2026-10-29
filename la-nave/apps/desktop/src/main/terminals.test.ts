@@ -3,7 +3,7 @@ import { EventBus, createLogger, createMemorySink } from '@nave/core';
 import type { EventMap, Panel, Project, TerminalEvent } from '@nave/shared';
 import { NaveError } from './projects';
 import type { ShellInfo } from './shells';
-import { TerminalManager } from './terminals';
+import { TerminalManager, toBracketedPaste } from './terminals';
 import type { PtyLike, SpawnFn } from './terminals';
 import type { ClaudeLaunchResult } from './claude';
 
@@ -171,5 +171,42 @@ describe('TerminalManager', () => {
     manager.killAll();
     expect(ptys[0]?.killed).toBe(true);
     expect(manager.isRunning('p1')).toBe(false);
+  });
+});
+
+describe('pegar texto en Claude (seguridad)', () => {
+  const claude = { launch: { file: '/c', args: [], label: 'Claude Code', id: 'claude', extraEnv: {} } };
+
+  it('usa bracketed paste y NUNCA añade Intro', () => {
+    const { manager, ptys } = setup({ panel: { kind: 'claude' }, claude });
+    manager.start('p1', 80, 24);
+    manager.paste('p1', 'revisa este plan\ncon dos líneas');
+    expect(ptys[0]?.written).toEqual(['\x1b[200~revisa este plan\ncon dos líneas\x1b[201~']);
+    const all = ptys[0]?.written.join('') ?? '';
+    expect(all.endsWith('\x1b[201~')).toBe(true); // nada después del cierre: ni Intro ni otra tecla
+    expect(all).not.toContain('\r');
+  });
+
+  it('un texto con ESC no puede cerrar el pegado antes de tiempo ni inyectar órdenes', () => {
+    const hostile = 'hola\x1b[201~rm -rf ~\r\x03\x04 fin';
+    const pasted = toBracketedPaste(hostile);
+    expect(pasted.startsWith('\x1b[200~')).toBe(true);
+    expect(pasted.endsWith('\x1b[201~')).toBe(true);
+    expect(pasted.slice(6, -6)).not.toContain('\x1b');
+    expect(pasted).not.toContain('\x03');
+    expect(pasted).not.toContain('\x04');
+    expect(pasted.slice(6, -6)).toBe('hola[201~rm -rf ~\n fin');
+  });
+
+  it('conserva saltos de línea y tabulaciones, y normaliza los retornos de carro', () => {
+    expect(toBracketedPaste('a\tb\r\nc\rd')).toBe('\x1b[200~a\tb\nc\nd\x1b[201~');
+  });
+
+  it('solo en paneles de Claude y en marcha', () => {
+    const shell = setup();
+    shell.manager.start('p1', 80, 24);
+    expect(() => shell.manager.paste('p1', 'x')).toThrow(/solo se puede enviar a un panel de Claude/);
+    const stopped = setup({ panel: { kind: 'claude' }, claude });
+    expect(() => stopped.manager.paste('p1', 'x')).toThrow(/no está en marcha/);
   });
 });

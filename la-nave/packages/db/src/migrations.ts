@@ -83,6 +83,32 @@ export const MIGRATIONS: Migration[] = [
         updated_at TEXT NOT NULL
       );
     `
+  },
+  {
+    version: 4,
+    name: 'tareas_y_notas',
+    sql: `
+      CREATE TABLE tasks (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        title TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'todo',
+        position REAL NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        done_at TEXT
+      );
+      CREATE INDEX tasks_project ON tasks(project_id, position);
+      CREATE TABLE notes (
+        id TEXT PRIMARY KEY,
+        project_id TEXT REFERENCES projects(id) ON DELETE SET NULL,
+        title TEXT NOT NULL DEFAULT '',
+        body TEXT NOT NULL DEFAULT '',
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      CREATE INDEX notes_project ON notes(project_id, updated_at);
+    `
   }
 ];
 

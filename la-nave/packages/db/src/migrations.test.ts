@@ -41,11 +41,25 @@ describe('migraciones', () => {
     db.exec(`INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t');
       INSERT INTO boards (id, project_id) VALUES ('b','p');
       INSERT INTO panels (id, board_id, project_id, kind, title, x, y, w, h, created_at, updated_at) VALUES ('a','b','p','claude','t',0,0,200,100,'t','t');`);
-    expect(migrate(db)).toEqual([3]);
+    expect(migrate(db, MIGRATIONS, { upTo: 3 })).toEqual([3]);
     expect(db.prepare('SELECT id FROM panels').all()).toEqual([{ id: 'a' }]);
     db.exec("INSERT INTO claude_sessions (panel_id, session_id, state, updated_at) VALUES ('a','s','idle','t')");
     db.exec("DELETE FROM panels WHERE id = 'a'");
     expect(db.prepare('SELECT COUNT(*) AS n FROM claude_sessions').get()).toEqual({ n: 0 });
+  });
+
+  it('la migración 4 sobre una BD en versión 3 conserva todo; las notas sobreviven sin proyecto', () => {
+    const db = mem();
+    db.exec('PRAGMA foreign_keys = ON');
+    migrate(db, MIGRATIONS, { upTo: 3 });
+    db.exec("INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t')");
+    expect(migrate(db)).toEqual([4]);
+    expect(db.prepare('SELECT id FROM projects').all()).toEqual([{ id: 'p' }]);
+    db.exec(`INSERT INTO tasks (id, project_id, title, position, created_at, updated_at) VALUES ('t','p','x',1,'t','t');
+      INSERT INTO notes (id, project_id, created_at, updated_at) VALUES ('n','p','t','t');`);
+    db.exec("DELETE FROM projects WHERE id = 'p'");
+    expect(db.prepare('SELECT COUNT(*) AS n FROM tasks').get()).toEqual({ n: 0 });
+    expect(db.prepare('SELECT project_id FROM notes').all()).toEqual([{ project_id: null }]);
   });
 
   it('borrar un proyecto borra su pizarra y sus paneles en cascada', () => {

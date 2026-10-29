@@ -5,11 +5,13 @@ import type { LogChannel, Logger } from '@nave/core';
 import { createBackup, migrate, openWithRecovery } from '@nave/db';
 import type { EventMap, EventName } from '@nave/shared';
 import { Projects } from './projects';
+import { Tasks } from './tasks';
 
 export interface NaveCore {
   bus: EventBus<EventMap>;
   db: DatabaseSync;
   projects: Projects;
+  tasks: Tasks;
   log: Record<LogChannel, Logger>;
   paths: { dataDir: string; db: string; backups: string; logs: string };
   close(): void;
@@ -37,6 +39,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
   if (applied.length > 0) log.app.info('Migraciones aplicadas', { versiones: applied });
 
   const projects = new Projects(db, bus);
+  const tasks = new Tasks(db, bus);
   recordActivity(db, bus);
 
   const backup = createBackup(db, paths.backups, { label: 'arranque' });
@@ -48,6 +51,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
     bus,
     db,
     projects,
+    tasks,
     log,
     paths,
     close() {
@@ -64,7 +68,13 @@ const ACTIVITY_EVENTS: EventName[] = [
   'project.archived',
   'board.panel_added',
   'board.panel_updated',
-  'board.panel_removed'
+  'board.panel_removed',
+  'task.created',
+  'task.updated',
+  'task.deleted',
+  'note.created',
+  'note.updated',
+  'note.deleted'
 ];
 
 /** Activity: cada evento de proyecto queda registrado, siempre redactado. Nunca la salida de terminales. */

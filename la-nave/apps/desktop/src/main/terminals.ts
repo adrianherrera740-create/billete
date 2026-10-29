@@ -56,6 +56,19 @@ interface Running {
 const BLOCKED_ENV = /^(NAVE_|ELECTRON_)/;
 
 /**
+ * Texto para PEGAR en Claude (bracketed paste), sin Intro. Se eliminan los caracteres de control salvo salto de línea y
+ * tabulador: si el texto llevara ESC [ 2 0 1 ~ cerraría el pegado antes de tiempo y lo que siguiera se ejecutaría como
+ * si lo hubiera tecleado la persona.
+ */
+export function toBracketedPaste(text: string): string {
+  const clean = text
+    .replace(/\r\n?/g, '\n')
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\x00-\x08\x0b-\x1f\x7f-\x9f]/g, '');
+  return `\x1b[200~${clean}\x1b[201~`;
+}
+
+/**
  * Terminales reales. Reglas: el renderer solo manda el id del panel; el shell y la carpeta salen de la BD;
  * la salida NO pasa por el bus, Activity ni logs (solo el ciclo de vida).
  */
@@ -151,6 +164,14 @@ export class TerminalManager {
 
   input(panelId: string, data: string): null {
     this.entry(panelId).pty.write(data);
+    return null;
+  }
+
+  /** Pega texto en un panel de Claude en marcha. Nunca pulsa Intro y nunca vale para terminales de shell. */
+  paste(panelId: string, text: string): null {
+    const panel = this.deps.getPanel(panelId);
+    if (panel.kind !== 'claude') throw new NaveError('VALIDATION', 'El texto solo se puede enviar a un panel de Claude, no a una terminal.');
+    this.entry(panelId).pty.write(toBracketedPaste(text));
     return null;
   }
 

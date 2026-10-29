@@ -4,6 +4,7 @@ import type { ChannelInput, ChannelName, ChannelOutputs, Result } from '@nave/sh
 import { NaveError } from './projects';
 import type { Projects } from './projects';
 import type { ClaudeService } from './claude';
+import type { Tasks } from './tasks';
 import type { TerminalManager } from './terminals';
 
 export type Handler<C extends ChannelName> = (input: ChannelInput<C>) => ChannelOutputs[C];
@@ -26,7 +27,7 @@ export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw:
   }
 }
 
-export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService): Handlers {
+export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService, tasks: Tasks): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -47,7 +48,16 @@ export function handlersFor(projects: Projects, terminals: TerminalManager, clau
       if (terminals.isRunning(i.panelId)) throw new NaveError('VALIDATION', 'La sesión ya está en marcha. Cierra el panel si quieres empezar otra.');
       return terminals.start(i.panelId, i.cols, i.rows, true);
     },
-    'claude:history': (i) => claude.history(i.panelId)
+    'claude:history': (i) => claude.history(i.panelId),
+    'claude:paste': (i) => terminals.paste(i.panelId, i.text),
+    'task:list': (i) => tasks.listTasks(i.projectId),
+    'task:create': (i) => tasks.createTask(i),
+    'task:update': (i) => tasks.updateTask(i),
+    'task:delete': (i) => tasks.deleteTask(i.id),
+    'note:list': (i) => tasks.listNotes(i.projectId),
+    'note:create': (i) => tasks.createNote(i),
+    'note:update': (i) => tasks.updateNote(i),
+    'note:delete': (i) => tasks.deleteNote(i.id)
   };
 }
 

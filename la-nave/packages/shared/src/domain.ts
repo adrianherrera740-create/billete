@@ -91,3 +91,28 @@ export interface HistoryEntry {
   role: 'user' | 'assistant';
   text: string;
 }
+
+export const TASK_STATUSES = ['todo', 'doing', 'done'] as const;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
+
+/** Una tarea pertenece SIEMPRE a un proyecto. */
+export interface Task {
+  id: string;
+  projectId: string;
+  title: string;
+  status: TaskStatus;
+  position: number;
+  createdAt: string;
+  updatedAt: string;
+  doneAt: string | null;
+}
+
+/** Una nota puede no tener proyecto (la bandeja de entrada). */
+export interface Note {
+  id: string;
+  projectId: string | null;
+  title: string;
+  body: string;
+  createdAt: string;
+  updatedAt: string;
+}
