@@ -1,0 +1,42 @@
+{
+  "app": { "name": "La Nave" },
+  "common": { "offline": "No se puede conectar con tu PC. ¿Está encendido y con La Nave abierta?", "retry": "Reintentar", "save": "Guardar", "add": "Añadir", "refresh": "Actualizar", "loading": "Cargando…", "inbox": "Bandeja (sin proyecto)" },
+  "gate": {
+    "pairing": "Emparejando con tu PC…",
+    "pairFailed": "No se ha podido emparejar.",
+    "unpairedTitle": "Este móvil no está emparejado",
+    "unpairedBody": "En La Nave, en el PC, abre Ajustes → Acceso desde el móvil → Emparejar un móvil y escanea el código QR con la cámara de este teléfono.",
+    "revokedTitle": "Este móvil ya no está emparejado",
+    "revokedBody": "Se ha revocado desde el PC o ha caducado. Vuelve a emparejarlo escaneando un código QR nuevo."
+  },
+  "nav": { "summary": "Resumen", "tasks": "Tareas", "notes": "Notas" },
+  "summary": {
+    "capture": "Captura una idea",
+    "capturePlaceholder": "Escribe aquí lo que no quieras olvidar…",
+    "captureSave": "Guardar en la bandeja",
+    "captured": "Guardado en la bandeja de La Nave.",
+    "projects": "Proyectos",
+    "empty": "Todavía no hay proyectos. Créalos desde el PC.",
+    "tasks_one": "{{count}} tarea abierta ({{doing}} en curso)",
+    "tasks_other": "{{count}} tareas abiertas ({{doing}} en curso)",
+    "review_one": "{{count}} pendiente de revisar en el Brain",
+    "review_other": "{{count}} pendientes de revisar en el Brain",
+    "noClaude": "Sin paneles de Claude"
+  },
+  "claude": { "state": { "unknown": "Sin iniciar", "idle": "Inactivo", "working": "Trabajando", "waiting": "Espera tu respuesta", "ended": "Terminada" } },
+  "tasks": {
+    "project": "Proyecto",
+    "new": "Nueva tarea…",
+    "none": "Sin tareas en este proyecto.",
+    "noProject": "Elige un proyecto. Se crean desde el PC.",
+    "status": { "todo": "Pendiente", "doing": "En curso", "done": "Hecha" },
+    "next": "Cambiar de estado"
+  },
+  "notes": {
+    "scope": "Ver notas de",
+    "new": "Nueva nota",
+    "placeholder": "Escribe la nota…",
+    "none": "No hay notas aquí.",
+    "saved": "Guardada"
+  }
+}
