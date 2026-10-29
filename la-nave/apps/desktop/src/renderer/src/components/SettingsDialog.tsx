@@ -5,6 +5,7 @@ import type { BackupInfo } from '@nave/shared';
 import { useNave } from '../store';
 import { Dialog } from './Dialog';
 import { GlassButton } from './GlassButton';
+import { MobileAccess } from './MobileAccess';
 
 const kb = (bytes: number): string => `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
@@ -106,6 +107,7 @@ export function SettingsDialog() {
           {t('settings.notifications')}
         </label>
         <p className="muted">{t('settings.notificationsHint')}</p>
+        <MobileAccess />
         <Backups />
       </div>
       <div className="actions">

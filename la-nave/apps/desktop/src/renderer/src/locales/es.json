@@ -1,6 +1,11 @@
 {
-  "app": { "name": "La Nave" },
-  "common": { "cancel": "Cancelar", "close": "Cerrar" },
+  "app": {
+    "name": "La Nave"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "close": "Cerrar"
+  },
   "project": {
     "new": "Nuevo proyecto",
     "list": "Proyectos",
@@ -59,7 +64,12 @@
   },
   "side": {
     "toggle": "Tareas y notas",
-    "tab": { "tasks": "Tareas", "notes": "Notas", "inbox": "Bandeja", "brain": "Brain" },
+    "tab": {
+      "tasks": "Tareas",
+      "notes": "Notas",
+      "inbox": "Bandeja",
+      "brain": "Brain"
+    },
     "noProject": "Elige un proyecto para ver sus tareas y notas.",
     "newTask": "Nueva tarea…",
     "add": "Añadir",
@@ -67,7 +77,11 @@
     "toggleDone": "Marcar como hecha",
     "nextStatus": "Cambiar de estado",
     "deleteTask": "Borrar tarea",
-    "status": { "todo": "Pendiente", "doing": "En curso", "done": "Hecha" },
+    "status": {
+      "todo": "Pendiente",
+      "doing": "En curso",
+      "done": "Hecha"
+    },
     "newNote": "Nueva nota",
     "noNotes": "Este proyecto no tiene notas.",
     "inboxEmpty": "La bandeja está vacía. Aquí caen las notas sin proyecto.",
@@ -88,7 +102,11 @@
     "noHits": "No hay resultados en este proyecto.",
     "newNode": "Nuevo nodo (título)…",
     "empty": "El Brain de este proyecto está vacío. Aquí se guarda lo que ya sabéis, con su nivel de confianza.",
-    "confidence": { "verified": "Verificado", "unverified": "Sin verificar", "deprecated": "Obsoleto" },
+    "confidence": {
+      "verified": "Verificado",
+      "unverified": "Sin verificar",
+      "deprecated": "Obsoleto"
+    },
     "section": {
       "unverified": "Pendientes de revisión ({{count}})",
       "verified": "Verificados ({{count}})",
@@ -101,7 +119,12 @@
     "restore": "Restaurar",
     "title": "Título del nodo",
     "kind": "Tipo de nodo",
-    "kinds": { "note": "Nota", "decision": "Decisión", "fact": "Dato", "source": "Fuente" },
+    "kinds": {
+      "note": "Nota",
+      "decision": "Decisión",
+      "fact": "Dato",
+      "source": "Fuente"
+    },
     "body": "Contenido del nodo",
     "bodyHint": "Escribe aquí. Enlaza otros nodos con [[Título]].",
     "links": "Enlaza a:",
@@ -122,7 +145,12 @@
     "title": "Buscar en todo",
     "placeholder": "Busca proyectos, tareas, notas y Brain…",
     "empty": "No hay nada que coincida.",
-    "kind": { "project": "Proyecto", "task": "Tarea", "note": "Nota", "brain": "Brain" }
+    "kind": {
+      "project": "Proyecto",
+      "task": "Tarea",
+      "note": "Nota",
+      "brain": "Brain"
+    }
   },
   "palette": {
     "title": "Paleta de comandos",
@@ -151,7 +179,11 @@
     "open": "Ajustes",
     "title": "Ajustes",
     "theme": "Tema",
-    "themes": { "dark": "Oscuro", "light": "Claro", "system": "Como el sistema" },
+    "themes": {
+      "dark": "Oscuro",
+      "light": "Claro",
+      "system": "Como el sistema"
+    },
     "notifications": "Avisarme cuando Claude espere o termine",
     "notificationsHint": "Solo se muestran con La Nave en segundo plano y nunca incluyen el contenido de la conversación."
   },
@@ -176,6 +208,34 @@
     "restoring": "Restauración preparada. La Nave se reinicia para aplicarla; si no lo hace, ciérrala y ábrela de nuevo.",
     "confirmTitle": "¿Restaurar esta copia?",
     "confirmBody": "Se volverá al estado del {{date}}. Antes se guarda una copia del estado actual por si quieres deshacerlo, y La Nave se reiniciará.",
-    "labels": { "arranque": "Al arrancar", "manual": "Manual", "antes-de-restaurar": "Antes de restaurar", "auto": "Automática" }
+    "labels": {
+      "arranque": "Al arrancar",
+      "manual": "Manual",
+      "antes-de-restaurar": "Antes de restaurar",
+      "auto": "Automática"
+    }
+  },
+  "mobile": {
+    "title": "Acceso desde el móvil",
+    "enable": "Permitir el acceso desde el móvil",
+    "hint": "El servidor solo escucha en este PC (127.0.0.1). Para llegar desde el móvil hace falta Tailscale en ambos aparatos; nada se abre a internet.",
+    "running": "Servidor activo en {{url}}",
+    "stopped": "Servidor parado",
+    "tailscaleMissing": "Tailscale no está instalado o no responde. Instálalo en el PC y en el móvil, e inicia sesión con la misma cuenta.",
+    "tailscaleOff": "Tailscale está instalado pero apagado.",
+    "tailscaleOk": "Tailscale activo: {{name}}",
+    "publish": "Publicar con Tailscale",
+    "publishHint": "Ejecuta «tailscale serve» para que tus aparatos lleguen a La Nave. Ojo: «tailscale serve reset» quita todo lo que tengas publicado.",
+    "published": "Publicado: {{url}}",
+    "pair": "Emparejar un móvil",
+    "pairHint": "Escanea este código con la cámara del móvil. Vale un solo uso y caduca a las {{time}}. Quien lo escanee tendrá acceso a tus proyectos, tareas y notas.",
+    "pairLocal": "Este enlace solo funciona en este PC porque Tailscale no está publicado todavía.",
+    "link": "Enlace de emparejamiento",
+    "devices": "Móviles emparejados",
+    "noDevices": "Ningún móvil emparejado.",
+    "lastSeen": "visto {{date}}",
+    "never": "sin usar",
+    "revoke": "Revocar",
+    "revoked": "Móvil revocado."
   }
 }
