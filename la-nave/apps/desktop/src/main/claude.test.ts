@@ -75,7 +75,8 @@ describe('servidor de hooks (seguridad)', () => {
     const url = `/hook/${panel.id}`;
     expect(await post(port, url, {}, hook('Stop'))).toBe(401);
     expect(await post(port, url, { Authorization: 'Bearer falso' }, hook('Stop'))).toBe(401);
-    expect(await post(port, url, { Authorization: `Bearer ${token.slice(0, -1)}0` }, hook('Stop'))).toBe(401);
+    const almost = token.slice(0, -1) + (token.endsWith('0') ? '1' : '0'); // igual salvo el último carácter
+    expect(await post(port, url, { Authorization: `Bearer ${almost}` }, hook('Stop'))).toBe(401);
     expect(await post(port, '/hook/no-existe', { Authorization: `Bearer ${token}` }, hook('Stop'))).toBe(404);
     expect(await post(port, `/hook/${sticky.id}`, { Authorization: `Bearer ${token}` }, hook('Stop'))).toBe(404);
   });

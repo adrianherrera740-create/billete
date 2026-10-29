@@ -72,3 +72,11 @@
 - La paleta de comandos es un registro extensible (`registerCommand`); la búsqueda global (Ctrl+K) cruza proyectos porque la pide la persona de forma explícita (el contexto para la IA nunca lo hace). El texto va como parámetro con `ESCAPE` en LIKE y por `buildFtsQuery` en FTS.
 - En producción se quita el menú de la aplicación (evita recargar o abrir herramientas de desarrollo por accidente); en desarrollo se mantiene.
 - Bug encontrado por un e2e y corregido: al cerrar la app con una terminal abierta, el aviso de salida del proceso llegaba tras cerrar la BD y lanzaba una excepción (en un PC real, un diálogo que impedía cerrar). Hay un test de regresión y un `uncaughtException` que registra en vez de abrir un diálogo.
+
+## Notas de F8 (29/10/2026)
+- Copias desde Ajustes: crear, listar y restaurar por NOMBRE (el parser solo admite `nave-AAAAMMDD-HHMMSS-<etiqueta>.db`; ninguna ruta). Restaurar comprueba que la copia está sana antes de tocar nada, guarda una copia «antes de restaurar» (para deshacer), deja el marcador y reinicia; el marcador se aplica al arrancar, antes de abrir la BD. La poda es por etiqueta, para que las copias automáticas no expulsen a las manuales.
+- Instalador: electron-builder con NSIS x64 (`apps/desktop/electron-builder.yml`), icono propio generado por código (`build/make-icon.py`), `asarUnpack` de `node-pty`, sin recompilar (binarios N-API ya incluidos) y en el paquete de Windows solo los de `win32-x64`. Desinstalar no borra los datos de la persona.
+- `node-pty` es la única dependencia de ejecución externa; el resto va empaquetado con vite (React, xterm, zustand, i18next y los paquetes del workspace son `devDependencies`).
+- Verificado: la app EMPAQUETADA para Linux pasa un e2e (arranca, guarda datos y abre una terminal real con `node-pty` cargado desde `app.asar.unpacked`) y el árbol `win-unpacked` contiene `La Nave.exe` x64 y los binarios de Windows.
+- **No generado aquí:** el `.exe` del instalador. El último paso de NSIS ejecuta el instalador con `wine`, que el contenedor no tiene. Hay que ejecutar `npm run dist` en Windows. El instalador no está firmado (SmartScreen avisará).
+- Bugs que cazaron los tests en esta fase: la lista de copias no se refrescaba tras restaurar (e2e); un test con un fallo aleatorio al fabricar un token «casi correcto» (1 de cada 16 veces el token real ya terminaba en 0).

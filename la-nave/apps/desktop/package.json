@@ -7,32 +7,36 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
-    "dist": "electron-vite build && electron-builder",
+    "dist": "electron-vite build && electron-builder --win --x64",
     "typecheck": "tsc -p tsconfig.node.json && tsc -p tsconfig.web.json",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "dist:dir": "electron-vite build && electron-builder --dir",
+    "test:e2e:packaged": "playwright test --grep @packaged"
   },
   "dependencies": {
+    "node-pty": "1.1.0"
+  },
+  "devDependencies": {
     "@nave/core": "*",
     "@nave/db": "*",
     "@nave/shared": "*",
-    "@xterm/addon-fit": "0.11.0",
-    "@xterm/addon-webgl": "0.19.0",
-    "@xterm/xterm": "6.0.0",
-    "i18next": "26.5.11",
-    "node-pty": "1.1.0",
-    "react": "19.3.1",
-    "react-dom": "19.3.1",
-    "react-i18next": "17.1.9",
-    "zustand": "5.0.16"
-  },
-  "devDependencies": {
     "@playwright/test": "1.64.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/addon-webgl": "0.19.0",
+    "@xterm/xterm": "6.0.0",
     "electron": "45.1.0",
     "electron-builder": "26.18.0",
     "electron-vite": "6.0.0",
-    "vite": "8.3.5"
-  }
+    "i18next": "26.5.11",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-i18next": "17.1.9",
+    "vite": "8.3.5",
+    "zustand": "5.0.16"
+  },
+  "author": "La Nave",
+  "homepage": "https://github.com/adrianherrera740-create/billete"
 }

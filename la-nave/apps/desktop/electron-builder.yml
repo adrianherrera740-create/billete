@@ -1,0 +1,41 @@
+# Instalador de La Nave (Windows 11, x64). `npm run dist` lo genera en apps/desktop/release.
+appId: app.lanave.desktop
+productName: La Nave
+copyright: La Nave
+directories:
+  output: release
+  buildResources: build
+files:
+  - out/**
+  - package.json
+  # De node-pty solo hace falta lo ya compilado: fuera sus fuentes y las herramientas de compilación.
+  - '!**/node_modules/node-pty/{src,deps,scripts,node-addon-api}/**'
+  - '!**/node_modules/node-pty/binding.gyp'
+asar: true
+# node-pty es un módulo nativo (N-API, con binarios para Windows): no puede ejecutarse desde dentro del .asar.
+asarUnpack:
+  - node_modules/node-pty/**
+# Los binarios de node-pty ya vienen compilados; no se recompila (evitaría exigir Visual Studio Build Tools).
+npmRebuild: false
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  # En el instalador de Windows solo van los binarios de Windows x64 (no el `build/` de Linux ni los de otros sistemas).
+  files:
+    - '!**/node_modules/node-pty/build/**'
+    - '!**/node_modules/node-pty/prebuilds/{darwin-arm64,darwin-x64,win32-arm64}/**'
+nsis:
+  artifactName: La-Nave-Instalador-${version}.exe
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  shortcutName: La Nave
+  # Desinstalar no borra los datos de la persona (proyectos, Brain, copias).
+  deleteAppDataOnUninstall: false
+linux:
+  executableName: la-nave
+  target: dir
+  icon: build/icon.png
+  category: Development
