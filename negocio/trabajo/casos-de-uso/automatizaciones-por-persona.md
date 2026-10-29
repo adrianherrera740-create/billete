@@ -42,7 +42,7 @@ Fecha: 29/10/2026. Estado: **NO VERIFICADO** (borrador generado por IA; la perso
 | A4 | Armar el itinerario de un viaje con 6 documentos distintos y avisar de cambios | 18 Itinerario único (solo propone, no reserva) |
 | A5 | Saber qué hay que mantener, renovar o pagar en casas, coches y barcos, y cuándo | 12 Calendario de mantenimiento + 4 Radar + 17 Inventario de documentos |
 
-Valor añadido para la venta: el triaje y los borradores le dan horas, pero ella es también quien puede **vetar** el servicio (se siente sustituida o espiada). Hay que probar con ella cómo lo vive (P6, P10).
+[IDEA] Valor añadido para la venta: el triaje y los borradores le dan horas, pero ella es también quien puede **vetar** el servicio (se siente sustituida o espiada). Hay que probar con ella cómo lo vive (P6, P10).
 
 ### 1.3 El family office o asesor (quien protege el patrimonio) [IDEA]
 **Día tipo.** Recibe documentos de bancos, gestoras y entidades en formatos diferentes. Los revisa, los cuadra y responde dudas del titular y de la familia. Habla con abogados, fiscalistas y gestores. Prepara informes periódicos. Se enfrenta a plazos regulatorios y fiscales.

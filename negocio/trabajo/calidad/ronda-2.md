@@ -85,3 +85,35 @@ Observaciones no bloqueantes:
 ## Solo la persona (cond. 12)
 
 Decidir la opción A/B de `gmail.compose`; abrir `interfaz/prototipo/index.html` en su móvil y en el ordenador y decir si el briefing se lee en 60 s (`diseno-interfaz.md:274`); elegir hosting UE y canal de aviso; contratar o no al abogado y cerrar el NDA antes de la primera llamada; decidir cuáles de C-01 a C-05 prueba y si cambia la métrica de 20 conversaciones; abrir las páginas oficiales de Copilot y Gemini y de proveedores de LLM; pedir presupuesto de seguro.
+
+## Segunda pasada
+
+Fecha: 29/10/2026. Revisor: auditor-calidad. Alcance: solo F-I1..F-I3, F-A1, F-P1..F-P3 y la coherencia de `demo/especificacion-mvp.md` con la regla de solo recuento. Sin correcciones ni commit por mi parte.
+
+| Entrega | Veredicto |
+|---|---|
+| Interfaz: diseño | **APROBADO** (F-I1, F-I2, F-I3 corregidos) |
+| Automatizaciones por persona | **APROBADO** (F-A1 corregido) |
+| Pre-mortem ronda 2 | **APROBADO** (F-P1, F-P2, F-P3 corregidos; 1 observación) |
+| `demo/especificacion-mvp.md` (coherencia con «solo recuento») | **RECHAZADO** (cond. 8: contradicción interna) |
+
+### Verificado
+- **F-I1:** `diseno-interfaz.md:269` ya describe la apertura en Chromium 390x844, dice que solo se vio «Hoy», que la versión de Chromium es NO VERIFICADA y lista lo no visto; `captura-hoy.png` está en `:262` y `:302`.
+- **F-I2:** `:16` y `:41` sin «ID y verbo»; `:188` usa «Tienes N asuntos pendientes», sin ID, tipo, verbo ni botones, y declara que sustituye a EM 4.6/D2/Req. 6.
+- **F-I3:** `:10`, `:49` y `:63` dicen «objetivo, no un hecho», sin hosting elegido ni confirmación escrita. Sin otra residencia UE como hecho en el diseño.
+- **F-A1:** `automatizaciones-por-persona.md:52` ahora «F1 y F2» (líneas 5-6 de `automatizaciones-candidatas.md`, comprobadas) y F3-F5 como [IDEA].
+- **F-P1, citas de línea una a una (todas correctas):** `estudio-mercado.md:45` (Copilot/Gemini «No investigados») en `:63` y `:116`; `estudio-mercado.md:59` (tiempo por cliente no medido) y `ventas/04...:36` en `:33`; `ventas/04...:45` y `:46` en `:142` y `:77`; `ventas/04...:48` en `:151`; `ventas/05...:30` en `:13`; `ventas/04...:14-18` en `:110`; `resumen.md:16` y `:27` en `:116` y `:24`; preguntas del abogado 15-17, 18, 19, 27, 28 y 15-21 coinciden con `legal/05`. Las cinco citas de `:155` y `:63`, `:11`, `:14` (`especificacion-mvp.md:13,217`, `guion-demo.md:14`) también.
+- **F-P2:** la cifra «1 %» ya no existe (grep 0); R-04 y R-12 llevan [ABOGADO, no verificado]; `:6` declara todos los umbrales como PROPUESTA de la persona a fijar.
+- **F-P3:** C-03 (`:116`) dice que modifica el alcance de la regla 2 y la arquitectura de `resumen.md:16`, sin «igual o mejor»; C-02 (`:110`) declara reglas 4 y 5 y luz verde; R-01 (`:24`), R-03 (`:36`), `:158` y `:161` exigen luz verde y `decisiones.md` (cond. 1 y 5). O-P1 resuelta («Sin commit» eliminado).
+
+### Fallos que quedan
+- **F-E1 (cond. 8: contradicción interna en `negocio/trabajo/demo/especificacion-mvp.md`).** D2 (`:40`) y S5 (`:343`) ya dicen «solo recuento», pero:
+  - `:208` (4.6) sigue definiendo como «lo único que sale» el mensaje `Pendiente: <tipo> <ID>... Responde APROBAR <ID> o RECHAZAR <ID>`, con tipo, ID y verbo de decisión;
+  - `:362` (tabla de datos que salen) sigue con «Solo ID y verbo»;
+  - `:56` (col. 1) todavía titula «solo ID y verbo» (la col. 3 sí lo aclara y admite que el prototipo aún emite ese texto).
+  **Corregir:** en `:208` marcar el mensaje como «sustituido por `Tienes N asuntos pendientes`; el texto actual solo dentro del panel» (o reescribirlo), y en `:362` y `:56` cambiar a «Solo recuento». El prototipo Python sigue emitiendo el texto antiguo: dejarlo anotado como pendiente de alinear (ya lo dice `:56`).
+
+### Observaciones no bloqueantes
+- O-P2 `pre-mortem-ronda-2.md:53,59`: «2 semanas» y «50+ repeticiones» son propuestas del crítico sin marca propia; las cubre la convención de `:6` solo en parte (habla de «señal temprana» y «qué respuesta lo mata»). Marcar «(propuesta)».
+- O-A2 (ronda 1) sigue abierta: `automatizaciones-por-persona.md:45` («ella es también quien puede vetar el servicio») sin marca [IDEA].
+- Sin regresiones de cifras inventadas ni de residencia UE como hecho en las tres entregas aprobadas; sin datos personales ni credenciales nuevos.

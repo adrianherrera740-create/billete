@@ -53,7 +53,7 @@ Leyenda: **Cumplido (prototipo)** = demostrado en `prototipo/` con prueba autom�
 | 3 | Batería R1–R4 con correos e invitaciones maliciosos; criterio: ninguna obedece, ninguna URL ni imagen sale | 4 correos maliciosos (e003, e004, e005, e009), 1 de categoría especial (e006) y 1 invitación maliciosa (ev2) (6.1), corridos con dos modelos | `tests/test_flujos_abuso.py` (clases `TestAbusoReglas` y `TestAbusoIngenuo`) | **Cumplido (prototipo, modelo simulado).** Con LLM real: pendiente (6.4) |
 | 4 | Salidas en texto plano, sin markdown de imagen/enlace, sin precarga de enlaces en el canal | Filtro de salida único (`filtro_salida.limpiar`) aplicado a briefing, dossier, resumen y borrador; el mensaje del canal no lleva contenido ni URL | `test_r3_ninguna_url_ni_imagen_en_salidas`, `test_briefing_texto_plano_y_aviso` | **Cumplido (prototipo).** La no precarga en Telegram/Slack real queda sin probar |
 | 5 | LLM con región UE confirmada por escrito; si no, solo datos ficticios y «no verificado» | La demo no usa ningún LLM (simulador). El aviso lo declara | `modelo.py` (`ModeloNoConfigurado` da error claro) | **Pendiente (D1).** La demo cumple la cláusula de salvaguarda |
-| 6 | Canal de aprobación sin contenido sensible (solo ID y verbo) o panel propio | El aviso en la pantalla de bloqueo lleva solo el recuento; el texto «Pendiente: borrador A-0001… APROBAR A-0001» solo se muestra dentro del panel, ya desbloqueado (el prototipo de esta demo aún lo emite como mensaje: alinear antes del piloto); segundo paso para acciones con efecto externo; cuenta vinculada | `TestAprobaciones` (4 pruebas) | **Cumplido (prototipo).** Canal real sin conectar (D2) |
+| 6 | Canal de aprobación sin contenido sensible (aviso solo con recuento) o panel propio | El aviso en la pantalla de bloqueo lleva solo el recuento; el texto «Pendiente: borrador A-0001… APROBAR A-0001» solo se muestra dentro del panel, ya desbloqueado (el prototipo de esta demo aún lo emite como mensaje: alinear antes del piloto); segundo paso para acciones con efecto externo; cuenta vinculada | `TestAprobaciones` (4 pruebas) | **Cumplido (prototipo).** Canal real sin conectar (D2) |
 | 7 | n8n parcheado, editor no expuesto, secretos fuera del repo, sin nodos innecesarios | Plano de nodos sin nodo de envío ni de ejecución de código (sección 4.7); secretos: ninguno en el repo | `test_sin_secretos` | **Pendiente (D3):** n8n no se ha instalado |
 | 8 | Registro de auditoría visible, apagado y borrado con identificador de prueba | Registro con hash encadenado sin cuerpos; interruptor que revoca tokens y vacía la cola; borrado certificado del identificador `ZZ-PRUEBA-0001` | `TestAuditoria`, `TestApagadoYBorrado` | **Cumplido (prototipo).** Borrado en copias, logs de n8n, LLM y canal: pendiente en producción |
 | 9 | Tabla de subencargados con región y estado de verificación | Sección 7.2 | revisión humana | **Cumplido (documento);** casi todo «no verificado» |
@@ -205,7 +205,7 @@ Reglas deterministas posteriores al modelo (precedencia de arriba abajo):
 ### 4.6 F5 Canal de aprobaciones
 
 - **Elemento:** `{id: "A-0001", tipo: "borrador|crm_alta", ref: "D-001", estado: "pendiente|aprobado|rechazado", creado}`.
-- **Mensaje al canal (lo único que sale):** `Pendiente: <tipo> <ID>. Revisa en tu panel. Responde APROBAR <ID> o RECHAZAR <ID>.` Sin asunto, cuerpo, nombres ni enlaces.
+- **Aviso al canal (lo único que sale, regla de pantalla de bloqueo):** `Tienes N asuntos pendientes.` Sin ID, tipo, asunto, cuerpo, nombres ni enlaces. El texto `Pendiente: <tipo> <ID>… APROBAR <ID>` solo se muestra dentro del panel ya desbloqueado (el prototipo de esta demo aún lo emite como mensaje: alinear antes del piloto).
 - **Tarjeta de revisión (en el panel autenticado, no en el canal):** destinatario real, original saneado, borrador, avisos, enlaces del original en forma inerte (`hxxps://dominio[.]test/...`). Una comparación de cambios (diff) solo es relevante si el humano edita el borrador; en esta versión se muestran original y borrador lado a lado.
 - **Reglas:** solo cuentas vinculadas; para tipos con efecto externo (borrador) la aprobación exige segundo paso del dispositivo vinculado (en producción: passkey/TOTP del cliente; en el prototipo, un código aleatorio por ejecución); una decisión no se puede repetir.
 - **Significado de «aprobado»:** el borrador queda **listo para que lo envíe el humano**. No hay transición automática a «enviado».
@@ -359,7 +359,7 @@ Regla: **nada de esta lista se contrata ni se instala sin que la persona lo deci
 | LLM (S1) | Texto saneado de correos, notas del CRM | Sin elegir. Residencia UE de Anthropic: **en conflicto entre fuentes (AR sección 4)** | **No verificado.** Retención cero no verificada |
 | Hosting n8n (S2) | Tokens y datos en tránsito | Sin elegir | **No verificado** |
 | Panel de aprobación (S4) | Borradores y originales | Sin elegir | **No verificado** |
-| Canal de aviso (S5) | Solo ID y verbo | Telegram: centros sin ubicación publicada [fuente secundaria]; Slack: no verificado | **No verificado** |
+| Canal de aviso (S5) | Solo recuento | Telegram: centros sin ubicación publicada [fuente secundaria]; Slack: no verificado | **No verificado** |
 | BD, copias y registro (S6) | Referencias, CRM, cola | Sin elegir | **No verificado** |
 | Monitorización y soporte (S8) | Metadatos | Sin elegir | **No verificado** |
 

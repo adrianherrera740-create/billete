@@ -16,3 +16,6 @@ Recomendación del arquitecto, no decisión: la IA no recibe `gmail.compose` (el
 
 ## 2026-10-29 — Ronda 1 del negocio cerrada tras dos pasadas de calidad
 Aprobadas: mercado, seguridad, demo, verificación, ventas y legal (con tres observaciones menores ya corregidas). Todo sigue NO VERIFICADO. Abierto: prueba de no envío del prototipo débil (endurecer antes del piloto) y hipótesis H4 sin investigar. Solo la persona: opción A/B de gmail.compose (recomendación A), abogado de protección de datos y NDA, región UE del modelo, dominios de red para fuentes primarias.
+
+## 2026-10-29 — Ronda 2: interfaz y automatizaciones; propuestas del pre-mortem pendientes de la persona
+Calidad aprobó en segunda pasada el diseño de la interfaz (panel web privado instalable con passkey; el móvil solo recibe «Tienes N asuntos pendientes»), las automatizaciones por persona y el pre-mortem. NO adoptado: los cambios de oferta del pre-mortem (cliente asistente, diagnóstico como producto, implantación con herramientas del cliente, un solo nicho, alianzas); R-01 y R-03 cambian la métrica de decisión y requieren luz verde de la persona. Todo NO VERIFICADO.

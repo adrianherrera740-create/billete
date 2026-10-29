@@ -50,13 +50,13 @@ Orden: de mayor a menor riesgo compuesto (mi juicio).
 ### R-06 Dependencia de LLM y APIs que cambian
 - **Fallo:** (a) La residencia UE del LLM sigue sin confirmar; si el proveedor elegido no la ofrece, la regla 2 se rompe y no hay producto. (b) Cambios de versión del modelo alteran el triaje (la batería de pruebas de inyección se hizo con un simulador, no con el modelo real). (c) Google/Microsoft cambian alcances OAuth, exigen verificación de app (CASA) o limitan acceso de terceros; el análisis ya dice que las fuentes discrepan. (d) El coste por token no está estimado en ninguna parte.
 - **P: Media-Alta. I: Alto.** *(juicio)*
-- **Señal temprana:** respuesta del proveedor de nube/LLM por escrito sobre región de inferencia y retención; si no llega en 2 semanas o es ambigua. Primera ejecución de la batería R1-R4 con un modelo real: cualquier obediencia a una instrucción maliciosa.
+- **Señal temprana:** respuesta del proveedor de nube/LLM por escrito sobre región de inferencia y retención; si no llega en 2 semanas (PROPUESTA mía) o es ambigua. Primera ejecución de la batería R1-R4 con un modelo real: cualquier obediencia a una instrucción maliciosa.
 - **Mitigación barata:** pedir confirmación por escrito a 2 proveedores en la sem. 1 (es solo un correo). Diseñar el prototipo con una capa de modelo intercambiable (ya hay `modelo.py`) y una batería de regresión que se ejecute cada vez que cambie el modelo.
 
 ### R-07 Inyección de prompts: un fallo real o aparente en la primera demo con datos vivos
 - **Fallo:** con un modelo real, algún caso que escape a las defensas (no hay garantía, ni siquiera con esquemas de salida; sin cifra, supuesto mío) aparece justo delante de un cliente. La confianza se pierde de golpe. Además, la demo actual puede dar falsa seguridad: el guion dice que el resultado es «el mismo» con un modelo ingenuo, pero eso es consecuencia de reglas deterministas que dejan fuera del modelo la decisión, lo que a su vez limita el valor del producto (el resumen lo compone una plantilla).
 - **P: Media. I: Alto.** *(juicio)*
-- **Señal temprana:** primera batería con un modelo real y 50+ repeticiones; cualquier fuga de URL/imagen o cambio de prioridad.
+- **Señal temprana:** primera batería con un modelo real y 50+ repeticiones (PROPUESTA mía); cualquier fuga de URL/imagen o cambio de prioridad.
 - **Mitigación barata:** no usar el argumento «es seguro»; usar el argumento «el diseño no necesita que el modelo se resista» y enseñar cuáles son las 3 patas de la trifecta y cuál se rompe. Endurecer O-D2 (la prueba de no envío mira solo nombres de función) antes de cualquier piloto.
 
 ### R-08 Competencia de Microsoft, Google y OpenAI
