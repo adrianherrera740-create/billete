@@ -5,6 +5,8 @@ import { NaveError } from './projects';
 import type { Projects } from './projects';
 import type { Brain } from './brain';
 import type { ClaudeService } from './claude';
+import type { Overview, GlobalSearch } from './shell';
+import type { SettingsStore } from './settings';
 import type { Tasks } from './tasks';
 import type { TerminalManager } from './terminals';
 
@@ -28,7 +30,18 @@ export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw:
   }
 }
 
-export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService, tasks: Tasks, brain: Brain): Handlers {
+export interface Services {
+  projects: Projects;
+  terminals: TerminalManager;
+  claude: ClaudeService;
+  tasks: Tasks;
+  brain: Brain;
+  settings: SettingsStore;
+  overview: Overview;
+  search: GlobalSearch;
+}
+
+export function handlersFor({ projects, terminals, claude, tasks, brain, settings, overview, search }: Services): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -66,7 +79,11 @@ export function handlersFor(projects: Projects, terminals: TerminalManager, clau
     'brain:review': (i) => brain.review(i.id, i.action),
     'brain:delete': (i) => brain.delete(i.id),
     'brain:search': (i) => brain.search(i.projectId, i.query, i.includeDeprecated ?? false),
-    'brain:context': (i) => brain.context(i.projectId, i.query)
+    'brain:context': (i) => brain.context(i.projectId, i.query),
+    'settings:get': () => settings.get(),
+    'settings:update': (i) => settings.update(i),
+    'overview:summary': () => overview.summary(),
+    'search:global': (i) => search.search(i.query)
   };
 }
 

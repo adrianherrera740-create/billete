@@ -155,3 +155,30 @@ export interface BrainContext {
   nodes: Array<{ id: string; title: string; confidence: BrainConfidence }>;
   truncated: boolean;
 }
+
+export const THEMES = ['dark', 'light', 'system'] as const;
+export type Theme = (typeof THEMES)[number];
+
+export interface Settings {
+  theme: Theme;
+  notifications: boolean;
+  sideOpen: boolean;
+}
+export const DEFAULT_SETTINGS: Settings = { theme: 'dark', notifications: true, sideOpen: true };
+
+/** Resumen de un proyecto para el Command Center. */
+export interface ProjectSummary {
+  project: Project;
+  openTasks: number;
+  doingTasks: number;
+  pendingReview: number;
+  claude: Array<{ panelId: string; title: string; state: ClaudeState }>;
+}
+
+export interface SearchResult {
+  kind: 'project' | 'task' | 'note' | 'brain';
+  id: string;
+  projectId: string | null;
+  title: string;
+  snippet: string;
+}

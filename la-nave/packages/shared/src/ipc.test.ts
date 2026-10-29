@@ -114,6 +114,30 @@ describe('brain (seguridad)', () => {
   });
 });
 
+describe('ajustes (parseSettingsPatch)', () => {
+  it('acepta parches parciales válidos, también el vacío', () => {
+    const p = CHANNELS['settings:update'].input;
+    expect(p({})).toEqual({});
+    expect(p({ theme: 'light' })).toEqual({ theme: 'light' });
+    expect(p({ theme: 'system', notifications: false, sideOpen: true })).toEqual({ theme: 'system', notifications: false, sideOpen: true });
+  });
+
+  it('rechaza claves desconocidas (incluida la ventana), valores de otro tipo y temas inventados', () => {
+    const p = CHANNELS['settings:update'].input;
+    expect(() => p({ window: { x: 1 } })).toThrow(/desconocido/);
+    expect(() => p({ theme: 'rosa' })).toThrow(/uno de/);
+    expect(() => p({ notifications: 'sí' })).toThrow(/verdadero o falso/);
+    expect(() => p({ __proto__: { theme: 'light' }, polluted: true })).toThrow(/desconocido/);
+  });
+
+  it('la búsqueda global exige texto y limita su tamaño', () => {
+    const p = CHANNELS['search:global'].input;
+    expect(p({ query: '  hola ' })).toEqual({ query: 'hola' });
+    expect(() => p({ query: '   ' })).toThrow();
+    expect(() => p({ query: 'x'.repeat(201) })).toThrow();
+  });
+});
+
 describe('createApi', () => {
   it('usa el transporte que se le da (IPC o red) sin cambiar la API', async () => {
     const calls: Array<[string, unknown]> = [];

@@ -192,6 +192,18 @@ export class Brain {
     }));
   }
 
+  /** Búsqueda entre TODOS los proyectos (solo para la búsqueda global de la persona; el contexto para la IA nunca la usa). */
+  searchAll(query: string, limit = 15): Array<BrainHit & { projectName: string }> {
+    const fts = buildFtsQuery(query, { mode: 'and', prefixLast: true });
+    if (fts === null) return [];
+    const sql = `SELECT n.*, p.name AS pname, snippet(brain_fts, 1, '[', ']', '…', 14) AS snip
+      FROM brain_fts JOIN brain_nodes n ON n.rid = brain_fts.rowid - ${FTS_ROWID_OFFSET} JOIN projects p ON p.id = n.project_id
+      WHERE brain_fts MATCH ? AND n.confidence != 'deprecated' AND p.archived_at IS NULL
+      ORDER BY bm25(brain_fts, 4.0, 1.0) LIMIT ?`;
+    const rows = this.db.prepare(sql).all(fts, limit) as unknown as Array<NodeRow & { snip: string; pname: string }>;
+    return rows.map((row) => ({ node: toNode(row), snippet: row.snip && row.snip.trim() !== '' ? row.snip : row.body.slice(0, 140), projectName: row.pname }));
+  }
+
   /**
    * Paquete de contexto para la IA: SOLO lo relevante a la consulta, de UN proyecto, con tope de nodos y de
    * caracteres, lo verificado primero, lo dudoso marcado y los secretos redactados. Nunca el Brain entero.

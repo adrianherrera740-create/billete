@@ -170,6 +170,8 @@ export class ClaudeService {
   }
 
   async start(): Promise<void> {
+    // Ningún proceso de Claude sobrevive a un reinicio de la app: lo que quedó "trabajando" ya no existe.
+    this.deps.db.prepare("UPDATE claude_sessions SET state = 'ended' WHERE state != 'ended'").run();
     await this.hooks.start();
   }
 

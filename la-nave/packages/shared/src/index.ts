@@ -36,3 +36,4 @@ export const EVENT_NAMES_ARE_DOTTED: EventNamesAreDotted = true;
 export * from './parse';
 export * from './domain';
 export * from './ipc';
+export * from './settings';

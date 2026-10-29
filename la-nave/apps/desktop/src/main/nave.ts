@@ -6,6 +6,8 @@ import { createBackup, migrate, openWithRecovery } from '@nave/db';
 import type { EventMap, EventName } from '@nave/shared';
 import { Brain } from './brain';
 import { Projects } from './projects';
+import { SettingsStore } from './settings';
+import { GlobalSearch, Overview } from './shell';
 import { Tasks } from './tasks';
 
 export interface NaveCore {
@@ -14,6 +16,9 @@ export interface NaveCore {
   projects: Projects;
   tasks: Tasks;
   brain: Brain;
+  settings: SettingsStore;
+  overview: Overview;
+  search: GlobalSearch;
   log: Record<LogChannel, Logger>;
   paths: { dataDir: string; db: string; backups: string; logs: string };
   close(): void;
@@ -43,6 +48,9 @@ export function startCore(dataDir: string, version: string): NaveCore {
   const projects = new Projects(db, bus);
   const tasks = new Tasks(db, bus);
   const brain = new Brain(db, bus);
+  const settings = new SettingsStore(db, bus);
+  const overview = new Overview(db);
+  const search = new GlobalSearch(db, brain);
   brain.rebuildLinks();
   recordActivity(db, bus);
 
@@ -57,6 +65,9 @@ export function startCore(dataDir: string, version: string): NaveCore {
     projects,
     tasks,
     brain,
+    settings,
+    overview,
+    search,
     log,
     paths,
     close() {
