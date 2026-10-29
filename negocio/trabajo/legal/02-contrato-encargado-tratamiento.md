@@ -29,7 +29,7 @@ Las del Anexo IV, adecuadas al riesgo. Se revisan al menos [PERIODO] y ante camb
 4. El Cliente conoce la identidad de todos los subencargados, incluida la cadena (criterio del CEPD recogido en el análisis de riesgos [V secundaria]).
 
 ## 6. Transferencias internacionales
-Los datos se tratan y almacenan en la UE (Anexo III indica región por proveedor). No se transfieren fuera de la UE sin instrucción escrita del Cliente y mecanismo válido. Aunque el proveedor esté en la UE, el acceso remoto desde fuera o la jurisdicción de su matriz pueden constituir transferencia. [ABOGADO: análisis de este punto; estado actual del marco UE–EE. UU. [NV].]
+[OBJETIVO, NV: aún no hay proveedor contratado ni región confirmada por escrito] Los datos se tratarán y almacenarán en la UE (el Anexo III indicará la región por proveedor). No se transfieren fuera de la UE sin instrucción escrita del Cliente y mecanismo válido. Aunque el proveedor esté en la UE, el acceso remoto desde fuera o la jurisdicción de su matriz pueden constituir transferencia. [ABOGADO: análisis de este punto; estado actual del marco UE–EE. UU. [NV].]
 
 ## 7. Derechos de los interesados
 El Prestador asiste al Cliente, con medidas técnicas y organizativas, en atender las solicitudes de los interesados. Si recibe una directamente, la reenvía al Cliente en [PLAZO] sin responderla.
@@ -83,7 +83,7 @@ Google Workspace / Microsoft 365 son proveedores del propio Cliente (relación d
 
 ## Anexo IV. Medidas técnicas y organizativas
 (Del análisis de riesgos, secciones 2, 3 y 6; todas deben comprobarse antes de datos reales.)
-1. **Mínimo privilegio:** acceso delegado, buzón único, solo lectura más creación de borradores; sin envío ni borrado. Alcances concretos (p. ej. `gmail.readonly`, `gmail.compose`, `Mail.Read`, `Mail.ReadWrite`) **[NV: confirmar en documentación primaria qué cubre cada uno]**. Ojo: `gmail.compose` puede también enviar, por lo que «no envío» debe garantizarse además por diseño de flujo [decisión pendiente de la persona].
+1. **Mínimo privilegio:** acceso delegado, buzón único, solo lectura; los borradores viven en el panel de aprobación (opción A). Con `Mail.ReadWrite` o `gmail.compose` la IA podría además borrar o enviar, por lo que «sin envío ni borrado» no puede apoyarse solo en el alcance. Alcances concretos (p. ej. `gmail.readonly`, `gmail.compose`, `Mail.Read`, `Mail.ReadWrite`) **[NV: confirmar en documentación primaria qué cubre cada uno]**. Ojo: `gmail.compose` puede también enviar, por lo que «no envío» debe garantizarse además por diseño de flujo [decisión pendiente de la persona].
 2. **Contenido entrante como no fiable (inyección de prompts):** delimitado como dato, nunca instrucción; el modelo de triaje sin herramientas de escritura ni red; salida con esquema fijo validado; HTML saneado a texto plano.
 3. **Sin exfiltración por enlaces o imágenes:** salidas en texto plano, sin markdown de imagen/enlace, sin precarga de enlaces en el canal, URLs ajenas al original mostradas como texto inerte.
 4. **Aprobación humana** en toda acción con efecto externo, mostrando destinatario real, diferencias y enlaces; el agente no puede cambiar destinatarios que no estén en el hilo.

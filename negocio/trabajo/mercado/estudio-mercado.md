@@ -56,7 +56,7 @@ Aritmética propia, **no es dato de mercado**. Supuestos: «beneficio» = ingres
 | 3.500 € | 2 (1,6) | 2 (1,7) | 2 (1,9) |
 | 5.000 € | 2 (1,1) | 2 (1,2) | 2 (1,3) |
 
-Conclusión: con cuotas del rango H3, bastan **2–5 clientes de retainer** para el objetivo, lo cual es coherente con H4 (5–15 clientes) y deja margen. Riesgos: dependencia de pocos clientes (un abandono hunde el resultado), tiempo de servicio por cliente no medido (si cada cliente exige muchas horas, el cuello de botella es la capacidad personal, no el número), e impuestos/cuota de autónomos no incluidos.
+Conclusión: con cuotas del rango H3, bastan **2–5 clientes de retainer** para el objetivo, lo cual es compatible con la hipótesis H4 (5–15 clientes), que sigue sin investigar, y deja margen si se cumple. Riesgos: dependencia de pocos clientes (un abandono hunde el resultado), tiempo de servicio por cliente no medido (si cada cliente exige muchas horas, el cuello de botella es la capacidad personal, no el número), e impuestos/cuota de autónomos no incluidos.
 
 ## Estado de hipótesis
 - H1 hueco: indicio débil (el buscador no halló oferta local); NO VERIFICADO.

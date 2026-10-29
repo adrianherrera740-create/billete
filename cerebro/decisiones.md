@@ -13,3 +13,6 @@ Del 02/11/2026 al 24/01/2027, sin conversaciones nuevas del 21/12 al 03/01; el p
 
 ## 2026-10-29 — Demo: recomendación A para los borradores (pendiente de la persona)
 Recomendación del arquitecto, no decisión: la IA no recibe `gmail.compose` (el token solo lee); los borradores viven en el panel de aprobación y el humano los copia. Es más segura aunque más incómoda. La opción B (compose en credencial separada) añade riesgo de envío y posible evaluación de seguridad de Google, sin verificar. Prototipo en `negocio/trabajo/demo/prototipo/` (62 pruebas con modelo simulado, no con un LLM real).
+
+## 2026-10-29 — Ronda 1 del negocio cerrada tras dos pasadas de calidad
+Aprobadas: mercado, seguridad, demo, verificación, ventas y legal (con tres observaciones menores ya corregidas). Todo sigue NO VERIFICADO. Abierto: prueba de no envío del prototipo débil (endurecer antes del piloto) y hipótesis H4 sin investigar. Solo la persona: opción A/B de gmail.compose (recomendación A), abogado de protección de datos y NDA, región UE del modelo, dominios de red para fuentes primarias.

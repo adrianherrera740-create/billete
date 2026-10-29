@@ -74,3 +74,40 @@ Pruebas 62/62 ejecutadas por mí; sin función de envío ni red; datos solo `.ex
 ## Solo la persona (cond. 12)
 
 Decidir opción A/B de `gmail.compose`; cerrar NDA con abogado antes de la primera conversación o aceptar saltarse la regla 4; confirmar por escrito la región UE del LLM; permitir dominios de fuentes primarias para repetir la verificación.
+
+## Segunda pasada
+
+Fecha: 29/10/2026. Revisor: auditor-calidad. Alcance: solo comprobar los fallos F-V1 a F-VT3 y las referencias cruzadas, más regresiones (commits `c354785`, `94f9b9c`, `c8e109d`). No se ha corregido nada ni se ha hecho commit.
+
+| Departamento | Veredicto |
+|---|---|
+| Verificación | **APROBADO** |
+| Legal | **APROBADO** (con 2 observaciones a corregir) |
+| Ventas | **APROBADO** |
+
+### Verificación: APROBADO
+- F-V1 corregido: el informe ya no contiene ningún «Verificado» (`verificacion/verificacion-informe.md:6` lo declara; filas 5, 8 y 11 pasan a «No verificado»). Un barrido de «verificad» en todo `negocio/trabajo/` solo devuelve usos negados o hipótesis.
+- F-V2 corregido y cruzado: `verificacion:19` y `mercado/estudio-mercado.md:41-42` coinciden (NO VERIFICADO); `verificacion:28`, `ventas/04:3` y `demo/especificacion-mvp.md:332` ya dicen «fuente secundaria / NO VERIFICADO / vista en un resumen de buscador».
+- F-V3 corregido: `verificacion:22` recoge la discrepancia de sede y plazas, y `mercado/estudio-mercado.md:31` queda alineado.
+
+### Legal: APROBADO (observaciones)
+- F-L1 corregido: `legal/03-condiciones-del-servicio.md:23` pasa a opción A recomendada / opción B condicionada, con [NV], [ABOGADO] y [PENDIENTE: decisión A/B]; admite que `gmail.compose` también envía.
+- F-L2 corregido: `legal/04-pagina-como-protegemos-tus-datos.md:41` admite la ventana de caducidad de copias y deja [PENDIENTE] el borrado en copias, logs, modelo y canal.
+- F-L3 corregido: el tope de 12 meses va como «PROPUESTA sin base verificada» (`legal/03:40`, `legal/02:53`, `legal/05:34`).
+- F-L4 corregido: `legal/04:3` declara que todo el texto es no verificado, y `:28`, `:32`, `:35`, `:44-45` llevan [PENDIENTE]. F-L5 resuelto con F-VT1.
+- Observación OL-1 (corregir): `legal/02-contrato-encargado-tratamiento.md:32` afirma «Los datos se tratan y almacenan en la UE» sin [NV]/[PENDIENTE], cuando el Anexo III (`:76-77`) tiene la residencia del LLM y de n8n sin confirmar. Es un contrato borrador, pero conviene condicionarlo como ya hace `legal/03:31`.
+- Observación OL-2 (corregir): `legal/02:86` sigue diciendo «solo lectura más creación de borradores; sin envío ni borrado» como regla. Lleva el aviso sobre `gmail.compose`, pero `Mail.ReadWrite` también permite borrar y la opción A no crea borradores en el buzón. Alinear con `legal/03:23`.
+
+### Ventas: APROBADO
+- F-VT1 corregido: `ventas/01-guion-descubrimiento.md:7-8` exige NDA firmado antes de la llamada y limita lo previo a 10 minutos sin información confidencial; `ventas/02:13`, `ventas/04:10` y `ventas/05:15-16` (puerta «NDA revisado antes de la primera llamada») coinciden con la regla 4.
+- F-VT2 corregido: «datos en la UE» pasa a objetivo a confirmar por escrito en `ventas/01:48`, `ventas/02:31,49` y `ventas/04:7,25`. Sin afirmaciones residuales en ventas.
+- F-VT3 corregido (ver F-V2).
+
+### Regresiones
+- Sin «Verificado» sin lectura primaria, sin artículos nuevos (solo el art. 28 ya existente, marcado no leído), sin cifras nuevas con apariencia de dato (el «10 minutos» es una propuesta de procedimiento). Sin datos personales nuevos. Promesas públicas de `legal/04` todas con [PENDIENTE] o bajo el aviso «No publicar».
+
+### Lo que queda
+- OL-1 y OL-2 (redactor-legal-confianza), no bloqueantes pero a corregir antes de enseñar el contrato.
+- O-M1 sin tocar: `mercado/estudio-mercado.md:59` sigue diciendo «coherente con H4 (5–15 clientes)» pese a que H4 está «no investigado» (`:65`). Reformular.
+- O-D2 (prueba de no envío por nombre de función) sigue abierta, recomendada antes del piloto.
+- Sigue pendiente solo de la persona: decisión A/B de `gmail.compose`, NDA revisado por abogado antes de la primera llamada, confirmación escrita de la región UE del LLM, abrir dominios de fuentes primarias para pasar de «No verificado» a «Verificado».
