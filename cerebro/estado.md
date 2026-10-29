@@ -7,8 +7,12 @@
 - Dropshipping de TikTok Shop cerrado; recuperable en la rama `archivo/dropshipping`.
 - La Nave (`la-nave/`): construida, sin verificar en Windows real; la persona no tiene PC por ahora.
 
+## Hallazgos de la primera ronda (29/10/2026, solo resúmenes de buscador: el entorno no abre las webs)
+- Del informe: de 12 cifras, 2 verificadas, 7 no verificadas, 2 contradichas y 1 obsoleta (`negocio/trabajo/verificacion/`). WhatsApp: la reversión fue de la Comisión Europea (medidas cautelares 09/06/2026), no de Meta; no construir sobre WhatsApp. THE LIVE Barcelona ya pasó.
+- Mercado: ningún competidor español claro (indicio débil); 2–5 clientes de retainer bastan para 5.000 €/mes (aritmética propia). Falta acceso de red para leer fuentes (`negocio/trabajo/mercado/`).
+
 ## Próximo paso
-Lanzar en paralelo las tareas 1, 2 y 3 del backlog (sin gasto, sin datos personales). Después 4, 5 y 6.
+Esperar el análisis de seguridad (tarea 3) y lanzar 4, 5 y 6. Si la persona amplía el acceso de red (eur-lex, citigroup, ubs, pwc.es, rankiapro, Meta), repetir 1 y 2 con lectura primaria.
 
 ## Solo la persona
 Abogado de protección de datos antes de firmar nada, las 20 conversaciones, cuentas/servicios de pago (n8n, LLM, hosting) y decisión sobre WhatsApp.
