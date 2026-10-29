@@ -1,17 +1,17 @@
 # Pre-mortem del negocio «chief of staff digital» (ronda 2, tarea 10)
 
-Fecha: 29/10/2026. Autor: critico-escepticismo. Estado: **NO VERIFICADO** (cond. 8). Sin datos personales. Sin commit.
+Fecha: 29/10/2026. Autor: critico-escepticismo. Estado: **NO VERIFICADO** (cond. 8). Sin datos personales. Revisado tras la puerta de calidad de ronda 2 (F-P1 a F-P3).
 Leído: `cerebro/negocio/resumen.md`, `negocio/trabajo/{mercado,ventas,legal,seguridad,demo,casos-de-uso,calidad/ronda-1.md,verificacion}`.
 
 **Convención.** Probabilidad (P) e impacto (I) son **JUICIO MÍO**, no dato: Baja / Media / Alta, sobre el escenario «a fecha 29/04/2027 el negocio no tiene un cliente que pague cuota recurrente». No hay base estadística detrás. Cada cifra que aparece en los informes sigue en NO VERIFICADO; aquí no añado ninguna.
 
 ## 0. Lo que más pesa antes de empezar (hechos del propio repo)
 
-1. **Nada del mercado se ha leído en fuente primaria.** `estudio-mercado.md:8-9`: WebFetch falló en todos los dominios; todo es resumen de buscador. H1-H4 son hipótesis puras. Los precios (H3) vienen de un informe generado por IA con anclas de Londres/EE. UU.
-2. **El único activo construido es un simulador.** La demo es un prototipo Python con un «modelo» simulado (`guion-demo.md:12`; `especificacion-mvp.md:13`). Las 62 pruebas prueban las reglas del código propio, no el comportamiento de un LLM real ante inyección. Y la arquitectura prometida al cliente (n8n + LLM UE + Workspace/M365) **no es** lo que se demuestra. Riesgo de venta: se enseña una cosa y se entrega otra.
+1. **Nada del mercado se ha leído en fuente primaria.** `mercado/estudio-mercado.md:8-9`: WebFetch falló en todos los dominios; todo es resumen de buscador. H1-H4 son hipótesis puras. Los precios (H3) vienen de un informe generado por IA con anclas de Londres/EE. UU.
+2. **El único activo construido es un simulador.** La demo es un prototipo Python con un «modelo» simulado (`demo/guion-demo.md:14`; `demo/especificacion-mvp.md:13`). Las 62 pruebas prueban las reglas del código propio, no el comportamiento de un LLM real ante inyección. Y la arquitectura prometida al cliente (n8n + LLM UE + Workspace/M365) **no es** lo que se demuestra. Riesgo de venta: se enseña una cosa y se entrega otra.
 3. **No se sabe si la persona tiene red en este mundo.** Ningún documento dice cuántos contactos de confianza hay en family offices, banca privada o asistentes ejecutivas. Todo el plan (20 conversaciones, H2 «se llega por intermediarios») presupone una entrada que no está medida. Es el dato que más falta.
-4. **El calendario ya se come el semestre.** Sem. 1 = 02/11; conversaciones reales desde sem. 4 (23/11); Navidad sem. 8-9; piloto 1 arranca sem. 10 (04/01) y dura 4 semanas; retainer «hacia febrero» (`ventas/05:50`). A los 6 meses (finales de abril 2027) caben, como mucho, 1 piloto cerrado y 1 decisión de retainer. Un solo fallo de plazo (abogado tarde) y no hay ni eso.
-5. **Contradicciones vivas entre informes** (ronda 1 las corrigió en parte; quedan): residencia UE sin confirmar frente a regla 2 «solo en la UE» como regla no negociable; `gmail.compose` puede enviar frente a regla 1 «nada se envía solo» (decisión A/B pendiente); borrado «certificado» prometido frente a copias/logs/LLM no cubiertos (`especificacion-mvp.md:217`); OL-1/OL-2 y O-M1 abiertas.
+4. **El calendario ya se come el semestre.** Sem. 1 = 02/11; conversaciones reales desde sem. 4 (23/11); Navidad sem. 8-9; piloto 1 arranca sem. 10 (04/01) y dura 4 semanas; retainer «hacia febrero» (`ventas/05-calendario-12-semanas-y-eventos-2027.md:30`). A los 6 meses (finales de abril 2027) caben, como mucho, 1 piloto cerrado y 1 decisión de retainer. Un solo fallo de plazo (abogado tarde) y no hay ni eso.
+5. **Contradicciones vivas entre informes** (ronda 1 las corrigió en parte; quedan): residencia UE sin confirmar frente a regla 2 «solo en la UE» como regla no negociable; `gmail.compose` puede enviar frente a regla 1 «nada se envía solo» (decisión A/B pendiente); borrado «certificado» prometido frente a copias/logs/LLM no cubiertos (`demo/especificacion-mvp.md:217`); OL-1/OL-2 y O-M1 abiertas.
 
 ## 1. Pre-mortem: por qué fallaría en 6 meses
 
@@ -30,13 +30,13 @@ Orden: de mayor a menor riesgo compuesto (mi juicio).
 - **Mitigación barata:** poner la primera venta fuera del buzón real (ver C-02, C-03). Pedir a cada interlocutor, en la conversación, qué prueba de confianza concreta aceptaría y anotarla literal.
 
 ### R-03 Capacidad de una sola persona
-- **Fallo:** la persona hace a la vez ventas, legal, seguridad, desarrollo, operación y soporte con un presupuesto de horas desconocido. El tiempo por cliente nunca se ha medido (`estudio-mercado.md:61`, `ventas/04:49`). Un piloto de 4 semanas con un cliente exigente absorbe todo y las conversaciones se paran. Además, un servicio «alto patrimonio» implica disponibilidad ante incidentes; una persona no puede cubrir vacaciones ni enfermedad.
+- **Fallo:** la persona hace a la vez ventas, legal, seguridad, desarrollo, operación y soporte con un presupuesto de horas desconocido. El tiempo por cliente nunca se ha medido (`mercado/estudio-mercado.md:59`, `ventas/04-propuesta-diagnostico-piloto-retainer.md:36`). Un piloto de 4 semanas con un cliente exigente absorbe todo y las conversaciones se paran. Además, un servicio «alto patrimonio» implica disponibilidad ante incidentes; una persona no puede cubrir vacaciones ni enfermedad.
 - **P: Alta. I: Alto.** *(juicio)*
 - **Señal temprana:** sem. 2 y 3 sin que el NDA o el material estén listos «por falta de tiempo»; horas reales semanales dedicadas por debajo de lo asumido. Nunca se ha declarado cuántas horas/semana tiene la persona: **ese dato falta**.
 - **Mitigación barata:** declarar por escrito horas/semana disponibles, y limitar a 1 piloto simultáneo. Cronometrar horas de cada tarea del prototipo (briefing, triaje) y de las del cliente, desde el primer piloto, para poder hablar de coste real.
 
 ### R-04 Responsabilidad legal y falta de seguro
-- **Fallo:** un borrador manipulado aprobado a ciegas (R4 del análisis) o un briefing que oculta un correo importante causa un daño económico o reputacional. El tope de «12 meses de cuota» es una propuesta de IA sin base (F-L3) y puede ser inválido para dolo o culpa grave y no oponible a terceros afectados. Sin seguro de RC/ciber y sin forma jurídica separada (persona física autónoma), el patrimonio personal responde. La clientela tipo puede litigar.
+- **Fallo:** un borrador manipulado aprobado a ciegas (R4 del análisis) o un briefing que oculta un correo importante causa un daño económico o reputacional. El tope de «12 meses de cuota» es una propuesta de IA sin base (F-L3) y puede ser inválido para dolo o culpa grave y no oponible a terceros [ABOGADO, no verificado] afectados. Sin seguro de RC/ciber y sin forma jurídica separada (persona física autónoma), el patrimonio personal responde [ABOGADO, no verificado]. La clientela tipo puede litigar.
 - **P: Media (en 6 meses, con pocos clientes). I: Crítico.** *(juicio)*
 - **Señal temprana:** el abogado no cierra las preguntas 18, 19, 27, 28 (`legal/05`) antes del primer piloto; el seguro no se consigue o excluye IA.
 - **Mitigación barata:** no empezar ningún piloto con datos reales sin (a) respuesta escrita del abogado a esas 4 preguntas y (b) presupuesto de seguro en mano, aunque no se contrate. Con eso se decide con información; sin eso se está apostando.
@@ -54,13 +54,13 @@ Orden: de mayor a menor riesgo compuesto (mi juicio).
 - **Mitigación barata:** pedir confirmación por escrito a 2 proveedores en la sem. 1 (es solo un correo). Diseñar el prototipo con una capa de modelo intercambiable (ya hay `modelo.py`) y una batería de regresión que se ejecute cada vez que cambie el modelo.
 
 ### R-07 Inyección de prompts: un fallo real o aparente en la primera demo con datos vivos
-- **Fallo:** con un modelo real, el 1 % que escapa a las defensas (no existe garantía, ni siquiera con esquemas de salida) aparece justo delante de un cliente. La confianza se pierde de golpe. Además, la demo actual puede dar falsa seguridad: el guion dice que el resultado es «el mismo» con un modelo ingenuo, pero eso es consecuencia de reglas deterministas que dejan fuera del modelo la decisión, lo que a su vez limita el valor del producto (el resumen lo compone una plantilla).
+- **Fallo:** con un modelo real, algún caso que escape a las defensas (no hay garantía, ni siquiera con esquemas de salida; sin cifra, supuesto mío) aparece justo delante de un cliente. La confianza se pierde de golpe. Además, la demo actual puede dar falsa seguridad: el guion dice que el resultado es «el mismo» con un modelo ingenuo, pero eso es consecuencia de reglas deterministas que dejan fuera del modelo la decisión, lo que a su vez limita el valor del producto (el resumen lo compone una plantilla).
 - **P: Media. I: Alto.** *(juicio)*
 - **Señal temprana:** primera batería con un modelo real y 50+ repeticiones; cualquier fuga de URL/imagen o cambio de prioridad.
 - **Mitigación barata:** no usar el argumento «es seguro»; usar el argumento «el diseño no necesita que el modelo se resista» y enseñar cuáles son las 3 patas de la trifecta y cuál se rompe. Endurecer O-D2 (la prueba de no envío mira solo nombres de función) antes de cualquier piloto.
 
 ### R-08 Competencia de Microsoft, Google y OpenAI
-- **Fallo:** Copilot en Outlook/Teams y Gemini en Workspace traen resúmenes de correo, preparación de reuniones y borradores incluidos en la suscripción que el cliente ya paga. Fyxer ya cuesta decenas de USD/mes. El cliente se pregunta por qué pagar 1.500+ €/mes por lo mismo. Los informes dicen **«Microsoft Copilot, Google Gemini: no investigados, sin dato»** (`estudio-mercado.md:38`). Estamos juzgando un diferencial contra un competidor al que no hemos mirado.
+- **Fallo:** Copilot en Outlook/Teams y Gemini en Workspace traen resúmenes de correo, preparación de reuniones y borradores incluidos en la suscripción que el cliente ya paga. Fyxer ya cuesta decenas de USD/mes. El cliente se pregunta por qué pagar 1.500+ €/mes por lo mismo. Los informes dicen **«Microsoft Copilot, Google Gemini: no investigados, sin dato»** (`mercado/estudio-mercado.md:45`). Estamos juzgando un diferencial contra un competidor al que no hemos mirado.
 - **P: Alta (a que se cite como objeción). I: Alto.** *(juicio)*
 - **Señal temprana:** en las conversaciones, «ya tengo Copilot/Gemini» o «mi asistente ya usa Fyxer». Contar cuántas veces sale.
 - **Mitigación barata:** antes de la conversación 1, una hora leyendo qué hacen Copilot y Gemini hoy con correo, agenda y reuniones (páginas oficiales; requiere abrir dominios, tarea de la persona). Convertir «lo que ellos no hacen» en una sola frase comprobada, o descartar el posicionamiento.
@@ -74,7 +74,7 @@ Orden: de mayor a menor riesgo compuesto (mi juicio).
 ### R-10 Precio: hipótesis sin ancla en España
 - **Fallo:** las conversaciones dicen que 1.500-3.000 € por un diagnóstico es caro para algo sin caso de éxito, o demasiado barato para ser creíble para ese perfil. Los 2-5 clientes del cálculo dependen de cuotas y costes C que son supuestos (500/1.000/1.500 €/mes), sin incluir cuota de autónomos, impuestos, seguro ni abogado recurrente.
 - **P: Media-Alta. I: Alto.** *(juicio)*
-- **Señal temprana:** 3 o más rangos espontáneos por debajo del extremo bajo (regla ya escrita en `ventas/04`); pedir «prueba gratis» o «prueba de un mes».
+- **Señal temprana:** 3 o más rangos espontáneos por debajo del extremo bajo (regla de ajuste ya escrita en `ventas/04-propuesta-diagnostico-piloto-retainer.md:46`); pedir «prueba gratis» o «prueba de un mes».
 - **Mitigación barata:** la regla de calibración ya existe. Añadir: preguntar siempre cuánto cuesta hoy la asistente humana o el tiempo del cliente, y comparar con la cuota.
 
 ### R-11 Estructura de ingresos: demasiado pocos clientes grandes, ciclo de venta largo
@@ -84,7 +84,7 @@ Orden: de mayor a menor riesgo compuesto (mi juicio).
 - **Mitigación barata:** mantener una segunda fuente de ingresos o un colchón declarado; ver C-02 (producto de entrada de ciclo corto).
 
 ### R-12 Brecha o incidente en el propio sistema
-- **Fallo:** un n8n sin parchear (el análisis cita una vulnerabilidad crítica de una sola fuente), token OAuth robado, canal de aprobación comprometido. Un solo evento acaba con la confianza y es notificable (72 h) con la persona sola.
+- **Fallo:** un n8n sin parchear (el análisis cita una vulnerabilidad crítica de una sola fuente), token OAuth robado, canal de aprobación comprometido. Un solo evento acaba con la confianza y es notificable (72 h) [ABOGADO, art. 33 no leído en fuente primaria] con la persona sola.
 - **P: Baja-Media (poca exposición temprana). I: Crítico.** *(juicio)*
 - **Señal temprana:** simulacro de brecha (R18) sin plan escrito; n8n expuesto.
 - **Mitigación barata:** en el piloto, tokens revocables en la cuenta del cliente, un único buzón, sin canal de aprobación con contenido; hacer el simulacro de brecha antes del piloto.
@@ -107,7 +107,7 @@ Para cada uno: qué cambia, por qué sube la probabilidad de éxito (juicio mío
 ### C-02 Vender el diagnóstico de 2 semanas como producto en sí, sin acceso a datos reales
 - **Cambio:** diagnóstico con precio cerrado, entregable útil por sí mismo (mapa de flujos, riesgos de privacidad, 1-2 casos priorizados, plan), basado en entrevistas y en datos de ejemplo del cliente anonimizados o sintéticos. Pasar a piloto es opcional.
 - **Por qué ayuda:** primer ingreso en sem. 7 en lugar de sem. 10+; elimina el bloqueo de R-02 (no hay buzón real); da un caso de éxito y aprendizaje sobre horas reales (R-03).
-- **Regla que toca:** ninguna; ya está en la propuesta (`ventas/04:20-21`), solo se promociona de «paso previo» a «producto». Cuidado con cond. 6: el valor lo debe confirmar el cliente, no la IA.
+- **Regla que toca:** ninguna; ya está en la propuesta (`ventas/04-propuesta-diagnostico-piloto-retainer.md:14-18`), solo se promociona de «paso previo» a «producto». Cuidado con cond. 6: el valor lo debe confirmar el cliente, no la IA.
 - **Dato que falta:** si alguien paga 1.500-3.000 € por un informe de un proveedor sin historial (esto es la H3 con otra cara). Competidor a mirar: las consultoras de IA generalistas.
 
 ### C-03 Implantación con las herramientas del cliente, sin infraestructura propia (el cliente es el responsable y el operador técnico)
@@ -139,7 +139,7 @@ Todos se comprueban dentro de las 20 conversaciones; añadir a la hoja de seguim
 | S1 | **«Hay red y se llega por presentación» (H2) y la persona tiene acceso a ≥10 contactos relevantes.** | Si falla, no hay conversaciones y el resto es irrelevante. | Antes de nada, contar contactos existentes por perfil. En cada conversación, al cierre: «¿A quién conoces que viva esto?» y apuntar *si* da un nombre al instante (sí/no, sin el nombre). | Menos de 3 de 10 conversaciones acaban con una presentación ofrecida. |
 | S2 | **«Quien decide es alcanzable y se fía de un proveedor unipersonal con NDA y demo ficticia».** | El mayor freno es la confianza (H1) pero, aun confirmada, puede significar «no compraré nunca» en vez de «compraré si hay garantías». | Pregunta 9 del guion, pero cerrada: «¿Qué tendría que existir, concretamente, para que me dieras acceso de solo lectura a un buzón durante 2 semanas?». Anotar literal si es algo que se puede cumplir (seguro, abogado, UE) o algo imposible (referencias, años de historia). | La mayoría pide referencias de clientes o historial que no existen. |
 | S3 | **«El valor es mayor que lo que ya trae su suite (Copilot/Gemini/Fyxer)».** | No se ha investigado el competidor más obvio. Si el cliente ya tiene resúmenes y borradores incluidos, la cuota de 1.500+ € no se sostiene. | Pregunta 7 del guion («¿habéis probado IA?») ampliada: «¿Qué usáis hoy? ¿Qué le falta?» y contar cuántos nombran Copilot, Gemini o Fyxer. | 5 de 20 o más dicen «ya lo hace mi herramienta» y no citan una carencia concreta. |
-| S4 | **«Pagarán 1.500-3.000 € por un diagnóstico y 1.500-5.000 €/mes de cuota» (H3), y quien paga es quien conversa.** | Todo el cálculo de 2-5 clientes depende de ello. Los anclas son de Londres/EE. UU. | Preguntas de coste actual (ya están en el guion) y, a partir de la conversación 5-8, presentar dos opciones de diagnóstico y ver cuál se elige (`ventas/04:39`). Añadir: «¿Quién firmaría esto, tú o alguien más?» | Rangos espontáneos por debajo del extremo bajo en 3 o más, o «tengo que consultarlo» sin decir con quién. |
+| S4 | **«Pagarán 1.500-3.000 € por un diagnóstico y 1.500-5.000 €/mes de cuota» (H3), y quien paga es quien conversa.** | Todo el cálculo de 2-5 clientes depende de ello. Los anclas son de Londres/EE. UU. | Preguntas de coste actual (ya están en el guion) y, a partir de la conversación 5-8, presentar dos opciones de diagnóstico y ver cuál se elige (`ventas/04-propuesta-diagnostico-piloto-retainer.md:45`). Añadir: «¿Quién firmaría esto, tú o alguien más?» | Rangos espontáneos por debajo del extremo bajo en 3 o más, o «tengo que consultarlo» sin decir con quién. |
 | S5 | **«Una persona puede entregar y operar esto con calidad y con seguridad en ese plazo y con ese coste».** | Nunca se ha medido tiempo por cliente. Incluye legal, seguridad, soporte, y la barrera que reclamarán (seguro, abogado). | Preguntar al cliente cuánto soporte espera («¿qué pasa si falla a las 7:00 un lunes?», «¿quién responde?») para conocer el nivel de servicio exigido; y cronometrar horas propias desde la primera semana. Sin necesidad de un cliente: medirlo con el prototipo ficticio. | El nivel de disponibilidad exigido (24/7, respuesta en horas) no cabe en una persona, o el abogado dice que hace falta estructura societaria y seguro caros antes del primer piloto. |
 
 ## 4. Datos que faltan para creer la propuesta (lista de «no creo nada de esto hasta ver…»)
@@ -148,7 +148,7 @@ Todos se comprueban dentro de las 20 conversaciones; añadir a la hoja de seguim
 3. Confirmación escrita de región UE de inferencia, almacenamiento y retención del LLM elegido.
 4. Respuesta escrita del abogado a las preguntas 15-21, 27 y 28 (EIPD, responsabilidad, seguro, forma jurídica) y mención del AI Act.
 5. Una batería R1-R4 ejecutada con un modelo real, repetida, con los resultados documentados.
-6. Al menos 3 rangos de precio espontáneos de interlocutores reales (la regla de `ventas/04:47`).
+6. Al menos 3 rangos de precio espontáneos de interlocutores reales (regla de `ventas/04-propuesta-diagnostico-piloto-retainer.md:48`).
 7. Alguien que, en una conversación, nombre un coste concreto reciente de un fallo operativo (8 de 20, criterio ya definido).
 
 ## 5. Observaciones sobre los propios informes (contradicciones y puntos débiles)

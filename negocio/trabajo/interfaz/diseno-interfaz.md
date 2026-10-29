@@ -7,13 +7,13 @@ Estado: **No verificado** (condición 8). Documento generado por IA. Todo lo que
 ## 0. Resumen en diez líneas
 
 1. Reglas que no se tocan: el agente propone, el humano decide; nada se envía solo; datos en la UE; «aprobado» significa «listo para que lo envíe una persona», nunca «enviado» (EM 4.6).
-2. **Recomendación:** un **panel privado instalable (PWA)** con inicio de sesión por passkey, que es a la vez la interfaz del titular y el **modo asistente** de su EA (misma cola, roles distintos). Es la única opción que cumple a la vez comodidad, control del contenido y residencia (secciones 1 y 2).
+2. **Recomendación:** un **panel privado instalable (PWA)** con inicio de sesión por passkey, que es a la vez la interfaz del titular y el **modo asistente** de su EA (misma cola, roles distintos). Es la única opción que permite combinar comodidad y control del contenido, y la única que **permitiría** cumplir el objetivo de residencia en la UE: hoy es un **objetivo, no un hecho** (aún sin hosting elegido ni confirmación escrita de ningún proveedor). Además, la opción A de `gmail.compose` (sin permiso de enviar) sigue **pendiente de decisión de la persona** (EM 1.1); el diseño la asume solo por defecto (secciones 1 y 2).
 3. El móvil recibe un **aviso sin contenido** («Tienes 2 asuntos pendientes»). Todo lo demás se lee dentro del panel, tras desbloquear.
 4. El briefing se lee en **60 segundos o menos**: estado, máximo 3 decisiones, agenda, una línea de «sin tocar». El prototipo lo mide (22 s con los datos de la demo).
 5. Aprobar es **un toque más la huella** (el segundo paso). No se aprueba deslizando. Aprobar no envía: deja el texto listo para copiar y enviar.
 6. Sin conexión: se puede **leer** lo último y **guardar decisiones como intención**; nada cambia de estado hasta volver a conectar, y las aprobaciones de borradores caducan en 12 h [propuesta mía] y piden de nuevo el segundo paso.
 7. El apagado es **un gesto en el panel**, sin pedir credenciales para apagar (sí para reanudar), más una vía independiente: revocar el acceso en la cuenta de correo.
-8. Voz, widget, reloj y mensajería son **complementos de aviso**, no canales de decisión ni de contenido. Telegram y compañía solo con ID y verbo, como ya fijó EM (D2).
+8. Voz, widget, reloj y mensajería son **complementos de aviso**, no canales de decisión ni de contenido. Telegram y compañía, si se usan, solo con el mismo recuento que la pantalla de bloqueo («Tienes N asuntos pendientes»), sin ID, tipo ni verbo. Esta regla sustituye a la de EM D2/Req. 6 para el aviso (hay que alinear `especificacion-mvp.md`).
 9. Pila mínima: HTML/JS estático + pequeño servidor en la UE + passkeys + aviso push sin contenido (sección 4). **Todo coste, NO VERIFICADO.**
 10. Hoy se puede prototipar sin servicios: el panel (`prototipo/`), con 20 pruebas automáticas que pasan (sección 7). Lo que exige tocar un móvil real, contratar o instalar algo queda para la persona (sección 8, condición 12).
 
@@ -38,7 +38,7 @@ Puntuación 1 a 5, donde **5 es lo mejor** en cada columna (en coste y esfuerzo,
 
 **A. Correo con resumen diario.** Es lo que el cliente ya usa y el aviso llega sin instalar nada. Pero el buzón es precisamente el activo que se protege (AR, «Canal de aprobación»): un resumen con contenido queda indexado, sincronizado en varios dispositivos, con vista previa en pantalla de bloqueo y es suplantable. Aprobar «respondiendo al correo» es un canal sin segundo paso. Uso válido: cuenta de aprobación **distinta** de la principal y **solo con el aviso sin contenido** (EM, S5 «alternativa sin pago»).
 
-**B1. Telegram.** Máxima comodidad (botones en línea). AR: los chats de bots **no tienen cifrado de extremo a extremo** y sus centros de datos no publican ubicación [secundarias]; «no recomendado para contenido». Con solo ID y verbo (decisión D2 de EM) es tolerable como aviso. El riesgo restante es la cuenta del titular: si se roba el móvil o la cuenta, quien pulse «APROBAR» debe seguir sin poder aprobar un borrador (EM 4.6: segundo paso y cuenta vinculada).
+**B1. Telegram.** Máxima comodidad (botones en línea). AR: los chats de bots **no tienen cifrado de extremo a extremo** y sus centros de datos no publican ubicación [secundarias]; «no recomendado para contenido». Con solo el recuento («Tienes N asuntos pendientes», sin ID ni verbo; esto sustituye a D2 de EM para el aviso) es tolerable como aviso. El riesgo restante es la cuenta del titular: si se roba el móvil o la cuenta, quien pulse «APROBAR» debe seguir sin poder aprobar un borrador (EM 4.6: segundo paso y cuenta vinculada).
 
 **B2. Signal.** Mejor privacidad de contenido, pero, por lo que sé, no ofrece una API oficial para bots y las soluciones son no oficiales **[NV]**: fragilidad y dependencia de un proyecto de terceros. Sin botones de acción. No de inicio.
 
@@ -46,7 +46,7 @@ Puntuación 1 a 5, donde **5 es lo mejor** en cada columna (en coste y esfuerzo,
 
 **B4. Slack.** Buenos botones y roles, útil si el family office ya lo usa. Residencia UE **no verificada** (AR sección 4). Añade un subencargado más. Solo por petición del cliente.
 
-**C. PWA.** El contenido nunca sale de un dominio que controlamos en la UE; el aviso es lo único que viaja por terceros. Passkey (WebAuthn) como inicio de sesión fuerte y como segundo paso de aprobación **[NV: comportamiento exacto de passkeys dentro de una PWA instalada en iOS y Android; hay que probarlo en móviles reales]**. Se instala en la pantalla de inicio sin tienda de aplicaciones: no depende de la aprobación de Apple o Google ni de una cuenta de desarrollador de pago. Coste de la comodidad: hay que construirlo y operarlo (EM ya lo contempla como S4, recomendado por AR).
+**C. PWA.** El diseño exige que el contenido no salga de un dominio nuestro alojado en la UE (**objetivo**: aún sin hosting elegido ni confirmación escrita); el aviso es lo único que viaja por terceros. Passkey (WebAuthn) como inicio de sesión fuerte y como segundo paso de aprobación **[NV: comportamiento exacto de passkeys dentro de una PWA instalada en iOS y Android; hay que probarlo en móviles reales]**. Se instala en la pantalla de inicio sin tienda de aplicaciones: no depende de la aprobación de Apple o Google ni de una cuenta de desarrollador de pago. Coste de la comodidad: hay que construirlo y operarlo (EM ya lo contempla como S4, recomendado por AR).
 
 **D. Voz.** Útil en el coche o paseando, y accesibilidad real. Riesgos: se oye en público, el audio con contenido es otro archivo sensible, y la síntesis de voz puede implicar un subencargado más **[NV]**. Reglas de diseño: **modo público** lee solo recuentos y horas; **modo privado** (auriculares conectados, activado a mano) lee también títulos; respuestas por voz solo con un vocabulario cerrado («aprobar», «rechazar», «más tarde», «siguiente») y **nunca** aprobar un borrador solo por voz, porque la voz es imitable (clonación) y la aprobación necesita el segundo paso físico. El prototipo ya genera el guion de voz y comprueba que cabe en 2 minutos (menos de 280 palabras a ritmo de locución, supuesto mío).
 
@@ -60,7 +60,7 @@ Puntuación 1 a 5, donde **5 es lo mejor** en cada columna (en coste y esfuerzo,
 
 | Capa | Qué | Qué viaja por terceros |
 |---|---|---|
-| Decidir y leer | Panel PWA (titular y asistente) | Nada: dominio propio en la UE |
+| Decidir y leer | Panel PWA (titular y asistente) | Nada, por diseño; el alojamiento en la UE es un objetivo sin hosting elegido ni confirmación escrita |
 | Avisar | Notificación push del panel (primera opción) o correo a cuenta aparte o Telegram (opcional) | Solo «hay N pendientes» |
 | Escuchar | Voz en fase 2, generada por el panel, modo público por defecto | Nada, si la síntesis es local o en la UE **[NV]** |
 | Atajos | «Abrir panel», «Apagar todo» | Nada |
@@ -185,7 +185,7 @@ La notificación, el widget, el reloj, el icono y el selector de aplicaciones so
 - El panel **oculta su contenido** al pasar a segundo plano (el prototipo lo hace al cambiar de visibilidad), y se bloquea tras 60 s de inactividad (propuesta). Hay que verificar en móviles reales qué capturas del selector de apps permiten iOS y Android **[NV]**.
 - Sin capturas de pantalla ni compartir: el panel no ofrece botón «compartir».
 - Modo público de la voz (sección 1.D): solo recuentos y horas.
-- Mensajería (Telegram, Slack, correo auxiliar): el mensaje es el mismo recuento, nunca más (EM 4.6: «Pendiente: borrador A-0001. Revisa en tu panel»).
+- Mensajería (Telegram, Slack, correo auxiliar): el mensaje es exactamente el del prototipo, «Tienes N asuntos pendientes», sin ID, tipo, verbo ni botones. Esta regla sustituye a la de EM 4.6/D2/Req. 6 («Pendiente: borrador A-0001… Responde APROBAR»), que debe alinear el arquitecto-agentes.
 
 ## 3. Modo asistente (EA)
 
@@ -259,13 +259,14 @@ Hecho en `negocio/trabajo/interfaz/prototipo/`:
 | `logica.js` | Lógica pura, sin DOM: aviso de bloqueo, texto inerte, compilación del briefing con tiempo de lectura, cola con roles/segundo paso/sin conexión/caducidad, apagado, reanudar, guion de voz |
 | `datos.js` | Datos ficticios (dominios reservados `.example`), alineados con la demo del MVP |
 | `app.js` | Pinta con `textContent`; sin red ni almacenamiento |
+| `../captura-hoy.png` | Captura de la vista «Hoy» en Chromium, 390x844 (solo esa vista) |
 | `tests/logica.test.js` | 20 pruebas con `node --test` (Node ya instalado; ningún paquete) |
 
 Cómo ejecutarlo: abrir `index.html` en un navegador (funciona con doble clic, sin servidor); pruebas: `cd negocio/trabajo/interfaz/prototipo && node --test tests/logica.test.js`.
 
 **Resultado de las pruebas (29/10/2026, Node 22):** 20 aprobadas, 0 fallos. Cubren: aviso de bloqueo solo con recuento; texto inerte; briefing legible en 60 s, riesgo primero, sin ocultar correos y con recuento exacto; segundo paso; no repetir decisión; inmutabilidad; permisos de asistente y delegación; intenciones sin conexión, sincronización y caducidad; apagado y reanudar; guion de voz de menos de 280 palabras y sin títulos en modo público; ausencia de red/envío/HTML dinámico/secretos en el código; correos solo de dominios reservados.
 
-**Límites honestos:** la lógica está probada; **la interfaz no se ha abierto en un navegador ni en un móvil** (no hay navegador aquí): el código de pintado solo pasó comprobación de sintaxis. Falta: service worker e instalación como PWA, passkeys reales, aviso push real, pruebas con VoiceOver/TalkBack, comprobación de contraste. Nada de ello se puede hacer sin un dispositivo y, en parte, sin servicios (sección 8).
+**Límites honestos:** la lógica está probada; la interfaz se abrió después en **Chromium con viewport de 390x844 (ancho de móvil), sin errores de consola**, y de ahí sale `captura-hoy.png` (vista «Hoy», lectura estimada 22 s). Esa apertura no la hice yo; versión exacta de Chromium: NO VERIFICADA. **Solo se vio la vista «Hoy».** Sigue sin verse: Aprobaciones, Bloqueo, Apagar, modo claro/oscuro, contraste, un móvil real. Falta además: service worker e instalación como PWA, passkeys reales, aviso push real, pruebas con VoiceOver/TalkBack. Nada de ello se puede hacer sin un dispositivo y, en parte, sin servicios (sección 8).
 
 **Qué más se puede prototipar ya** (sin servicios, solo local): la vista de dossier y de radar de vencimientos (casos 3 y 4 de `viables-hoy.md`); un export a texto del briefing para pegar en un correo de prueba; ensayar el guion de voz con la síntesis del propio navegador (comprobando antes si envía audio a un servidor **[NV]**); el modo viaje; el idioma catalán. No lo he hecho: alcance cerrado (condición 11).
 
@@ -298,4 +299,5 @@ negocio/trabajo/interfaz/
   prototipo/
     index.html  app.js  logica.js  datos.js
     tests/logica.test.js         (20 pruebas, node --test)
+  captura-hoy.png                (vista «Hoy», Chromium 390x844)
 ```
