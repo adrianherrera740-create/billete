@@ -149,6 +149,21 @@ export const MIGRATIONS: Migration[] = [
         DELETE FROM brain_fts WHERE rowid = 1000000000000 + old.rid;
       END;
     `
+  },
+  {
+    version: 6,
+    name: 'dispositivos_moviles',
+    // Solo se guarda el HASH del token de cada móvil emparejado; el token en claro vive únicamente en el móvil.
+    sql: `
+      CREATE TABLE mobile_devices (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        token_hash TEXT NOT NULL UNIQUE,
+        created_at TEXT NOT NULL,
+        last_seen_at TEXT,
+        revoked_at TEXT
+      );
+    `
   }
 ];
 

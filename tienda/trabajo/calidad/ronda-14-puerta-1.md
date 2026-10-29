@@ -8,7 +8,7 @@ Autor: auditor-calidad. Fecha: 29/10/2026. Revisados: `tienda/trabajo/ronda-14/p
 |---|---|---|
 | finanzas/supuestos-y-tope.md | RECHAZADO (corrección de 2 líneas) | El núcleo se reproduce, pero una cifra de la ronda 13 (8,83 / 10,27 €) no sale con el script (condiciones 6 y 8) |
 | producto/hoja-lectura-canal.md | RECHAZADO | La regla AGUANTAR contradice el criterio de parada de decision-ceo y los añadidos del agente no están marcados como propuesta (condiciones 5 y 8) |
-| cumplimiento/preguntas-seller-center-y-gestoría.md | RECHAZADO (menor) | Sin tiempo estimado, asume una cuenta de Seller Center que la persona quizá no tiene, y las capturas pueden llevar datos personales (condiciones 4, 7 y 12) |
+| cumplimiento/preguntas-seller-center-y-gestoria.md | RECHAZADO (menor) | Sin tiempo estimado, asume una cuenta de Seller Center que la persona quizá no tiene, y las capturas pueden llevar datos personales (condiciones 4, 7 y 12) |
 
 Ninguno exige rehacer el informe; son correcciones de texto.
 
@@ -72,13 +72,13 @@ Hoja de lectura: bien. Es la más clara de las tres (pasos numerados, qué copia
 3. Falta una línea que diga qué hacer si TikTok Shop ES no está disponible en la app de la persona (ya hay aviso de región; basta una línea sobre la web).
 
 Cumplimiento: no ejecutable sin ayuda tal como está. Correcciones:
-1. Añadir tiempo estimado por bloque y total. Hoy no hay ninguno. Con 8 bloques A y 6 bloques B (unas 55 preguntas) y 2 minutos por búsqueda, A son unos 30-45 min si hay acceso al panel. Decir que B (gestoría) no se responde el 02/11: solo se envía el correo ese día; la respuesta llegará después y no es requisito de M0.
+1. Añadir tiempo estimado por bloque y total. Hoy no hay ninguno. Con 8 bloques A y 6 bloques B (más de 50 preguntas) y 2 minutos cada una, A son unos 30-45 min si hay acceso al panel. Decir que B (gestoría) no se responde el 02/11: solo se envía el correo ese día; la respuesta llegará después y no es requisito de M0.
 2. Condición 7: asume que la persona tiene acceso a un Seller Center ("qué porcentaje muestra el panel para tu categoría", línea 16). Pero el alta de vendedor es la pregunta A7 y la pregunta pendiente 4 de `estado.md`. Falta decir qué hacer si no tiene cuenta: leer el Centro de ayuda público y escribir "no accesible sin cuenta", sin iniciar el alta.
 3. Condición 12: registrarse en Seller Center, hablar con una gestoría (puede costar) y mandar el correo obligan a la persona. Falta un aviso explícito del tipo "esto te obliga a: ..., y no es necesario pagar ni darse de alta para responder".
 4. Condición 4: se piden capturas del panel de vendedor, que pueden mostrar NIF, IBAN, correo o dirección. Añadir "tapa datos personales antes de guardarlas en el repo".
 5. Falta una pregunta a la gestoría o al revisor sobre la preventa: cobro anticipado, plazos prometidos y desistimiento. decision-ceo (línea 47) y finanzas (§6) la tratan como pendiente, y en cumplimiento solo aparece A4 pregunta 4 (Seller Center), no la parte legal. Añadir B7.
 6. En A1, la pregunta sobre la base de la comisión (PVP con o sin IVA).
-7. Aparte de lo anterior, las 19 preguntas con casilla y "texto literal" son claras; las opciones de A7 (modelo 036/037, RETA, IAE) son terminología del asesor, no verificada; marcarla "NO VERIFICADO" como el resto.
+7. Aparte de lo anterior, las preguntas con casilla y "texto literal" son claras; las opciones de A7 (modelo 036/037, RETA, IAE) son terminología del asesor, no verificada; marcarla "NO VERIFICADO" como el resto.
 
 ## 7. Resumen de condiciones citadas
 

@@ -98,9 +98,9 @@ export const CHANNELS = {
   // Enviar texto a Claude solo lo PEGA (bracketed paste, sin Intro) y solo en paneles de Claude.
   'claude:paste': { remote: 'forbidden', input: object({ panelId: id, text: str({ min: 1, max: 20_000 }) }) },
   'task:list': { remote: 'allowed', input: object({ projectId: id }) },
-  'task:create': { remote: 'forbidden', input: object({ projectId: id, title: str({ min: 1, max: 200, trim: true }) }) },
+  'task:create': { remote: 'allowed', input: object({ projectId: id, title: str({ min: 1, max: 200, trim: true }) }) },
   'task:update': {
-    remote: 'forbidden',
+    remote: 'allowed',
     input: objectWith(
       { id },
       { title: str({ min: 1, max: 200, trim: true }), status: oneOf(TASK_STATUSES), position: num({ min: 0, max: 1e9 }) }
@@ -110,11 +110,11 @@ export const CHANNELS = {
   // projectId null = la bandeja de entrada (notas sin proyecto).
   'note:list': { remote: 'allowed', input: object({ projectId: nullable(id) }) },
   'note:create': {
-    remote: 'forbidden',
+    remote: 'allowed',
     input: objectWith({ projectId: nullable(id) }, { title: str({ max: 120, trim: true }), body: str({ max: 20_000 }) })
   },
   'note:update': {
-    remote: 'forbidden',
+    remote: 'allowed',
     input: objectWith({ id }, { title: str({ max: 120, trim: true }), body: str({ max: 20_000 }), projectId: nullable(id) })
   },
   'note:delete': { remote: 'forbidden', input: object({ id }) },
@@ -138,7 +138,7 @@ export const CHANNELS = {
   'brain:context': { remote: 'forbidden', input: object({ projectId: id, query: str({ max: 300 }) }) },
   'settings:get': { remote: 'forbidden', input: nothing },
   'settings:update': { remote: 'forbidden', input: parseSettingsPatch },
-  'overview:summary': { remote: 'forbidden', input: nothing },
+  'overview:summary': { remote: 'allowed', input: nothing },
   // Búsqueda global (Ctrl+K): la hace la persona de forma explícita y cruza proyectos; el contexto para la IA nunca.
   'search:global': { remote: 'forbidden', input: object({ query: str({ min: 1, max: 200, trim: true }) }) },
   // Copias de seguridad: se identifican por NOMBRE (nunca por ruta); main solo busca dentro de su carpeta de copias.

@@ -9,7 +9,7 @@ Qué hace esta hoja: da la ancla de precio y de ventas (la puerta M1 del 09/11 y
 
 ## 1. Instrucciones paso a paso (para hacerlo sin conocimientos previos)
 
-Tiempo: 60-90 minutos. Material: el móvil con la app de TikTok (o un ordenador con la web de TikTok Shop España), esta hoja abierta en otro sitio donde puedas escribir, y las capturas de pantalla (opcional, pero muy recomendable).
+Tiempo: 90-120 minutos solo la hoja (unos 2 min por ficha en 36 fichas); las 4 obligatorias, unos 60 min. Seller Center se hace aparte. Material: el móvil con la app de TikTok (o un ordenador con la web de TikTok Shop España), esta hoja abierta en otro sitio donde puedas escribir, y las capturas de pantalla (opcional, pero muy recomendable).
 
 Aviso (condición 12): esto te obliga a abrir TikTok Shop tú mismo. No compres nada, no pagues nada, no des datos. Solo mirar.
 
@@ -58,7 +58,7 @@ Si las respuestas son 1 sí, 2 no, 3 sí, es producto de identidad sin marca.
 Rellena esta misma hoja (copia el archivo, o pega las tablas en un documento) y entrégala al director junto con las capturas. Con eso los agentes calculan, tú no tienes que interpretar nada.
 
 ### 1.8 Reparto de tiempo orientativo
-Instrucciones y preparación: 5 min. Cuatro búsquedas obligatorias: 12 min cada una (48 min). Dos libres: 10 min cada una (20 min). Resumen: 10 min. Total: 83 min. Si vas justo de tiempo, haz solo las 4 obligatorias (condición mínima) y deja las libres.
+Instrucciones y preparación: 5 min. Cuatro búsquedas obligatorias: unos 12-15 min cada una (6 fichas x 2 min; 48-60 min en total). Dos libres: 12 min cada una (unos 24 min). Resumen: 10-15 min. Total: 90-120 min. Si vas justo de tiempo, haz solo las 4 obligatorias (unos 60 min, condición mínima) y deja las libres.
 
 ---
 
@@ -187,9 +187,9 @@ Si en una ficha el precio es un rango, usa el más bajo para la mediana y anóta
 Preguntas de cierre (responde SÍ / NO / no sé):
 1. ¿Hay al menos 3 fichas sin marca con precio >= 25 € y >= 500 ventas visibles, en total? ______  (cuáles: filas ______)
 2. ¿Esas 3 fichas se concentran en UNA misma búsqueda (un mismo público)? ______  ¿En cuál? ______
-3. ¿Hay al menos 2 vendedores distintos entre esas fichas? ______
+3. (PROPUESTA del investigador) ¿Hay al menos 2 vendedores distintos entre esas fichas? ______
 4. ¿Alguna de esas fichas se entrega desde España? ______
-5. En cualquier búsqueda, ¿todo lo que vende más de 500 está por debajo de 15 €? ______
+5. (PROPUESTA del investigador, corte de 15 €) En cualquier búsqueda, ¿todo lo que vende más de 500 está por debajo de 15 €? ______
 6. ¿Qué te llamó la atención que no está en las columnas? (3 líneas máximo) ______
 
 ---
@@ -202,9 +202,9 @@ Definiciones: "ficha ancla" = ficha sin marca, precio >= 25 €, ventas visibles
 
 | Resultado de la hoja | Decisión | Condición de `decision-ceo.md` §4 que toca |
 |---|---|---|
-| SEGUIR | Hay >= 3 fichas ancla, de >= 2 vendedores distintos, y al menos 3 de ellas están en la MISMA búsqueda o en dos búsquedas del mismo público. Se elige ese público y ese gancho para la fase 1 | (a) cumplida. Esto no basta: sigue pendiente (b) Seller Center, (c) cotizaciones, (d) alta fiscal, (e) capital, (f) demanda propia. Marca propia pasa a "SOLO SI" con (a) en verde, no a GO |
-| AGUANTAR | Hay 1 o 2 fichas ancla, o hay >= 3 pero dispersas en públicos distintos, o todas de un único vendedor, o ninguna se entrega desde España y Seller Center no ha respondido aún. Un único ajuste: repetir con 2 búsquedas nuevas del público más cercano (máximo 45 min, solo si la persona tiene tiempo antes del 09/11). Sin presupuesto | (a) en amarillo. Marca propia sigue en AGUANTAR sin presupuesto |
-| PARAR | Hay 0 fichas ancla en las 6 búsquedas, o todo lo que supera 500 ventas está por debajo de 15 €, o la persona no pudo ver precios ni ventas en la mayoría de fichas ("no visible"). Se archiva marca propia como canal consumidor en TikTok Shop; sigue solo B2B y canal propio | (a) falla: se aplica el criterio de parada de la etapa 1 de `decision-ceo.md` §4. No se cambia de modelo con la misma hoja |
+| SEGUIR | Hay >= 3 fichas ancla (criterio de `decision-ceo.md` §4, etapa 1). PROPUESTA del investigador, no del CEO: que sean de >= 2 vendedores distintos y que al menos 3 estén en la MISMA búsqueda o en dos búsquedas del mismo público. Se elige ese público y ese gancho para la fase 1 | (a) cumplida. Esto no basta: sigue pendiente (b) Seller Center, (c) cotizaciones, (d) alta fiscal, (e) capital, (f) demanda propia. Marca propia pasa a "SOLO SI" con (a) en verde, no a GO |
+| PARAR | Hay 0, 1 o 2 fichas ancla (menos de 3: criterio de parada de `decision-ceo.md` §4, se cierra marca propia en TikTok Shop como canal consumidor); o la persona no pudo ver precios ni ventas en la mayoría de fichas ("no visible"). PROPUESTA del investigador (corte de 15 €): también PARAR si todo lo que supera 500 ventas está por debajo de 15 €. Sigue solo B2B y canal propio | (a) falla. No se cambia de modelo con la misma hoja |
+| AGUANTAR (CAMBIO PROPUESTO, requiere aprobación de la persona y anotación en `decisiones.md` antes de aplicarse; mientras no haya aprobación, estos casos son PARAR) | Hay >= 3 fichas ancla pero dispersas en públicos distintos, o todas de un único vendedor. PROPUESTA del investigador: un único ajuste de 45 min, repetir con 2 búsquedas nuevas del público más cercano, solo si hay tiempo antes del 09/11. Sin presupuesto | (a) en amarillo. No está en `decision-ceo.md` §4 |
 
 Reglas auxiliares:
 1. Si menos de 4 de las 6 tablas tienen >= 5 filas completas, la lectura no cuenta: se repite o se pausa (M0 requiere "lectura hecha").

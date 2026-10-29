@@ -6,6 +6,27 @@ Cómo responder: marca una casilla, pega el texto literal del panel (copiar/pega
 
 Leyenda de prioridad: P1 = bloquea la puerta M1 (09/11); P2 = necesario antes de gastar nada; P3 = útil.
 
+## Antes de empezar
+
+**Tiempo estimado (propuesta del agente, sin medir; calculado a unos 2 minutos por pregunta):**
+- Parte A (Seller Center): 30-45 min si tienes acceso al panel. Sin cuenta, 15-20 min leyendo el Centro de ayuda público (ver abajo).
+- Parte B (gestoría): 10-15 min para revisar y enviar el correo el 02/11. La respuesta de la gestoría llegará después y NO es requisito de M0; las casillas de B se rellenan cuando conteste.
+
+**Si NO tienes cuenta de Seller Center (no lo doy por supuesto):**
+- No inicies el alta para responder: no hace falta y te comprometería (ver "Qué te obliga a ti").
+- Puedes intentar responder leyendo el Centro de ayuda o la Academy públicos de TikTok Shop, si abren sin sesión. Ruta y existencia: [NO VERIFICADO]; no inventes pasos oficiales. Si una página no abre, escribe "no accesible sin cuenta".
+- Casi seguro quedarán pendientes (campos del panel, tu categoría, comisión que se muestra a tu tienda): A1 (lo que ve tu tienda), A4 (campo del formulario), A5 (por categoría), A8. Anótalos como "pendiente de cuenta". Esa deducción es del agente, no verificada.
+- A7 (requisitos de alta) se puede leer en la ayuda pública sin crear cuenta, si está publicada: [NO VERIFICADO].
+
+**Qué te obliga a ti (condición 12).** Todo esto es decisión tuya, nada se hace sin tu visto bueno:
+- Abrir la cuenta de vendedor: te vincula con datos fiscales y aceptas sus condiciones. No es necesario para responder esta hoja.
+- Enviar el correo: comparte tus datos personales con un tercero. Revisa y rellena la plantilla tú; el agente no la envía.
+- Pagar la gestoría: puede tener coste (importe [NO VERIFICADO]); pregunta el precio antes de aceptar nada.
+- Darte de alta como autónomo o firmar documentos: obligaciones fiscales y cuotas; solo tú decides si y cuándo (pregunta pendiente 4 de `estado.md`).
+- No es necesario pagar ni darse de alta para responder A y B; basta con leer, preguntar y anotar.
+
+**Capturas y datos personales (condición 4).** Las capturas del panel pueden mostrar NIF, IBAN, correo, teléfono, dirección o ID de cuenta. Tapa o recorta esos datos ANTES de guardarlas en el repositorio. No pegues contraseñas, códigos ni claves en ningún campo.
+
 ---
 
 ## A) Seller Center de TikTok Shop ES
@@ -13,7 +34,8 @@ Leyenda de prioridad: P1 = bloquea la puerta M1 (09/11); P2 = necesario antes de
 Ruta general en el panel para todas: [NO VERIFICADO] (probar buscador del Seller Center, Centro de ayuda / Academy, y "Reglas" o "Políticas" del vendedor). Anota la ruta real que uses en cada "Dónde lo encontré".
 
 ### A1. Comisión real y rebaja de tienda nueva (P1)
-- Pregunta 1: ¿Qué porcentaje de comisión de plataforma muestra el panel para tu categoría?  [ ] 9 %  [ ] otro: ____  [ ] no aparece
+- Pregunta 1: ¿Qué porcentaje de comisión de plataforma muestra el panel para tu categoría?  [ ] 4 %  [ ] 5 %  [ ] 9 %  [ ] otro: ____  [ ] no aparece. (El "5 %" aparece en `cerebro/estado.md` como "4/5/9 %" y no figura en ningún informe: [NO VERIFICADO]. Una sola lectura lo resuelve.)
+- Pregunta 1b: ¿La comisión se calcula sobre el precio con IVA o sin IVA?  [ ] con IVA  [ ] sin IVA  [ ] no indicado. (`margen_es.py` la aplica sobre la base sin IVA: es una convención del script, no una regla comprobada. Con IVA la comisión sube de 1,85 a 2,24 € en el ejemplo de PVP 24,90 € de la auditoría de calidad.)
 - Pregunta 2: ¿Hay una rebaja o promoción de comisión para tiendas nuevas?  [ ] Sí  [ ] No  [ ] No aparece
 - Pregunta 3 (si Sí): ¿Cuántos días dura y desde qué fecha cuenta (alta, verificación o primer pedido)?  [ ] Días: ____  [ ] Cuenta desde: alta / verificación / primer pedido / otro: ____
 - Pregunta 4: ¿Hay comisión adicional (afiliados, pago, envío, tarifa fija por pedido)?  [ ] Sí: ____  [ ] No  [ ] No aparece
@@ -68,7 +90,7 @@ Ruta general en el panel para todas: [NO VERIFICADO] (probar buscador del Seller
 
 ### A7. Requisitos de alta: NIF, autónomo o sociedad (P1)
 - Pregunta 1: ¿Qué tipos de vendedor admite el alta?  [ ] Particular  [ ] Autónomo  [ ] Sociedad  [ ] Solo empresa
-- Pregunta 2: ¿Qué documentos pide el formulario de alta?  [ ] NIF/DNI  [ ] Alta en Hacienda (modelo 036/037)  [ ] Alta RETA  [ ] CIF sociedad  [ ] Cuenta bancaria IBAN  [ ] Otros: ____
+- Pregunta 2: ¿Qué documentos pide el formulario de alta?  [ ] NIF/DNI  [ ] Alta en Hacienda (modelo 036/037)  [ ] Alta RETA  [ ] CIF sociedad  [ ] Cuenta bancaria IBAN  [ ] Otros: ____  (Los nombres de modelos, RETA e IAE son terminología del asesor/agente: [NO VERIFICADO].)
 - Pregunta 3: ¿Pide número de IVA intracomunitario o epígrafe IAE?  [ ] Sí  [ ] No
 - Pregunta 4: ¿Puedes iniciar el alta sin tener todo y completarla después?  [ ] Sí  [ ] No
 - Pregunta 5: ¿Hay depósito o tarifa de apertura?  [ ] No  [ ] Sí: ____
@@ -134,6 +156,14 @@ Ninguna respuesta del asesor sustituye a la fuente oficial: pide que cite la nor
 - Pregunta 4: ¿Qué cláusulas me protegen si el envío llega tarde o el producto no cumple?  Respuesta: ____
 - Por qué importa: CJ no mostraba razón social ni VAT (ronda 13, red flag 1); esta lista decide qué proveedores se descartan sin más.
 
+### B7. Preventa: cobro anticipado y desistimiento (P1)
+- Pregunta 1: Si vendo en preventa (producto aún no enviado, entrega más tarde), ¿puedo cobrar al cliente en el momento del pedido?  [ ] Sí  [ ] No  [ ] Solo con condiciones: ____
+- Pregunta 2: ¿Qué plazo de entrega puedo prometer y qué ocurre si no lo cumplo (cancelación, reembolso, sanciones)?  Respuesta: ____
+- Pregunta 3: ¿Cómo afecta el derecho de desistimiento de 14 días a una preventa? ¿Desde cuándo cuenta si el producto no se ha entregado?  Respuesta: ____
+- Pregunta 4: ¿Qué información debo mostrar en la ficha (fecha estimada, condiciones de cancelación)?  Lista: ____
+- Pregunta 5: ¿Quién devuelve el dinero si el proveedor falla, y cuál es mi responsabilidad frente al cliente?  Respuesta: ____
+- Por qué importa: la preventa (14 días, tope 30 €) es una de las pruebas GO de `decision-ceo.md`; sin esta respuesta la parte legal está sin cubrir. Todo lo que conteste el asesor sin citar norma: [NO VERIFICADO].
+
 ---
 
 ## Plantilla de correo (NO ENVIADA; revisar, rellenar los corchetes y enviar tú)
@@ -151,7 +181,8 @@ Mis preguntas son:
 4. Quién debe figurar como responsable de seguridad del producto (GPSR) cuando el fabricante está fuera de la UE.
 5. Qué documentos debo pedir a un proveedor (razón social, VAT, factura, declaración CE, datos del fabricante).
 6. Si compensa registrar una marca antes de empezar o esperar a validar ventas.
-7. Honorarios: alta, cuota mensual de gestoría, presentación trimestral de IVA e IRPF.
+7. Preventa: si puedo cobrar por adelantado, qué plazo de entrega puedo prometer y cómo funciona el desistimiento de 14 días cuando el producto aún no se ha entregado.
+8. Honorarios: alta, cuota mensual de gestoría, presentación trimestral de IVA e IRPF.
 
 Si es posible, indicadme la norma o página oficial en la que se basan las respuestas, para poder guardarla como referencia. ¿Podríamos hacer una llamada breve de [15-20] minutos esta semana? Mi disponibilidad: [DÍAS Y HORAS].
 

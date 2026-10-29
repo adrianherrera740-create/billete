@@ -62,6 +62,18 @@ describe('migraciones', () => {
     expect(db.prepare('SELECT project_id FROM notes').all()).toEqual([{ project_id: null }]);
   });
 
+  it('la migración 6 sobre una BD en versión 5 conserva el Brain y crea la tabla de móviles', () => {
+    const db = mem();
+    db.exec('PRAGMA foreign_keys = ON');
+    migrate(db, MIGRATIONS, { upTo: 5 });
+    db.exec(`INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t');
+      INSERT INTO brain_nodes (id, project_id, title, created_at, updated_at) VALUES ('b','p','Nodo','t','t');`);
+    expect(migrate(db)).toEqual([6]);
+    expect(db.prepare('SELECT title FROM brain_nodes').all()).toEqual([{ title: 'Nodo' }]);
+    db.exec("INSERT INTO mobile_devices (id, name, token_hash, created_at) VALUES ('d','Móvil','h','t')");
+    expect(() => db.exec("INSERT INTO mobile_devices (id, name, token_hash, created_at) VALUES ('e','Otro','h','t')")).toThrow(); // hash único
+  });
+
   it('borrar un proyecto borra su pizarra y sus paneles en cascada', () => {
     const db = mem();
     db.exec('PRAGMA foreign_keys = ON');

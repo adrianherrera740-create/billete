@@ -3,7 +3,9 @@ import { CHANNELS, REMOTE_ALLOWED, REMOTE_FORBIDDEN, createApi } from './ipc';
 import type { ChannelName } from './ipc';
 
 // Revisar a mano: añadir un canal a esta lista es decidir que el móvil puede usarlo.
-const REMOTE_ALLOWED_REVIEWED: ChannelName[] = ['project:list', 'board:get', 'task:list', 'note:list'];
+// Lista cerrada del móvil (ADR-002): ver el estado y capturar ideas. Nunca borrar, ni terminales, ni Claude, ni Brain, ni ajustes.
+const REMOTE_ALLOWED_REVIEWED: ChannelName[] = ['overview:summary', 'project:list', 'board:get', 'task:list', 'task:create', 'task:update', 'note:list', 'note:create', 'note:update'];
+const REMOTE_CAPTURE: ChannelName[] = ['task:create', 'task:update', 'note:create', 'note:update'];
 
 describe('clasificación de canales para acceso remoto (seguridad)', () => {
   it('cada canal está clasificado como permitido o prohibido en remoto', () => {
@@ -19,7 +21,9 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review|restore)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review|restore)$/.test(name) && !REMOTE_CAPTURE.includes(name)) {
+        expect(CHANNELS[name].remote, name).toBe('forbidden');
+      }
     }
   });
 });
