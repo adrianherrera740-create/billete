@@ -10,6 +10,7 @@ Fecha: 29/10/2026. Estado: **NO VERIFICADO** (borrador de IA; la persona lo edit
 - Canal: correo, LinkedIn o presentación en persona. No WhatsApp como base.
 - Tratamiento de datos: usar el dato mínimo; si se contacta a una persona física con fines comerciales, hay que valorar el RGPD y la LOPDGDD (consultar al abogado; es cosa de la persona).
 - No guardar nombres ni datos en el repositorio. Los marcadores `[ ]` se rellenan fuera.
+- Al aceptar la persona, enviar el NDA revisado por el abogado y **no hacer la llamada de descubrimiento hasta tenerlo firmado** (regla 4). Si aún no está revisado, solo una llamada previa de 10 minutos sin información confidencial.
 - Un solo recordatorio, a los 7-10 días, y se para.
 
 ## 1. Asistentes ejecutivas / chiefs of staff

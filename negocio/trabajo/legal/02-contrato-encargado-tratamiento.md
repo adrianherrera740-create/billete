@@ -50,7 +50,7 @@ El Prestador pone a disposición del Cliente la información necesaria para demo
 El Prestador lleva el registro de las actividades de tratamiento que realiza por cuenta del Cliente [NV: obligación y contenido, confirmar]. [ABOGADO.]
 
 ## 12. Responsabilidad
-[ABOGADO: relación entre este contrato y la limitación de responsabilidad de las condiciones del servicio (documento 03). La limitación comercial a 12 meses de cuota **no debe asumirse aplicable** a daños frente a interesados ni a sanciones sin que un abogado lo valide; se deja aquí como pregunta abierta, no como pacto.]
+[ABOGADO: relación entre este contrato y la limitación de responsabilidad de las condiciones del servicio (documento 03). La limitación comercial propuesta (12 meses de cuota, cifra sin base verificada) **no debe asumirse aplicable** a daños frente a interesados ni a sanciones sin que un abogado lo valide; se deja aquí como pregunta abierta, no como pacto.]
 
 ## 13. Ley aplicable y jurisdicción
 [ABOGADO.]

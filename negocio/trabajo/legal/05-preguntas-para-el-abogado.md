@@ -31,9 +31,9 @@ Los cuatro borradores; el análisis de riesgos; la arquitectura (Google Workspac
 17. ¿Qué información debe dar el cliente a sus contactos sobre este tratamiento?
 
 ## E. Condiciones del servicio y responsabilidad (documento 03)
-18. Límite de responsabilidad a 12 meses de cuota: ¿es válido en España? ¿Qué supuestos no se pueden limitar (dolo, culpa grave, otros) y cómo redactar la carve-out?
+18. Límite de responsabilidad propuesto (12 meses de cuota, cifra sin base, a decidir contigo): ¿es válido en España? ¿Qué supuestos no se pueden limitar (dolo, culpa grave, otros) y cómo redactar la carve-out?
 19. ¿Aplica el límite frente a interesados y sanciones? ¿Cómo convive con la responsabilidad del encargado y de los subencargados?
-20. ¿Qué cuenta en «cuotas de 12 meses» cuando el contrato lleva menos de un año? ¿Entran pagos puntuales (diagnóstico, piloto, implantación)?
+20. ¿Qué cuenta en «cuotas de N meses (propuesta: 12)» cuando el contrato lleva menos de un año? ¿Entran pagos puntuales (diagnóstico, piloto, implantación)?
 21. Cláusula de no ejecución de pagos y de decisión humana: ¿protege suficientemente frente a un fraude por borrador aprobado sin mirar (cambio de IBAN, etc.)?
 22. Titularidad del cliente de sus cuentas y datos, y propiedad de flujos a medida y de contenido generado por IA.
 23. Si el cliente actúa como persona física, ¿le aplican reglas de consumidores? ¿Cambia algo en el límite de responsabilidad?
