@@ -72,6 +72,7 @@ export class Devices {
   add(name: string): { device: MobileDevice; token: string } {
     const token = randomBytes(32).toString('base64url');
     const id = randomUUID();
+    // eslint-disable-next-line no-control-regex
     const clean = name.replace(/[\u0000-\u001f]/g, '').trim().slice(0, 40) || 'Móvil';
     this.db.prepare('INSERT INTO mobile_devices (id, name, token_hash, created_at) VALUES (?, ?, ?, ?)').run(id, clean, sha256(token), this.now().toISOString());
     return { device: this.get(id), token };
