@@ -5,7 +5,7 @@
 | 2 | Estudio de mercado en España/Cataluña con fuentes leídas y competidores | `investigador-mercado` | — | hecho parcial (todo no verificado) |
 | 3 | Auditoría de riesgos de seguridad y RGPD del MVP | `auditor-seguridad-datos` | — | hecho (18 riesgos; varias fuentes no leídas) |
 | 4 | Especificación del MVP y demo con datos ficticios (briefing 7:00, triaje, dossier) | `arquitecto-agentes` | 3 | por hacer |
-| 5 | Borradores NDA, encargo art. 28 y página de protección de datos | `redactor-legal-confianza` | 3 | por hacer |
+| 5 | Borradores NDA, encargo art. 28 y página de protección de datos | `redactor-legal-confianza` | 3 | hecho (5 borradores, falta abogado) |
 | 6 | Guion de conversaciones, propuesta y seguimiento de 20 contactos | `estratega-ventas-confianza` | 1 | hecho (5 ficheros, no verificado) |
 | 7 | Abogado de protección de datos revisa borradores | **la persona** | 5 | por hacer |
 | 8 | Las 20 conversaciones (asistentes, family offices, banca privada, abogados, fundadores) | **la persona** | 6 | por hacer |
