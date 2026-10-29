@@ -1,8 +1,32 @@
 {
-  "app": {
-    "name": "La Nave",
-    "tagline": "Tu escritorio de proyectos con IA",
-    "phase": "Fase {{phase}}: andamiaje listo",
-    "platform": "Sistema: {{platform}}"
+  "app": { "name": "La Nave" },
+  "common": { "cancel": "Cancelar", "close": "Cerrar" },
+  "project": {
+    "new": "Nuevo proyecto",
+    "list": "Proyectos",
+    "name": "Nombre",
+    "icon": "Icono",
+    "color": "Color",
+    "folder": "Carpeta del proyecto (opcional)",
+    "folderHint": "C:\\Proyectos\\mi-proyecto",
+    "create": "Crear proyecto",
+    "archive": "Archivar proyecto",
+    "restore": "Restaurar proyecto",
+    "archivedTag": "archivado",
+    "showArchived": "Ver archivados"
+  },
+  "board": {
+    "pick": "Crea o elige un proyecto para abrir su pizarra.",
+    "empty": "La pizarra está vacía. Añade una nota para empezar.",
+    "addNote": "Añadir nota",
+    "overview": "Visión general",
+    "exitOverview": "Salir de la visión general"
+  },
+  "panel": {
+    "delete": "Borrar panel",
+    "deleteTitle": "¿Borrar este panel?",
+    "deleteBody": "Se borrará «{{title}}» y su contenido. No se puede deshacer.",
+    "stickyPlaceholder": "Escribe aquí…",
+    "soon": "El panel de tipo «{{kind}}» llega en una fase posterior."
   }
 }

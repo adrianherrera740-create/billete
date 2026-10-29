@@ -26,3 +26,10 @@
 - Copias con `VACUUM INTO` (consistentes con el WAL). Al arrancar se crea una copia (`arranque`) y se conservan las 10 últimas.
 - Arranque seguro: restauración pedida con marcador (`restore-request.json`) aplicada antes de abrir la BD; si la BD está corrupta se aparta como `.corrupt-*` y se recupera la última copia sana, o se crea una nueva.
 - `NAVE_USER_DATA` sustituye la carpeta de datos (lo usan los e2e para no tocar datos reales).
+
+## Notas de F2 (29/10/2026)
+- Un único registro IPC (`apps/desktop/src/main/ipc.ts`): valida la entrada con el parser del canal, traduce errores a `Result` en español sin filtrar rutas ni trazas, y solo atiende peticiones de la propia página (`senderFrame`).
+- Cada canal declara `remote: 'allowed' | 'forbidden'` en `@nave/shared`; un test fija la lista permitida (`project:list`, `board:get`) y exige que todo lo que modifica datos sea `forbidden`.
+- Los parsers rechazan claves desconocidas y usan `Object.hasOwn` (un test de seguridad cazó que `key in shape` dejaba pasar `__proto__`).
+- Pizarra: lógica pura en `renderer/src/board/geometry.ts`; zoom entre 10 % y 100 %; sin scroll nativo (rueda = mover, Ctrl + rueda = zoom); visión general de solo lectura. Activity se escribe suscrita al bus, siempre redactada.
+- Solo se pueden crear notas (`kind='sticky'`) desde la interfaz; el resto de tipos de panel llegan en sus fases.

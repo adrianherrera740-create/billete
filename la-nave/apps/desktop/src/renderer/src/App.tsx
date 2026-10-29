@@ -1,13 +1,33 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BoardView } from './components/BoardView';
+import { GlassButton } from './components/GlassButton';
+import { Sidebar } from './components/Sidebar';
+import { useNave } from './store';
 
-export function App(): React.JSX.Element {
+export function App() {
   const { t } = useTranslation();
+  const load = useNave((s) => s.load);
+  const error = useNave((s) => s.error);
+  const clearError = useNave((s) => s.clearError);
+  const ready = useNave((s) => s.ready);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
   return (
-    <main className="shell">
-      <h1 data-testid="app-name">{t('app.name')}</h1>
-      <p>{t('app.tagline')}</p>
-      <p data-testid="phase">{t('app.phase', { phase: 'F0' })}</p>
-      <p data-testid="platform">{t('app.platform', { platform: window.nave.platform })}</p>
-    </main>
+    <div className="app" data-testid="app" data-ready={ready}>
+      <Sidebar />
+      <BoardView />
+      {error && (
+        <div className="toast glass" role="alert" data-testid="error-toast">
+          <span>{error}</span>
+          <GlassButton variant="ghost" onClick={clearError}>
+            {t('common.close')}
+          </GlassButton>
+        </div>
+      )}
+    </div>
   );
 }
