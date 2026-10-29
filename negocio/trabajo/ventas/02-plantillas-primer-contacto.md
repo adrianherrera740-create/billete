@@ -27,7 +27,7 @@ Fecha: 29/10/2026. Estado: **NO VERIFICADO** (borrador de IA; la persona lo edit
 
 > Asunto: Una pregunta sobre cómo gestionáis la operativa diaria
 >
-> Buenos días [nombre]: [contexto de presentación]. Trabajo en cómo apoyar con IA la operativa de equipos pequeños que gestionan un patrimonio (resúmenes, agenda, correspondencia), con datos en la UE y decisión siempre humana. Antes de proponer nada quiero entender qué funciona y qué no hoy. ¿Podríamos hablar 20 minutos, bajo confidencialidad? Y si no encaja, le agradeceré igualmente cualquier orientación sobre con quién conviene hablar.
+> Buenos días [nombre]: [contexto de presentación]. Trabajo en cómo apoyar con IA la operativa de equipos pequeños que gestionan un patrimonio (resúmenes, agenda, correspondencia), con decisión siempre humana (el objetivo es alojar los datos en la UE; se confirmará por escrito). Antes de proponer nada quiero entender qué funciona y qué no hoy. ¿Podríamos hablar 20 minutos, bajo confidencialidad? Y si no encaja, le agradeceré igualmente cualquier orientación sobre con quién conviene hablar.
 > [firma]
 
 ## 3. Banca privada
@@ -45,7 +45,7 @@ Fecha: 29/10/2026. Estado: **NO VERIFICADO** (borrador de IA; la persona lo edit
 
 > Asunto: Una consulta sobre tecnología y confidencialidad con clientes de patrimonio
 >
-> Buenos días [nombre]: [contexto]. Estoy diseñando un servicio con IA para apoyo operativo a personas y familias con patrimonio, con aprobación humana en toda acción y tratamiento de datos en la UE. Me interesa mucho su perspectiva sobre qué exigen sus clientes en confidencialidad y dónde ven los mayores riesgos. ¿Tendría 20 minutos? Si prefiere un formato de consulta con honorarios, también lo planteo así.
+> Buenos días [nombre]: [contexto]. Estoy diseñando un servicio con IA para apoyo operativo a personas y familias con patrimonio, con aprobación humana en toda acción y, como objetivo, alojamiento en la UE que se confirmará por escrito. Me interesa mucho su perspectiva sobre qué exigen sus clientes en confidencialidad y dónde ven los mayores riesgos. ¿Tendría 20 minutos? Si prefiere un formato de consulta con honorarios, también lo planteo así.
 > [firma]
 
 ## 5. Fundadores con exit

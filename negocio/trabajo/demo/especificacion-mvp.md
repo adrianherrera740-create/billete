@@ -329,7 +329,7 @@ Resultado de la última ejecución (29/10/2026): ver sección 8.
 
 ## 7. Servicios de pago necesarios
 
-Regla: **nada de esta lista se contrata ni se instala sin que la persona lo decida** (condición 12). Ningún precio está verificado: donde pone «NO VERIFICADO» no hay cifra porque no hay fuente leída (condición 6); hay que pedir presupuesto o leer la página oficial del proveedor. La única cifra verificada del proyecto relacionada (Fyxer, 30 $/usuario/mes en el plan inicial según el centro de ayuda del propio Fyxer, resumen de buscador) es de un producto masivo y solo sirve de referencia de mercado, no de coste de este proyecto.
+Regla: **nada de esta lista se contrata ni se instala sin que la persona lo decida** (condición 12). Ningún precio está verificado: donde pone «NO VERIFICADO» no hay cifra porque no hay fuente leída (condición 6); hay que pedir presupuesto o leer la página oficial del proveedor. La única cifra con fuente secundaria relacionada (Fyxer, 30 $/usuario/mes en el plan inicial, vista en un resumen de buscador; NO VERIFICADO) es de un producto masivo y solo sirve de referencia de mercado, no de coste de este proyecto.
 
 ### 7.1 Lista y estado
 

@@ -6,7 +6,7 @@ Fecha: 29/10/2026. Estado: **NO VERIFICADO** (borrador generado por IA; la perso
 Esta llamada no vende nada. Se pregunta, se escucha y se toma nota. Si al final la otra parte pide algo, se propone un segundo paso pequeño; no se presenta precio en esta llamada. Regla de oro: hablar menos del 30 % del tiempo.
 
 ## Antes de la llamada
-- NDA o compromiso de confidencialidad acordado por escrito si la otra parte lo pide (regla 4 del negocio). Lo jurídico lo revisa un abogado (solo la persona).
+- **La llamada de descubrimiento no se hace sin NDA firmado** (regla 4 del negocio). El NDA lo revisa un abogado antes de usarse (solo la persona). Mientras no esté revisado, solo cabe una llamada previa de 10 minutos para presentarse y fijar la fecha, **sin información confidencial** de ninguna de las partes, sin casos ni cifras, y diciéndolo al empezar.
 - Pedir permiso para tomar notas. Las notas van **fuera del repositorio** y sin nombres propios de terceros.
 - No grabar sin consentimiento expreso.
 - Canal: videollamada, teléfono o reunión en persona. No WhatsApp como base (estado en la UE incierto y litigioso, verificación fila 6).
@@ -30,7 +30,7 @@ Esta llamada no vende nada. Se pregunta, se escucha y se toma nota. Si al final 
 ### 4. Herramientas, IA y confianza (5 min)
 7. ¿Habéis probado alguna herramienta de IA (correo, agenda, resúmenes)? ¿Qué pasó? ¿Qué os frenó?
 8. **Pregunta del informe 1:** «¿Qué te frena, en la práctica, de dejar que una herramienta de IA toque el correo o la agenda de un patrimonio: la confidencialidad, el riesgo de error, el control, o que nadie lo ha pedido?» (hipótesis H1: la privacidad es la barrera).
-9. ¿Qué tendría que cumplir algo así para que lo aceptaras? (datos en la UE, que nada se envíe solo, que lo apagues tú, registro de lo hecho...). No sugerirlo antes de que respondan; contrastar después.
+9. ¿Qué tendría que cumplir algo así para que lo aceptaras? (alojamiento en la UE, que nada se envíe solo, que lo apagues tú, registro de lo hecho...). No sugerirlo antes de que respondan; contrastar después.
 10. ¿Quién tiene que decir sí? ¿Hay alguien más a quien consultarías (el titular, un asesor, un abogado)?
 
 ### 5. Cómo se compra y a quién se llega (3 min)
@@ -45,7 +45,7 @@ Esta llamada no vende nada. Se pregunta, se escucha y se toma nota. Si al final 
 ## Reglas durante la llamada
 - Preguntas abiertas («cómo», «qué», «cuándo fue la última vez»); evitar «¿te gustaría...?» que invita a un sí educado.
 - Pedir ejemplos concretos y pasados, no intenciones futuras. Un «sí me interesaría» sin ejemplo vale poco.
-- Si preguntan «y tú qué haces», responder en 2 frases: «Un servicio privado de operaciones con IA: resúmenes, triaje y borradores; el humano decide y envía; datos en la UE.» Y volver a preguntar.
+- Si preguntan «y tú qué haces», responder en 2 frases: «Un servicio privado de operaciones con IA: resúmenes, triaje y borradores; el humano decide y envía; el objetivo es alojar los datos en la UE y se confirmará por escrito.» Y volver a preguntar.
 - Si se ofrecen a pagar o preguntan precio: «Aún estoy calibrando; lo que me dices me ayuda a ajustarlo. Qué rango te parecería razonable para algo así?» No dar cifra.
 - No prometer resultados, ahorros ni plazos. No mencionar clientes (no los hay).
 - Nunca pedir ni aceptar accesos, contraseñas o documentos reales en la llamada.

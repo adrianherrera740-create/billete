@@ -12,8 +12,8 @@ Fecha: 29/10/2026 (jueves). Estado: **NO VERIFICADO**. Las fechas del calendario
 | Sem | Fechas | Foco | Resultado esperado |
 |---|---|---|---|
 | 1 | 02/11 - 08/11 | Preparación: leer y editar guion, plantillas y hoja; decidir criterios de éxito; elegir canal y soporte privado de notas; empezar demo con datos ficticios | Material aprobado por la persona; demo mínima en marcha |
-| 2 | 09/11 - 15/11 | Demo ficticia lista; contactar a personas de confianza (círculo propio) para pruebas de guion; solicitar revisión jurídica (NDA y encargo) | Guion probado en 2-3 ensayos; abogado contratado o en proceso |
-| 3 | 16/11 - 22/11 | Kit legal y de confianza (resumen de privacidad, esquema de arquitectura en 1 página); primeros 5 contactos con plantillas | 3-5 conversaciones agendadas |
+| 2 | 09/11 - 15/11 | Demo ficticia lista; contactar a personas de confianza (círculo propio) para pruebas de guion; solicitar revisión jurídica (NDA y encargo) | Guion probado en 2-3 ensayos; abogado contratado y NDA revisado (puerta: sin NDA revisado no hay llamada de descubrimiento) |
+| 3 | 16/11 - 22/11 | Puerta: NDA revisado por el abogado antes de la primera llamada de descubrimiento; si no está, solo llamadas previas de 10 min sin información confidencial (pueden agendar). Kit legal y de confianza (resumen de privacidad, esquema de arquitectura en 1 página); primeros 5 contactos con plantillas | 3-5 conversaciones agendadas |
 | 4 | 23/11 - 29/11 | Conversaciones 1-5; revisión tras la 5ª | Hoja rellena; primeros aprendizajes; ajuste de guion |
 | 5 | 30/11 - 06/12 | Conversaciones 6-10; primeros rangos de precio | Control «parar si 10 sin dolor concreto» |
 | 6 | 07/12 - 13/12 | Conversaciones 11-14; primeras propuestas de diagnóstico a quien las pida | Primer diagnóstico propuesto |
