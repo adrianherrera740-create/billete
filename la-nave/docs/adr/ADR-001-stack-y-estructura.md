@@ -20,3 +20,9 @@
 ## Alternativas descartadas
 - Tauri: no hay terminal PTY nativo equivalente a `node-pty` en el stack acordado.
 - `better-sqlite3`: añade un módulo nativo más; `node:sqlite` cubre FTS5 y evita la compilación.
+
+## Notas de F1 (29/10/2026)
+- Migraciones: checksum SHA-256 por migración; si una ya aplicada cambia, o si la BD es más nueva que la app, el arranque se detiene con un mensaje que explica qué hacer.
+- Copias con `VACUUM INTO` (consistentes con el WAL). Al arrancar se crea una copia (`arranque`) y se conservan las 10 últimas.
+- Arranque seguro: restauración pedida con marcador (`restore-request.json`) aplicada antes de abrir la BD; si la BD está corrupta se aparta como `.corrupt-*` y se recupera la última copia sana, o se crea una nueva.
+- `NAVE_USER_DATA` sustituye la carpeta de datos (lo usan los e2e para no tocar datos reales).

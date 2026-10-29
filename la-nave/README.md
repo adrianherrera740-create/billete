@@ -2,7 +2,7 @@
 
 Tu escritorio de proyectos con IA para Windows 11: proyectos, terminales reales, Claude Code, un Brain con búsqueda, tareas y notas.
 
-Estado: **F0 (andamiaje) completada**. Plan completo por fases en `docs/adr/` y en el prompt maestro de la persona (`../cerebro/la-nave-prompt-maestro.md`).
+Estado: **F0 (andamiaje) y F1 (núcleo y persistencia) completadas**. Plan completo por fases en `docs/adr/` y en el prompt maestro de la persona (`../cerebro/la-nave-prompt-maestro.md`).
 
 ## Requisitos
 - Node 22 o superior y Git.
@@ -22,8 +22,8 @@ Estado: **F0 (andamiaje) completada**. Plan completo por fases en `docs/adr/` y 
 ```
 apps/desktop      Electron + React + TypeScript (main, preload, renderer, e2e)
 packages/shared   contratos: canales IPC, parsers, tipos
-packages/core     EventBus, logging, redactSecrets (F1)
-packages/db       migraciones, backups, FTS (F1)
+packages/core     EventBus, logging con rotación, redactSecrets
+packages/db       migraciones aditivas con checksum, backups, recuperación y restauración
 docs/adr          decisiones importantes
 ```
 

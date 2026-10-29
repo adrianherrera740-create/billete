@@ -1,6 +1,8 @@
 import { join } from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
 import { APP_NAME } from '@nave/shared';
+import { startCore } from './nave';
+import type { NaveCore } from './nave';
 
 function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
@@ -33,11 +35,20 @@ function createWindow(): BrowserWindow {
   return win;
 }
 
+let core: NaveCore | undefined;
+
 void app.whenReady().then(() => {
+  // NAVE_USER_DATA permite aislar los datos (tests e2e) sin tocar los reales.
+  core = startCore(process.env['NAVE_USER_DATA'] ?? app.getPath('userData'), app.getVersion());
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+});
+
+app.on('before-quit', () => {
+  core?.close();
+  core = undefined;
 });
 
 app.on('window-all-closed', () => {
