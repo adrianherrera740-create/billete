@@ -2,10 +2,13 @@
 Última actualización: 2026-10-29
 
 ## Dónde estamos
-- Dropshipping de TikTok Shop CERRADO por decisión de la persona (29/10/2026). Todo su contexto se ha borrado; queda en la etiqueta de git `archivo-dropshipping`.
-- La Nave (`la-nave/`): construida (F0 a F8 y acceso desde el móvil), 232 tests y 18 e2e en Linux. Sin verificar en Windows real, con Tailscale real ni en un móvil real. La persona no tiene PC por ahora.
-- Siguiente negocio: sin definir.
+- Negocio elegido por la persona (29/10/2026): servicio privado «chief of staff digital» con agentes de IA para patrimonios altos en Cataluña/España. Resumen, MVP y reglas en `negocio/resumen.md`. Todo viene de un informe generado por IA: NO VERIFICADO.
+- Equipo: 8 agentes genéricos + 6 del negocio (`investigador-mercado`, `verificador-fuentes`, `arquitecto-agentes`, `auditor-seguridad-datos`, `redactor-legal-confianza`, `estratega-ventas-confianza`). Tareas en `backlog.md`.
+- Dropshipping de TikTok Shop cerrado; recuperable en la rama `archivo/dropshipping`.
+- La Nave (`la-nave/`): construida, sin verificar en Windows real; la persona no tiene PC por ahora.
 
-## Pendiente de la persona
-- Decidir qué negocio o herramienta sigue.
-- Probar La Nave en un ordenador cuando tenga uno (`la-nave/README.md`).
+## Próximo paso
+Lanzar en paralelo las tareas 1, 2 y 3 del backlog (sin gasto, sin datos personales). Después 4, 5 y 6.
+
+## Solo la persona
+Abogado de protección de datos antes de firmar nada, las 20 conversaciones, cuentas/servicios de pago (n8n, LLM, hosting) y decisión sobre WhatsApp.

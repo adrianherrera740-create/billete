@@ -10,6 +10,7 @@ Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual 
 | `estado.md` | Dónde estamos, qué sigue y qué decide la persona. Máx. 60 líneas | Siempre, al empezar | Al terminar cada sesión o paso |
 | `aprendizajes.md` | Reglas que ya nos han costado caras. No repetir errores | Siempre, al empezar | Cuando se aprende algo nuevo |
 | `decisiones.md` | Registro fechado de decisiones y por qué se tomaron | Cuando haya dudas sobre el pasado | Cada vez que se decide algo |
+| `negocio/resumen.md` | El negocio actual, sus hipótesis y reglas | Siempre | Cuando cambie el negocio |
 | `backlog.md` | Tareas pendientes | Al planificar | Cada semana |
 | `usuario.md` | Cómo le gusta trabajar a la persona y qué ha rechazado | Siempre, al empezar | Cuando exprese una preferencia |
 | `diario/AAAA-MM-DD.md` | Qué se hizo cada día, en orden | Solo si hace falta el detalle | Al final de cada sesión |
