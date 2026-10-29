@@ -524,3 +524,43 @@ test('la ventana recuerda su tamaño y posición', async () => {
   expect(bounds).toMatchObject({ width: 1111, height: 703 });
   await app.close();
 });
+
+test('copias de seguridad: crear, restaurar al reiniciar y poder deshacer', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  let app = await launch(dataDir);
+  let page = await ready(app);
+  await createProject(page, 'Antes de la copia');
+  await page.getByTestId('settings-btn').click();
+  await expect(page.getByTestId('backup-item')).toHaveCount(1); // la copia automática «Al arrancar»
+  await page.getByTestId('backup-create').click();
+  await expect(page.getByTestId('backup-item')).toHaveCount(2);
+  await expect(page.getByTestId('backup-item').filter({ hasText: 'Manual' })).toHaveCount(1);
+  await page.keyboard.press('Escape');
+
+  await createProject(page, 'Después de la copia');
+  await expect(page.getByTestId('project-item')).toHaveCount(2);
+
+  // Restaurar la copia manual: pide confirmación y deja la restauración para el próximo arranque.
+  await page.getByTestId('settings-btn').click();
+  await page.getByTestId('backup-item').filter({ hasText: 'Manual' }).getByTestId('backup-restore').click();
+  await page.getByTestId('backup-confirm').click();
+  await expect(page.getByTestId('info-toast')).toContainText('Restauración preparada');
+  await expect(page.getByTestId('backup-item').filter({ hasText: 'Antes de restaurar' })).toHaveCount(1);
+  await app.close();
+
+  app = await launch(dataDir);
+  page = await ready(app);
+  await expect(page.getByTestId('project-item')).toHaveCount(1);
+  await expect(page.getByTestId('project-item')).toContainText('Antes de la copia');
+
+  // Deshacer: la copia previa a restaurar contiene los dos proyectos.
+  await page.getByTestId('settings-btn').click();
+  await page.getByTestId('backup-item').filter({ hasText: 'Antes de restaurar' }).getByTestId('backup-restore').click();
+  await page.getByTestId('backup-confirm').click();
+  await expect(page.getByTestId('info-toast')).toBeVisible();
+  await app.close();
+  app = await launch(dataDir);
+  page = await ready(app);
+  await expect(page.getByTestId('project-item')).toHaveCount(2);
+  await app.close();
+});

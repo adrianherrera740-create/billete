@@ -9,12 +9,13 @@ import {
   object,
   objectWith,
   oneOf,
+  pattern,
   str
 } from './parse';
 import type { Parser } from './parse';
 import { parseSettingsPatch } from './settings';
 import { BRAIN_KINDS, PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, TASK_STATUSES, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { ProjectSummary, SearchResult, Settings, BrainContext, BrainDetail, BrainHit, BrainNode, Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
+import type { BackupInfo, ProjectSummary, SearchResult, Settings, BrainContext, BrainDetail, BrainHit, BrainNode, Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -139,7 +140,11 @@ export const CHANNELS = {
   'settings:update': { remote: 'forbidden', input: parseSettingsPatch },
   'overview:summary': { remote: 'forbidden', input: nothing },
   // Búsqueda global (Ctrl+K): la hace la persona de forma explícita y cruza proyectos; el contexto para la IA nunca.
-  'search:global': { remote: 'forbidden', input: object({ query: str({ min: 1, max: 200, trim: true }) }) }
+  'search:global': { remote: 'forbidden', input: object({ query: str({ min: 1, max: 200, trim: true }) }) },
+  // Copias de seguridad: se identifican por NOMBRE (nunca por ruta); main solo busca dentro de su carpeta de copias.
+  'backup:list': { remote: 'forbidden', input: nothing },
+  'backup:create': { remote: 'forbidden', input: nothing },
+  'backup:restore': { remote: 'forbidden', input: object({ name: pattern(/^nave-\d{8}-\d{6}-[a-z0-9-]{1,40}\.db$/i, 'no es el nombre de una copia de seguridad') }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
 export type ChannelName = keyof typeof CHANNELS;
@@ -184,6 +189,9 @@ export interface ChannelOutputs {
   'settings:update': Settings;
   'overview:summary': ProjectSummary[];
   'search:global': SearchResult[];
+  'backup:list': BackupInfo[];
+  'backup:create': BackupInfo;
+  'backup:restore': null;
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';

@@ -123,3 +123,11 @@ export const absolutePath: Parser<string> = (value, path = 'ruta') => {
   if (/[\x00-\x1f]/.test(text)) return fail(path, 'contiene caracteres no válidos');
   return text;
 };
+
+/** Texto que debe cumplir un patrón (p. ej. el nombre de una copia de seguridad: nunca una ruta). */
+export function pattern(regex: RegExp, message: string, max = 200): Parser<string> {
+  return (value, path = 'valor') => {
+    const text = str({ min: 1, max })(value, path);
+    return regex.test(text) ? text : fail(path, message);
+  };
+}

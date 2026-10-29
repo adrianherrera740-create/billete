@@ -2,7 +2,7 @@ import { existsSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { createBackup, listBackups, openDatabase, openWithRecovery, requestRestore, verifyBackup } from './database';
+import { backupLabel, createBackup, listBackups, openDatabase, openWithRecovery, requestRestore, verifyBackup } from './database';
 import { migrate } from './migrations';
 
 const tmp = (): string => mkdtempSync(join(tmpdir(), 'nave-db-'));
@@ -30,6 +30,25 @@ describe('copias de seguridad', () => {
     for (let i = 0; i < 5; i++) createBackup(db, join(dir, 'backups'), { keep: 3, now: () => new Date((t += 60_000)) });
     expect(listBackups(join(dir, 'backups'))).toHaveLength(3);
     db.close();
+  });
+
+  it('la poda es por etiqueta: muchas copias de arranque no borran las manuales', () => {
+    const dir = tmp();
+    const db = seeded(dir);
+    let t = Date.UTC(2026, 9, 29, 10, 0, 0);
+    const now = () => new Date((t += 60_000));
+    const manual = createBackup(db, join(dir, 'backups'), { keep: 3, label: 'manual', now });
+    for (let i = 0; i < 8; i++) createBackup(db, join(dir, 'backups'), { keep: 3, label: 'arranque', now });
+    const names = listBackups(join(dir, 'backups'));
+    expect(names).toContain(manual);
+    expect(names.filter((n) => backupLabel(n) === 'arranque')).toHaveLength(3);
+    db.close();
+  });
+
+  it('backupLabel entiende etiquetas con guiones y el sufijo numérico', () => {
+    expect(backupLabel('/x/nave-20261029-100000-antes-de-restaurar.db')).toBe('antes-de-restaurar');
+    expect(backupLabel('nave-20261029-100000-manual-2.db')).toBe('manual');
+    expect(backupLabel('otra-cosa.db')).toBeNull();
   });
 
   it('rechaza un archivo que no es una copia sana', () => {

@@ -182,3 +182,10 @@ export interface SearchResult {
   title: string;
   snippet: string;
 }
+
+export interface BackupInfo {
+  name: string;
+  label: string;
+  createdAt: string;
+  sizeBytes: number;
+}

@@ -38,8 +38,16 @@ export function createBackup(
   let target = join(backupsDir, `nave-${stamp(now())}-${label}.db`);
   for (let n = 1; existsSync(target); n++) target = join(backupsDir, `nave-${stamp(now())}-${label}-${n}.db`);
   db.prepare('VACUUM INTO ?').run(target);
-  for (const old of listBackups(backupsDir).slice(keep)) rmSync(old, { force: true });
+  // La poda es por etiqueta: las copias automáticas del arranque no expulsan a las manuales ni a las de seguridad.
+  const same = listBackups(backupsDir).filter((file) => backupLabel(file) === label);
+  for (const old of same.slice(keep)) rmSync(old, { force: true });
   return target;
+}
+
+/** Etiqueta de una copia a partir de su nombre `nave-AAAAMMDD-HHMMSS-<etiqueta>[-n].db`. */
+export function backupLabel(file: string): string | null {
+  const match = /^nave-\d{8}-\d{6}-(.+?)(?:-\d+)?\.db$/.exec(basename(file));
+  return match?.[1] ?? null;
 }
 
 /** Copias de seguridad, de la más nueva a la más antigua. */

@@ -4,6 +4,7 @@ import { EventBus, createFileSink, createLogger, redactDeep } from '@nave/core';
 import type { LogChannel, Logger } from '@nave/core';
 import { createBackup, migrate, openWithRecovery } from '@nave/db';
 import type { EventMap, EventName } from '@nave/shared';
+import { Backups } from './backups';
 import { Brain } from './brain';
 import { Projects } from './projects';
 import { SettingsStore } from './settings';
@@ -19,6 +20,7 @@ export interface NaveCore {
   settings: SettingsStore;
   overview: Overview;
   search: GlobalSearch;
+  backups: Backups;
   log: Record<LogChannel, Logger>;
   paths: { dataDir: string; db: string; backups: string; logs: string };
   close(): void;
@@ -27,7 +29,7 @@ export interface NaveCore {
 const CHANNELS: LogChannel[] = ['app', 'terminals', 'security', 'activity'];
 
 /** Nave Core: carpeta de datos, logs separados, BD con migraciones, copia al arrancar y bus de eventos. */
-export function startCore(dataDir: string, version: string): NaveCore {
+export function startCore(dataDir: string, version: string, onRestoreRequested: () => void = () => undefined): NaveCore {
   const paths = { dataDir, db: join(dataDir, 'nave.db'), backups: join(dataDir, 'backups'), logs: join(dataDir, 'logs') };
   const log = Object.fromEntries(
     CHANNELS.map((c) => [c, createLogger(c, createFileSink(join(paths.logs, `${c}.log`)))])
@@ -51,6 +53,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
   const settings = new SettingsStore(db, bus);
   const overview = new Overview(db);
   const search = new GlobalSearch(db, brain);
+  const backups = new Backups(db, paths.db, paths.backups, bus, onRestoreRequested);
   brain.rebuildLinks();
   recordActivity(db, bus);
 
@@ -68,6 +71,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
     settings,
     overview,
     search,
+    backups,
     log,
     paths,
     close() {

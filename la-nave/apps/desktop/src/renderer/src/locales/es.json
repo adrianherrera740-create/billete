@@ -166,5 +166,16 @@
     "review_other": "{{count}} pendientes de revisar en el Brain",
     "noClaude": "Sin paneles de Claude",
     "empty": "Todavía no hay proyectos."
+  },
+  "backup": {
+    "title": "Copias de seguridad",
+    "create": "Crear copia ahora",
+    "created": "Copia de seguridad creada.",
+    "empty": "Todavía no hay copias.",
+    "restore": "Restaurar",
+    "restoring": "Restauración preparada. La Nave se reinicia para aplicarla; si no lo hace, ciérrala y ábrela de nuevo.",
+    "confirmTitle": "¿Restaurar esta copia?",
+    "confirmBody": "Se volverá al estado del {{date}}. Antes se guarda una copia del estado actual por si quieres deshacerlo, y La Nave se reiniciará.",
+    "labels": { "arranque": "Al arrancar", "manual": "Manual", "antes-de-restaurar": "Antes de restaurar", "auto": "Automática" }
   }
 }

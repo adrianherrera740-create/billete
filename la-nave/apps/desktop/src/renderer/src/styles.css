@@ -169,4 +169,7 @@ pre.context { max-height: 320px; overflow: auto; padding: 10px; border-radius: 1
 .palette-title { font-weight: 600; }
 .palette-hint { font-size: 12px; margin-top: 10px; }
 
+.backup-list { max-height: 180px; overflow: auto; }
+.backups { display: flex; flex-direction: column; gap: 8px; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

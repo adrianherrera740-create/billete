@@ -24,7 +24,8 @@ const services = (projects: Projects, terminals: TerminalManager, tasks: Tasks):
   brain: {} as Brain,
   settings: {} as Services['settings'],
   overview: {} as Services['overview'],
-  search: {} as Services['search']
+  search: {} as Services['search'],
+  backups: {} as Services['backups']
 });
 
 // electron no se carga en vitest: el módulo importa ipcMain, así que lo simulamos.

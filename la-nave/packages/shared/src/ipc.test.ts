@@ -19,7 +19,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review|restore)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 });
@@ -135,6 +135,17 @@ describe('ajustes (parseSettingsPatch)', () => {
     expect(p({ query: '  hola ' })).toEqual({ query: 'hola' });
     expect(() => p({ query: '   ' })).toThrow();
     expect(() => p({ query: 'x'.repeat(201) })).toThrow();
+  });
+});
+
+describe('copias de seguridad (seguridad)', () => {
+  it('restaurar solo acepta el NOMBRE de una copia: ninguna ruta ni recorrido de carpetas', () => {
+    const p = CHANNELS['backup:restore'].input;
+    expect(p({ name: 'nave-20261029-100000-manual.db' })).toEqual({ name: 'nave-20261029-100000-manual.db' });
+    expect(p({ name: 'nave-20261029-100000-antes-de-restaurar.db' }).name).toContain('antes-de-restaurar');
+    for (const bad of ['../nave-20261029-100000-manual.db', 'C:\\Windows\\system.db', '/etc/passwd', 'nave-20261029-100000-manual.db/../x', 'nave.db', 'nave-1-2-x.db', 'otra.db', '']) {
+      expect(() => p({ name: bad }), bad).toThrow();
+    }
   });
 });
 

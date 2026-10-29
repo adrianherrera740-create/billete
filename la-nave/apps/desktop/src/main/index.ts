@@ -73,7 +73,12 @@ function isOwnPage(event: unknown): boolean {
 
 void app.whenReady().then(async () => {
   // NAVE_USER_DATA permite aislar los datos (tests e2e) sin tocar los reales.
-  core = startCore(process.env['NAVE_USER_DATA'] ?? app.getPath('userData'), app.getVersion());
+  core = startCore(process.env['NAVE_USER_DATA'] ?? app.getPath('userData'), app.getVersion(), () => {
+    // La restauración se aplica al arrancar, antes de abrir la BD: hay que reiniciar (los e2e lo hacen ellos).
+    if (process.env['NAVE_NO_RELAUNCH'] === '1') return;
+    app.relaunch();
+    app.quit();
+  });
   const current = core;
   // En producción no hay barra de menús (evita atajos accidentales como recargar); en desarrollo se mantiene.
   if (!process.env['ELECTRON_RENDERER_URL']) Menu.setApplicationMenu(null);
@@ -140,7 +145,7 @@ void app.whenReady().then(async () => {
   });
   current.bus.on('claude.session_state_changed', ({ panelId, state }) => notifier.onState(panelId, state as ClaudeState));
   registerIpc(
-    handlersFor({ projects: current.projects, terminals: manager, claude: claudeService, tasks: current.tasks, brain: current.brain, settings: current.settings, overview: current.overview, search: current.search }),
+    handlersFor({ projects: current.projects, terminals: manager, claude: claudeService, tasks: current.tasks, brain: current.brain, settings: current.settings, overview: current.overview, search: current.search, backups: current.backups }),
     (error) => core?.log.app.error('Fallo interno en un canal IPC', error),
     undefined,
     isOwnPage

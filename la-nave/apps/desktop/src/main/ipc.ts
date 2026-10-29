@@ -3,6 +3,7 @@ import { CHANNELS, ValidationError } from '@nave/shared';
 import type { ChannelInput, ChannelName, ChannelOutputs, Result } from '@nave/shared';
 import { NaveError } from './projects';
 import type { Projects } from './projects';
+import type { Backups } from './backups';
 import type { Brain } from './brain';
 import type { ClaudeService } from './claude';
 import type { Overview, GlobalSearch } from './shell';
@@ -39,9 +40,10 @@ export interface Services {
   settings: SettingsStore;
   overview: Overview;
   search: GlobalSearch;
+  backups: Backups;
 }
 
-export function handlersFor({ projects, terminals, claude, tasks, brain, settings, overview, search }: Services): Handlers {
+export function handlersFor({ projects, terminals, claude, tasks, brain, settings, overview, search, backups }: Services): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -83,7 +85,10 @@ export function handlersFor({ projects, terminals, claude, tasks, brain, setting
     'settings:get': () => settings.get(),
     'settings:update': (i) => settings.update(i),
     'overview:summary': () => overview.summary(),
-    'search:global': (i) => search.search(i.query)
+    'search:global': (i) => search.search(i.query),
+    'backup:list': () => backups.list(),
+    'backup:create': () => backups.create(),
+    'backup:restore': (i) => backups.restore(i.name)
   };
 }
 
