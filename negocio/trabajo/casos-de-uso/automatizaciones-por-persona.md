@@ -49,7 +49,7 @@ Valor añadido para la venta: el triaje y los borradores le dan horas, pero ella
 
 **Semana tipo.** Principio de semana: revisar lo que llegó de entidades. Mitad: reuniones con la familia o el titular. Final: preparar informes y cerrar consultas. A final de mes o trimestre: picos de documentación y plazos.
 
-**Las 5 fricciones más fuertes** (la 1 y la 5 coinciden con lo que dicen las fuentes de `automatizaciones-candidatas.md`, **[NO VERIFICADO]**; el resto son [IDEA]):
+**Las 5 fricciones más fuertes** (la F1 y la F2 coinciden con lo que dicen las fuentes de `automatizaciones-candidatas.md` líneas 5-6, **[NO VERIFICADO]**; la F3, la F4 y la F5 son [IDEA], sin respaldo en fuentes):
 | # | Fricción | Qué la quita |
 |---|---|---|
 | F1 | Consolidar informes de varias entidades (el dolor más repetido en las fuentes) | 9 Resumen consolidado de extractos. **Fase 3**, con datos financieros: no entra en los paquetes iniciales |
