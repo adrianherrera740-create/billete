@@ -189,3 +189,12 @@ export interface BackupInfo {
   createdAt: string;
   sizeBytes: number;
 }
+
+/** Un móvil emparejado. El token nunca sale del móvil: el PC solo guarda su hash. */
+export interface MobileDevice {
+  id: string;
+  name: string;
+  createdAt: string;
+  lastSeenAt: string | null;
+  revokedAt: string | null;
+}

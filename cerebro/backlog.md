@@ -45,3 +45,8 @@ Actualizado: 2026-10-27 (cierre ronda 12). Sustituye las secciones de abajo para
 - [Persona] Cuenta gratuita CJ: SKU gaming/coche/streetwear con stock en DE/PL, precio, plazo a ES, dispute-policy; BigBuy: razon social, VAT (VIES) y cuota real. Sin pagar.
 - [auditor-calidad + autores] Aplicar las correcciones de `ronda-13-proveedores.md` 6 a dropshipping-ue, mayoristas-es, fabricantes-marca-blanca, pod-textil-ue y protocolo-homologacion.
 - [Agentes] No lanzar mas busquedas de proveedores por blog hasta tener acceso o respuestas de la persona (aprendizaje 30).
+
+## Ronda 14 (29/10/2026): cierre
+- Hecho: hoja de lectura de canal, preguntas para Seller Center y gestoría, tabla única de supuestos y tope de 30 €. Calidad: APROBADO en 2.ª pasada (`tienda/trabajo/calidad/ronda-14-puerta-2.md`).
+- [Persona] 02/11: hoja de lectura (90-120 min) y preguntas de Seller Center (45-60 min); responder qué son los «500 €/mes».
+- Pendientes menores (no bloquean): caso «no visible en la mayoría de fichas» de la hoja (PARAR en un sitio y «repetir o pausar» en otros), marcar el aviso a 24 € como propuesta del CFO, unificar la redacción del derecho de 3 €, tiempo de la parte A (31 preguntas = 45-60 min) y casilla de P sobre fichas ancla.
