@@ -27,6 +27,18 @@ describe('startCore', () => {
     expect(readFileSync(join(dir, 'logs', 'app.log'), 'utf8')).toContain('"version":"0.0.2"');
   });
 
+  it('Activity registra los eventos de proyecto', () => {
+    const core = startCore(tmp(), '0.0.1');
+    const p = core.projects.create({ name: 'Registro' });
+    core.projects.createPanel({ projectId: p.id, kind: 'sticky', x: 0, y: 0, w: 200, h: 100 });
+    const rows = core.db.prepare('SELECT type, project_id FROM activity ORDER BY id').all();
+    expect(rows).toEqual([
+      { type: 'project.created', project_id: p.id },
+      { type: 'board.panel_added', project_id: p.id }
+    ]);
+    core.close();
+  });
+
   it('recupera una BD corrupta usando la copia de arranque anterior', () => {
     const dir = tmp();
     startCore(dir, '0.0.1').close();

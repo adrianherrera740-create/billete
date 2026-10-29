@@ -1,13 +1,15 @@
 import { join } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
-import { EventBus, createFileSink, createLogger } from '@nave/core';
+import { EventBus, createFileSink, createLogger, redactDeep } from '@nave/core';
 import type { LogChannel, Logger } from '@nave/core';
 import { createBackup, migrate, openWithRecovery } from '@nave/db';
-import type { EventMap } from '@nave/shared';
+import type { EventMap, EventName } from '@nave/shared';
+import { Projects } from './projects';
 
 export interface NaveCore {
   bus: EventBus<EventMap>;
   db: DatabaseSync;
+  projects: Projects;
   log: Record<LogChannel, Logger>;
   paths: { dataDir: string; db: string; backups: string; logs: string };
   close(): void;
@@ -34,6 +36,9 @@ export function startCore(dataDir: string, version: string): NaveCore {
   const applied = migrate(db);
   if (applied.length > 0) log.app.info('Migraciones aplicadas', { versiones: applied });
 
+  const projects = new Projects(db, bus);
+  recordActivity(db, bus);
+
   const backup = createBackup(db, paths.backups, { label: 'arranque' });
   bus.emit('backup.created', { path: backup, label: 'arranque' });
   log.app.info('Arranque del núcleo', { version });
@@ -42,6 +47,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
   return {
     bus,
     db,
+    projects,
     log,
     paths,
     close() {
@@ -50,4 +56,24 @@ export function startCore(dataDir: string, version: string): NaveCore {
       db.close();
     }
   };
+}
+
+const ACTIVITY_EVENTS: EventName[] = [
+  'project.created',
+  'project.updated',
+  'project.archived',
+  'board.panel_added',
+  'board.panel_updated',
+  'board.panel_removed'
+];
+
+/** Activity: cada evento de proyecto queda registrado, siempre redactado. Nunca la salida de terminales. */
+function recordActivity(db: DatabaseSync, bus: EventBus<EventMap>): void {
+  const insert = db.prepare('INSERT INTO activity (ts, project_id, type, payload) VALUES (?, ?, ?, ?)');
+  for (const name of ACTIVITY_EVENTS) {
+    bus.on(name, (payload) => {
+      const data = payload as { id?: string; projectId?: string };
+      insert.run(new Date().toISOString(), data.projectId ?? data.id ?? null, name, JSON.stringify(redactDeep(payload)));
+    });
+  }
 }
