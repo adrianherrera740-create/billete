@@ -1,42 +1,11 @@
 # Estado actual (actualizar al terminar cada sesión)
-Última actualización: 2026-10-29 (La Nave: acceso desde el móvil construido)
-
-## Objetivo
-Primera tienda de dropshipping en TikTok Shop España: sin stock propio, 500 €/mes (qué significa exactamente, sin definir), sin comprar muestras, vídeos hechos con IA. Público: gamers, coches, streetwear (sin usar la marca de GTA). Las reglas de `CLAUDE.md` NO han cambiado: solo la persona puede levantarlas (ver preguntas pendientes).
+Última actualización: 2026-10-29
 
 ## Dónde estamos
-- 29/10/2026: la persona fija «sin stock hasta validar» y admite vender en otro país. Investigación de origen de producto: quienes venden con volumen compran a fábrica (1688/Alibaba/Yiwu) y tienen stock local; el dropshipping desde AliExpress choca con comisión 9 % y plazo de 2 días. Ningún mercado probado como más fácil (todo blogs, [NO VERIFICADO]). Ver `decisiones.md`.
-- Ronda 14 (29/10/2026) APROBADA en segunda pasada de calidad: tres documentos listos para tu comprobación del 02/11, en `tienda/trabajo/ronda-14/`: `producto/hoja-lectura-canal.md` (90-120 min, 6 tablas y regla SEGUIR/AGUANTAR/PARAR), `cumplimiento/preguntas-seller-center-y-gestoria.md` (Seller Center + gestoría + plantilla de correo) y `finanzas/supuestos-y-tope.md` (supuestos únicos y tope de 30 € provisional). Pendientes menores no bloqueantes en `calidad/ronda-14-puerta-2.md`.
-- La Nave, acceso desde el móvil CONSTRUIDO (M1–M6, 232 tests + 18 e2e, capturas en `la-nave/docs/movil-*.png`): servidor solo en 127.0.0.1 + Tailscale Serve, emparejamiento por QR, llave por móvil y revocable, lista cerrada de canales. NO verificado: Tailscale real, teléfono real, Windows real. Pasos para ti en `la-nave/README.md` (sección «Acceso desde el móvil»).
-- 29/10/2026: todo trabajo pasa antes por `cerebro/condiciones.md` (13 condiciones del prompt maestro de La Nave de la persona, íntegro en `la-nave-prompt-maestro.md`). La Nave (proyecto aparte, `la-nave/`) tiene construidas las fases F0 a F8, con 232 tests y 18 e2e en Electron real. Falta lo que solo se puede hacer en tu PC con Windows: `npm install`, `npm run dev`, `npm run dist` y probar terminales y Claude (ver `la-nave/README.md`).
-- NO hay producto ganador ni ruta aprobada. Trece rondas, 0 € gastados, 0 vídeos, 0 precios leídos en TikTok Shop ES.
-- Ronda 13 (27/10/2026, solo proveedores): NINGUN proveedor homologado. El cuello de botella real es de ACCESO, no de busqueda: el entorno en la nube no resuelve DNS de proveedores ni de Seller Center (Printful, Gelato, Printify, seller-es.tiktok.com...). Calidad: `tienda/trabajo/calidad/ronda-13-proveedores.md`; informes en `tienda/trabajo/ronda-13/proveedores/`.
-- Unico legible: CJ Dropshipping (13 datos [OFICIAL] leidos: tarifas de servicio, MOQ 10/100, sin NIF exigido en el acuerdo, almacenes DE y PL SOLO del stock que envia el vendedor, no prueba catalogo de dropshipping UE; pagina TikTok sin mencionar Espana y con botones a TikTok_US). Sin razon social ni VAT visibles: red flag roja 1, puntua 4/30, descartado hasta aclarar. BigBuy: 403. Plazo 2 dias y comision 4 %/9 % siguen SIN confirmar. Margenes de ronda 13 con devoluciones 0,10 (ronda 12: 0,15).
-- Via de desbloqueo: la persona puede ampliar Network access del entorno con bigbuy.eu, cjdropshipping.com, printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com, globomatik.com, dmi.es, faire.com (ver `red-y-limites.md`), o hacer las 8 comprobaciones de 0 EUR con URL de `calidad/ronda-13-proveedores.md` 7.2.
-- Ronda 12 (27/10/2026), puerta 1: NINGUNA ruta pasa. NO se compromete capital (ni 2.000 ni 5.000 €). Decisión: `tienda/trabajo/ronda-12/decision-ceo.md`; calidad: `tienda/trabajo/calidad/ronda-12-puerta-1.md`; crítico: `ronda-12/critica/pre-mortem.md`.
-- Marca propia + 3PL: AGUANTAR sin presupuesto (destino condicionado "SOLO SI" a-f, en `decision-ceo.md` §4). Su GO teórico del 33 % sale de asumir PVP 39,90 €, sin dato medido.
-- POD de marca y dropshipping simple: CERRAR como motor de anuncios (camiseta POD 34,90 € = +4,53 €/pedido, a 14,90 € = -7,86 €; `margen_es.py`, crítico, 27/10).
-- Ventosa B2 (1005013071285711): AGUANTAR congelada, sin presupuesto, solo como dato de lectura.
-- GO a PRUEBA con tope total 30 € / 30 días: preventa (14 días, <= 30 €), B2B (7 días, 0 €), curación/afiliación (21 días, 0 €, condicionada a requisitos del programa).
-- Informes `producto/marca-propia.md` y `producto/modelos-alternativos.md` RECHAZADOS por calidad: no citarlos como evidencia. `metodo-busqueda.md` y `modelos-y-escalas.md` solo con sus correcciones.
-- Único dato de canal: FastMoss abril 2026 (blog, no verificado en TikTok Shop): vende ropa y belleza a 4-14 €, sin gaming/coche/hogar en el top 5.
+- Dropshipping de TikTok Shop CERRADO por decisión de la persona (29/10/2026). Todo su contexto se ha borrado; queda en la etiqueta de git `archivo-dropshipping`.
+- La Nave (`la-nave/`): construida (F0 a F8 y acceso desde el móvil), 232 tests y 18 e2e en Linux. Sin verificar en Windows real, con Tailscale real ni en un móvil real. La persona no tiene PC por ahora.
+- Siguiente negocio: sin definir.
 
-## Calendario (puertas de la ruta "demanda primero")
-- M0 02/11/2026: respuestas de la persona + lectura de canal hecha. Si no: PAUSAR todo.
-- M1 09/11/2026: ancla leída (>= 3 fichas con PVP >= 25 € y >= 500 ventas) y Seller Center no bloquea stock propio/plazo. Si falla: se archiva marca propia como canal consumidor.
-- M2 26/11/2026: medición y decisión (condiciones a-f). Black Friday (27/11) no se aprovecha: asumido.
-
-## PREGUNTAS PENDIENTES de la persona (responder con la letra antes del 02/11; detalle en `decision-ceo.md` §6)
-0. ¿Haces la lectura de canal de 2-3 h (4 búsquedas en TikTok Shop ES + Seller Center)? Recomendado: sí.
-1. Capital real que podrías perder en 90 días (<100 / 100-500 / 500-2.000 / 2.000-5.000 / >5.000 €).
-2. Qué son los "500 €/mes" (tope de anuncios / gasto total mensual / beneficio / capital total de 90 días).
-3. Horas por semana con constancia (<3 / 3-6 / 6-10 / >10). Menos de 3: se pausa.
-4. Alta fiscal: ¿ya hecha, antes del 10/11, no puedo/quiero, o necesito gestoría?
-5. ¿Levantas "sin stock propio" (a) y "sin comprar muestras" (b)? Recomendación del CEO: solo tras M2 y con tope tuyo.
-
-## Próximo paso
-Persona: (a) ampliar Network access o hacer las 8 comprobaciones de la ronda 13; (b) preguntas anteriores + lectura de canal + (opcional) cuentas gratuitas BigBuy/CJ y descargar CSV. Agentes: 10 tareas de 0 €, lotes <= 10 (`backlog.md`). Nada de gasto > 30 € sin respuesta.
-
-## Bloqueos vivos
-Entorno sin DNS de proveedores ni Seller Center (ronda 13). Sin ventas de TikTok Shop ES (FastMoss 429). Fichas de AliExpress no abren desde la nube. Alta fiscal sin cubrir. Plazo (2 vs 5 días hábiles) y comisión (4/5/9 %) sin resolver hasta leer Seller Center. Derecho de 3 € y flete de importación no verificados y fuera de `margen_es.py`. Ejecución de la persona = riesgo principal (crítico, juicio propio).
-Propuestas de OKR y proceso: marcadas "pendiente de aprobación de la persona" en `okrs.md` y `proceso.md`.
+## Pendiente de la persona
+- Decidir qué negocio o herramienta sigue.
+- Probar La Nave en un ordenador cuando tenga uno (`la-nave/README.md`).
