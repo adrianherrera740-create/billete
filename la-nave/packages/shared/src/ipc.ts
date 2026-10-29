@@ -3,6 +3,7 @@ import {
   bool,
   hexColor,
   jsonObject,
+  nothing,
   nullable,
   num,
   object,
@@ -12,7 +13,7 @@ import {
 } from './parse';
 import type { Parser } from './parse';
 import { PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { Board, Panel, Project } from './domain';
+import type { Board, Panel, Project, ShellOption, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -71,7 +72,20 @@ export const CHANNELS = {
       }
     )
   },
-  'panel:delete': { remote: 'forbidden', input: object({ id }) }
+  'panel:delete': { remote: 'forbidden', input: object({ id }) },
+  // Terminales: acceso a un shell real, por eso nunca desde el móvil. El renderer solo envía el id del panel;
+  // el shell y la carpeta salen de la base de datos.
+  'terminal:shells': { remote: 'forbidden', input: nothing },
+  'terminal:start': {
+    remote: 'forbidden',
+    input: object({ panelId: id, cols: num({ min: 20, max: 500, int: true }), rows: num({ min: 5, max: 200, int: true }) })
+  },
+  'terminal:input': { remote: 'forbidden', input: object({ panelId: id, data: str({ min: 1, max: 65_536 }) }) },
+  'terminal:resize': {
+    remote: 'forbidden',
+    input: object({ panelId: id, cols: num({ min: 20, max: 500, int: true }), rows: num({ min: 5, max: 200, int: true }) })
+  },
+  'terminal:kill': { remote: 'forbidden', input: object({ panelId: id }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
 export type ChannelName = keyof typeof CHANNELS;
@@ -87,6 +101,11 @@ export interface ChannelOutputs {
   'panel:create': Panel;
   'panel:update': Panel;
   'panel:delete': null;
+  'terminal:shells': ShellOption[];
+  'terminal:start': TerminalStarted;
+  'terminal:input': null;
+  'terminal:resize': null;
+  'terminal:kill': null;
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';
@@ -102,15 +121,21 @@ export const REMOTE_ALLOWED: ChannelName[] = (Object.keys(CHANNELS) as ChannelNa
 
 export type Transport = (channel: ChannelName, input: unknown) => Promise<Result<unknown>>;
 
+export type Unsubscribe = () => void;
+export type TerminalSubscribe = (handler: (event: TerminalEvent) => void) => Unsubscribe;
+
 export interface NaveApi {
   readonly platform: string;
   invoke<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<Result<ChannelOutputs[C]>>;
+  /** Salida de las terminales (main empuja; no es un canal invoke). */
+  onTerminal: TerminalSubscribe;
 }
 
 /** La misma API funciona por IPC (escritorio) o por red (móvil): solo cambia el transporte. */
-export function createApi(platform: string, transport: Transport): NaveApi {
+export function createApi(platform: string, transport: Transport, onTerminal: TerminalSubscribe = () => () => undefined): NaveApi {
   return {
     platform,
+    onTerminal,
     invoke: async (channel, input) => (await transport(channel, input)) as Result<ChannelOutputs[typeof channel]>
   };
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, Panel, PanelKind, Project } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, Panel, PanelKind, Project, ShellOption } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
   const res = await window.nave.invoke(channel, input);
@@ -8,12 +8,15 @@ async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): 
   return res.data;
 }
 
-const NOTE_SIZE = { w: 280, h: 200 };
+const SIZES: Record<string, { w: number; h: number }> = { sticky: { w: 280, h: 200 }, terminal: { w: 640, h: 380 } };
+const DEFAULT_SIZE = { w: 400, h: 280 };
 let cameraTimer: ReturnType<typeof setTimeout> | undefined;
 
 interface State {
   projects: Project[];
   showArchived: boolean;
+  shells: ShellOption[];
+  shellId: string | null;
   activeId: string | null;
   board: Board | null;
   viewport: { w: number; h: number };
@@ -23,6 +26,7 @@ interface State {
   ready: boolean;
   load(): Promise<void>;
   setShowArchived(value: boolean): Promise<void>;
+  setShellId(id: string): void;
   select(id: string): Promise<void>;
   createProject(input: ChannelInput<'project:create'>): Promise<void>;
   archiveProject(id: string, archived: boolean): Promise<void>;
@@ -56,6 +60,8 @@ export const useNave = create<State>((set, get) => {
   return {
     projects: [],
     showArchived: false,
+    shells: [],
+    shellId: null,
     activeId: null,
     board: null,
     viewport: { w: 1000, h: 700 },
@@ -67,7 +73,8 @@ export const useNave = create<State>((set, get) => {
     load: () =>
       guard(async () => {
         const projects = await call('project:list', { includeArchived: get().showArchived });
-        set({ projects, ready: true });
+        const shells = await call('terminal:shells', undefined);
+        set({ projects, shells, shellId: get().shellId ?? shells[0]?.id ?? null, ready: true });
         const current = get().activeId;
         const first = projects.find((p) => p.id === current && !p.archivedAt) ?? projects.find((p) => !p.archivedAt);
         if (first) await loadBoard(first.id);
@@ -78,6 +85,8 @@ export const useNave = create<State>((set, get) => {
       set({ showArchived: value });
       await get().load();
     },
+
+    setShellId: (id) => set({ shellId: id }),
 
     select: (id) => guard(() => loadBoard(id)),
 
@@ -125,8 +134,11 @@ export const useNave = create<State>((set, get) => {
       guard(async () => {
         const { board, viewport } = get();
         if (!board) return;
-        const at = spawnPosition(board.camera, viewport, NOTE_SIZE, board.panels.length);
-        const panel = await call('panel:create', { projectId: board.projectId, kind, title, ...at, ...NOTE_SIZE, config: { text: '' } });
+        const size = SIZES[kind] ?? DEFAULT_SIZE;
+        const at = spawnPosition(board.camera, viewport, size, board.panels.length);
+        const { shellId } = get();
+        const config = kind === 'terminal' ? (shellId ? { shell: shellId } : {}) : { text: '' };
+        const panel = await call('panel:create', { projectId: board.projectId, kind, title, ...at, ...size, config });
         const current = get().board;
         if (current) set({ board: { ...current, panels: [...current.panels, panel] } });
       }),

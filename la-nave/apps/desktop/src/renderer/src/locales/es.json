@@ -29,5 +29,12 @@
     "deleteBody": "Se borrará «{{title}}» y su contenido. No se puede deshacer.",
     "stickyPlaceholder": "Escribe aquí…",
     "soon": "El panel de tipo «{{kind}}» llega en una fase posterior."
+  },
+  "terminal": {
+    "add": "Añadir terminal",
+    "title": "Terminal {{n}}",
+    "shell": "Shell de la nueva terminal",
+    "none": "No se ha encontrado ningún shell en este equipo.",
+    "exited": "El proceso terminó (código {{code}}). Cierra el panel y abre otro para empezar de nuevo."
   }
 }

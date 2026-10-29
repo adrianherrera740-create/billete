@@ -33,3 +33,11 @@
 - Los parsers rechazan claves desconocidas y usan `Object.hasOwn` (un test de seguridad cazó que `key in shape` dejaba pasar `__proto__`).
 - Pizarra: lógica pura en `renderer/src/board/geometry.ts`; zoom entre 10 % y 100 %; sin scroll nativo (rueda = mover, Ctrl + rueda = zoom); visión general de solo lectura. Activity se escribe suscrita al bus, siempre redactada.
 - Solo se pueden crear notas (`kind='sticky'`) desde la interfaz; el resto de tipos de panel llegan en sus fases.
+
+## Notas de F3 (29/10/2026)
+- `node-pty` 1.1.0 es N-API: trae binarios para Windows y no hace falta recompilar para Electron; en Linux se compila con node-gyp. Sigue pendiente `asarUnpack` en F8.
+- El renderer solo envía el id del panel (y el tamaño); shell y carpeta salen de la BD. Un test rechaza campos `shell` o `cwd` en `terminal:start`.
+- La salida de la terminal viaja por un canal propio (`terminal:event`) y nunca por el bus, Activity ni logs; un test lo comprueba con una contraseña falsa. El renderer ordena la salida con un desplazamiento (`end`) para no duplicar lo ya repintado.
+- Detección de shells sin asumir nada: PowerShell, PowerShell 7, CMD, Git Bash y cada distribución de WSL (`wsl -l -q` decodificado de UTF-16). Lo que falta no aparece.
+- **No verificado en Windows real:** la detección se prueba con un sistema de ficheros simulado y la terminal con un shell Linux (bash). ConPTY, PowerShell y WSL hay que probarlos en el PC de la persona.
+- Los canales `terminal:*` están `forbidden` en remoto (un shell no se expone al móvil).

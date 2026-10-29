@@ -1,8 +1,12 @@
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
+import { spawn as ptySpawn } from 'node-pty';
 import { APP_NAME } from '@nave/shared';
 import { handlersFor, registerIpc } from './ipc';
 import { startCore } from './nave';
+import { detectShells, realDeps } from './shells';
+import { TerminalManager } from './terminals';
 import type { NaveCore } from './nave';
 
 function createWindow(): BrowserWindow {
@@ -37,6 +41,7 @@ function createWindow(): BrowserWindow {
 }
 
 let core: NaveCore | undefined;
+let terminals: TerminalManager | undefined;
 
 /** Solo se atienden peticiones que vienen de nuestra propia página (archivo local o servidor de desarrollo). */
 function isOwnPage(event: unknown): boolean {
@@ -48,8 +53,24 @@ function isOwnPage(event: unknown): boolean {
 void app.whenReady().then(() => {
   // NAVE_USER_DATA permite aislar los datos (tests e2e) sin tocar los reales.
   core = startCore(process.env['NAVE_USER_DATA'] ?? app.getPath('userData'), app.getVersion());
+  const current = core;
+  const shells = detectShells(realDeps());
+  const manager = new TerminalManager({
+    getPanel: (id) => current.projects.panel(id),
+    getProject: (id) => current.projects.get(id),
+    shells: () => shells,
+    spawn: (file, args, options) => ptySpawn(file, args, options),
+    emit: (event) => {
+      for (const win of BrowserWindow.getAllWindows()) win.webContents.send('terminal:event', event);
+    },
+    bus: current.bus,
+    log: current.log.terminals,
+    cwdExists: existsSync
+  });
+  terminals = manager;
+  current.bus.on('board.panel_removed', ({ panelId }) => manager.kill(panelId));
   registerIpc(
-    handlersFor(core.projects),
+    handlersFor(current.projects, manager),
     (error) => core?.log.app.error('Fallo interno en un canal IPC', error),
     undefined,
     isOwnPage
@@ -61,6 +82,7 @@ void app.whenReady().then(() => {
 });
 
 app.on('before-quit', () => {
+  terminals?.killAll();
   core?.close();
   core = undefined;
 });

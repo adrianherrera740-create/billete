@@ -19,7 +19,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 });
@@ -47,6 +47,28 @@ describe('parsers de canales', () => {
     const p = CHANNELS['board:set-camera'].input;
     expect(() => p({ projectId: 'p', x: 0, y: 0, zoom: 1.5 })).toThrow();
     expect(p({ projectId: 'p', x: 0, y: 0, zoom: 1 }).zoom).toBe(1);
+  });
+});
+
+describe('terminales (seguridad)', () => {
+  it('ningún canal de terminal está permitido en remoto', () => {
+    for (const name of Object.keys(CHANNELS) as ChannelName[]) {
+      if (name.startsWith('terminal:')) expect(CHANNELS[name].remote, name).toBe('forbidden');
+    }
+  });
+
+  it('terminal:start solo acepta id de panel y tamaño: nada de shell ni carpeta', () => {
+    const p = CHANNELS['terminal:start'].input;
+    expect(p({ panelId: 'x', cols: 80, rows: 24 })).toEqual({ panelId: 'x', cols: 80, rows: 24 });
+    expect(() => p({ panelId: 'x', cols: 80, rows: 24, shell: 'cmd.exe' })).toThrow(/desconocido/);
+    expect(() => p({ panelId: 'x', cols: 80, rows: 24, cwd: 'C:\\' })).toThrow(/desconocido/);
+    expect(() => p({ panelId: 'x', cols: 5, rows: 24 })).toThrow();
+  });
+
+  it('terminal:input limita el tamaño de lo que se escribe', () => {
+    const p = CHANNELS['terminal:input'].input;
+    expect(() => p({ panelId: 'x', data: 'a'.repeat(70_000) })).toThrow();
+    expect(() => p({ panelId: 'x', data: '' })).toThrow();
   });
 });
 

@@ -9,9 +9,23 @@ import type { ChannelName, EventMap, Result } from '@nave/shared';
 import { handlersFor, registerIpc } from './ipc';
 import type { IpcLike } from './ipc';
 import { Projects } from './projects';
+import { TerminalManager } from './terminals';
 
 // electron no se carga en vitest: el módulo importa ipcMain, así que lo simulamos.
 vi.mock('electron', () => ({ ipcMain: { handle: () => undefined } }));
+
+const stubTerminals = (projects: Projects): TerminalManager =>
+  new TerminalManager({
+    getPanel: (id) => projects.panel(id),
+    getProject: (id) => projects.get(id),
+    shells: () => [],
+    spawn: () => {
+      throw new Error('sin pty en este test');
+    },
+    emit: () => undefined,
+    bus: new EventBus<EventMap>(),
+    log: { debug: () => undefined, info: () => undefined, warn: () => undefined, error: () => undefined }
+  });
 
 function setup(): { call: (channel: ChannelName, input: unknown) => Result<unknown>; errors: unknown[]; channels: string[] } {
   const db = openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc-')), 'nave.db'));
@@ -19,7 +33,8 @@ function setup(): { call: (channel: ChannelName, input: unknown) => Result<unkno
   const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
   const fake: IpcLike = { handle: (c, l) => void registered.set(c, l) };
   const errors: unknown[] = [];
-  registerIpc(handlersFor(new Projects(db, new EventBus<EventMap>())), (e) => errors.push(e), fake);
+  const projects = new Projects(db, new EventBus<EventMap>());
+  registerIpc(handlersFor(projects, stubTerminals(projects)), (e) => errors.push(e), fake);
   return {
     call: (channel, input) => registered.get(channel)?.({}, input) as Result<unknown>,
     errors,
@@ -55,7 +70,8 @@ describe('registro único de IPC', () => {
     const db = openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc3-')), 'nave.db'));
     migrate(db);
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
-    registerIpc(handlersFor(new Projects(db, new EventBus<EventMap>())), () => undefined, { handle: (c, l) => void registered.set(c, l) }, (e) => (e as { ok?: boolean }).ok === true);
+    const projects = new Projects(db, new EventBus<EventMap>());
+    registerIpc(handlersFor(projects, stubTerminals(projects)), () => undefined, { handle: (c, l) => void registered.set(c, l) }, (e) => (e as { ok?: boolean }).ok === true);
     const input = { includeArchived: false };
     expect(registered.get('project:list')?.({ ok: false }, input)).toMatchObject({ ok: false, error: { code: 'FORBIDDEN' } });
     expect(registered.get('project:list')?.({ ok: true }, input)).toEqual({ ok: true, data: [] });
@@ -66,8 +82,9 @@ describe('registro único de IPC', () => {
     expect(call('board:get', { projectId: 'x' })).toMatchObject({ ok: false, error: { code: 'NOT_FOUND' } });
     // Provocamos un fallo interno real: color válido pero BD cerrada no es sencillo; usamos un manejador que lanza.
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
+    const projects2 = new Projects(openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc2-')), 'a.db')), new EventBus<EventMap>());
     registerIpc(
-      { ...handlersFor(new Projects(openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc2-')), 'a.db')), new EventBus<EventMap>())), 'project:list': () => { throw new Error('ruta secreta C:\\Users\\yo\\x'); } },
+      { ...handlersFor(projects2, stubTerminals(projects2)), 'project:list': () => { throw new Error('ruta secreta C:\\Users\\yo\\x'); } },
       (e) => errors.push(e),
       { handle: (c, l) => void registered.set(c, l) }
     );

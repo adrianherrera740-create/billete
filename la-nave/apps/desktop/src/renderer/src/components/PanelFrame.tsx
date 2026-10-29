@@ -6,6 +6,7 @@ import { moveRect, resizeRect } from '../board/geometry';
 import { useNave } from '../store';
 import { GlassButton } from './GlassButton';
 import { StickyPanel } from './StickyPanel';
+import { TerminalPanel } from './TerminalPanel';
 
 interface Props {
   panel: Panel;
@@ -52,8 +53,13 @@ export function PanelFrame({ panel, zoom, readOnly, onDelete }: Props) {
     <section
       className={`panel glass ${readOnly ? 'readonly' : ''}`}
       data-testid="panel"
+      data-panel-id={panel.id}
       style={{ left: panel.x, top: panel.y, width: panel.w, height: panel.h, zIndex: panel.z }}
-      onPointerDown={() => !readOnly && void bringToFront(panel.id)}
+      onPointerDown={(e) => {
+        // El fondo de la pizarra se arrastra; un panel no debe iniciar ese arrastre.
+        e.stopPropagation();
+        if (!readOnly) void bringToFront(panel.id);
+      }}
     >
       <header className="panel-head" onPointerDown={(e) => begin('move', e)} onPointerMove={move} onPointerUp={end} onPointerCancel={end}>
         <span className="panel-title">{panel.title}</span>
@@ -63,7 +69,11 @@ export function PanelFrame({ panel, zoom, readOnly, onDelete }: Props) {
           </GlassButton>
         )}
       </header>
-      <div className="panel-body">{panel.kind === 'sticky' ? <StickyPanel panel={panel} readOnly={readOnly} /> : <p className="muted">{t('panel.soon', { kind: panel.kind })}</p>}</div>
+      <div className="panel-body">
+        {panel.kind === 'sticky' && <StickyPanel panel={panel} readOnly={readOnly} />}
+        {panel.kind === 'terminal' && <TerminalPanel panel={panel} readOnly={readOnly} />}
+        {panel.kind !== 'sticky' && panel.kind !== 'terminal' && <p className="muted">{t('panel.soon', { kind: panel.kind })}</p>}
+      </div>
       {!readOnly && <div className="resize" aria-hidden="true" onPointerDown={(e) => begin('resize', e)} onPointerMove={move} onPointerUp={end} onPointerCancel={end} />}
     </section>
   );

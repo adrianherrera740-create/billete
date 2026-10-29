@@ -45,3 +45,24 @@ export const ZOOM_MIN = 0.1;
 export const ZOOM_MAX = 1;
 export const PANEL_MIN_W = 160;
 export const PANEL_MIN_H = 100;
+
+/** Shell detectado en este equipo (solo lo que el renderer necesita ver). */
+export interface ShellOption {
+  id: string;
+  label: string;
+}
+
+export interface TerminalStarted {
+  running: boolean;
+  /** Salida acumulada para repintar el panel; `end` es el desplazamiento total al que corresponde. */
+  replay: string;
+  end: number;
+  shell: string;
+  cwd: string;
+  notice: string | null;
+}
+
+/** Eventos de terminal empujados de main al renderer (NO pasan por el bus, Activity ni logs). */
+export type TerminalEvent =
+  | { type: 'data'; panelId: string; data: string; end: number }
+  | { type: 'exit'; panelId: string; exitCode: number | null };

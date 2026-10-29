@@ -3,6 +3,7 @@ import { CHANNELS, ValidationError } from '@nave/shared';
 import type { ChannelInput, ChannelName, ChannelOutputs, Result } from '@nave/shared';
 import { NaveError } from './projects';
 import type { Projects } from './projects';
+import type { TerminalManager } from './terminals';
 
 export type Handler<C extends ChannelName> = (input: ChannelInput<C>) => ChannelOutputs[C];
 export type Handlers = { [C in ChannelName]: Handler<C> };
@@ -24,7 +25,7 @@ export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw:
   }
 }
 
-export function handlersFor(projects: Projects): Handlers {
+export function handlersFor(projects: Projects, terminals: TerminalManager): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -34,7 +35,12 @@ export function handlersFor(projects: Projects): Handlers {
     'board:set-camera': (i) => projects.setCamera(i),
     'panel:create': (i) => projects.createPanel(i),
     'panel:update': (i) => projects.updatePanel(i),
-    'panel:delete': (i) => projects.deletePanel(i.id)
+    'panel:delete': (i) => projects.deletePanel(i.id),
+    'terminal:shells': () => terminals.shellOptions(),
+    'terminal:start': (i) => terminals.start(i.panelId, i.cols, i.rows),
+    'terminal:input': (i) => terminals.input(i.panelId, i.data),
+    'terminal:resize': (i) => terminals.resize(i.panelId, i.cols, i.rows),
+    'terminal:kill': (i) => terminals.kill(i.panelId)
   };
 }
 

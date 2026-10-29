@@ -71,4 +71,11 @@ button { font: inherit; color: inherit; }
 .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
 .toast { position: fixed; right: 20px; bottom: 20px; display: flex; align-items: center; gap: 10px; padding: 10px 14px; max-width: 420px; background: rgba(120, 30, 20, 0.85); z-index: 1100; }
 
+select { padding: 7px 8px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.06); color: var(--text); font: inherit; max-width: 200px; }
+select option { background: #161c2a; }
+.panel-body:has(.terminal-wrap) { padding: 0; }
+.terminal-wrap { position: relative; width: 100%; height: 100%; background: #0b0f17; }
+.terminal { width: 100%; height: 100%; padding: 6px 0 0 8px; }
+.terminal-notice { position: absolute; left: 8px; right: 8px; top: 6px; z-index: 2; margin: 0; padding: 6px 10px; border-radius: 8px; background: rgba(120, 80, 20, 0.85); font-size: 12px; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

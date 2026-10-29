@@ -15,6 +15,8 @@ export interface EventMap {
   'board.panel_added': { projectId: string; panelId: string };
   'board.panel_updated': { projectId: string; panelId: string };
   'board.panel_removed': { projectId: string; panelId: string };
+  'terminal.process_started': { panelId: string; shell: string };
+  'terminal.process_exited': { panelId: string; exitCode: number | null };
 }
 export type EventName = keyof EventMap;
 export type EventNamesAreDotted = EventName extends `${string}.${string}` ? true : never;

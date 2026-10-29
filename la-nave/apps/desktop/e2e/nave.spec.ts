@@ -1,4 +1,4 @@
-import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { _electron as electron, expect, test } from '@playwright/test';
@@ -18,9 +18,10 @@ async function ready(app: ElectronApplication): Promise<Page> {
   return page;
 }
 
-async function createProject(page: Page, name: string): Promise<void> {
+async function createProject(page: Page, name: string, folder?: string): Promise<void> {
   await page.getByTestId('new-project-btn').click();
   await page.getByTestId('project-name-input').fill(name);
+  if (folder) await page.getByLabel('Carpeta del proyecto (opcional)').fill(folder);
   await page.getByTestId('create-project-btn').click();
 }
 
@@ -128,5 +129,42 @@ test('seguridad: el IPC valida las entradas y rechaza canales desconocidos', asy
     }
   });
   expect(unknown).toContain('Canal desconocido');
+  await app.close();
+});
+
+/** Lo que el panel ha recibido hasta ahora: se pide como lo haría el renderer, sin leer el DOM (xterm pinta en WebGL). */
+const replayOf = (page: Page, panelId: string): Promise<string> =>
+  page.evaluate(async (id) => {
+    const res = await (globalThis as unknown as Bridge).nave.invoke('terminal:start', { panelId: id, cols: 80, rows: 24 });
+    return (res as { ok: boolean; data?: { replay: string } }).data?.replay ?? '';
+  }, panelId);
+
+test('terminal real: ejecuta un comando en la carpeta del proyecto y se cierra con el panel', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const projectDir = realpathSync(mkdtempSync(join(tmpdir(), 'nave-proj-')));
+  const app = await launch(dataDir);
+  const page = await ready(app);
+  await createProject(page, 'Con terminal', projectDir);
+  await page.getByTestId('add-terminal-btn').click();
+  await expect(page.getByTestId('terminal')).toBeVisible();
+  const panelId = (await page.getByTestId('panel').getAttribute('data-panel-id')) ?? '';
+
+  await page.locator('.xterm-helper-textarea').focus();
+  const win = process.platform === 'win32';
+  // El resultado (hola-42) solo aparece si el shell evaluó la operación; lo tecleado no lo contiene.
+  await page.keyboard.type(win ? 'echo "hola-$(20+22)"\r' : 'echo hola-$((20+22))\n');
+  await expect.poll(() => replayOf(page, panelId), { timeout: 15_000 }).toContain('hola-42');
+  await page.keyboard.type(win ? 'pwd\r' : 'pwd\n');
+  await expect.poll(() => replayOf(page, panelId), { timeout: 15_000 }).toContain(projectDir);
+
+  // Borrar el panel mata el proceso.
+  await page.getByRole('button', { name: 'Borrar panel' }).first().click();
+  await page.getByTestId('confirm-delete-btn').click();
+  await expect(page.getByTestId('panel')).toHaveCount(0);
+  const after = await page.evaluate(
+    (id) => (globalThis as unknown as Bridge).nave.invoke('terminal:input', { panelId: id, data: 'x' }),
+    panelId
+  );
+  expect(after).toMatchObject({ ok: false });
   await app.close();
 });
