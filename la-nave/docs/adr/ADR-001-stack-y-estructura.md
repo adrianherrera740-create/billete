@@ -50,3 +50,9 @@
 - Historial: lectura de solo lectura del `.jsonl` bajo `~/.claude/projects`, sin seguir enlaces simbólicos, con parser tolerante, últimos 50 mensajes y secretos redactados.
 - Un panel con sesión previa no abre otra sola al arrancar la app: pregunta Reanudar o Nueva sesión.
 - **No verificado con un `claude` real autenticado:** el e2e usa `fake-claude` (`apps/desktop/e2e/fixtures`), que imita la ejecución de hooks (JSON por stdin, comando con `sh -c`). Falta confirmar con Claude Code real, en Windows, que la herencia del entorno y `curl` funcionan igual en el shell que use para los hooks.
+
+## Notas de F5 (29/10/2026)
+- Las tareas pertenecen siempre a un proyecto (`project_id NOT NULL`, borrado en cascada). Las notas pueden no tener proyecto (la bandeja); si un proyecto desapareciera, sus notas pasan a la bandeja (`ON DELETE SET NULL`) en vez de perderse.
+- Enviar texto a Claude (`claude:paste`) solo PEGA: bracketed paste, sin Intro, y únicamente en paneles `kind='claude'` en marcha. El texto se filtra de caracteres de control (ESC, ^C, ^D...) para que no pueda cerrar el pegado antes de tiempo ni inyectar órdenes; hay un test con un texto hostil.
+- Canales de lectura (`task:list`, `note:list`) permitidos en remoto; todos los que modifican datos, no.
+- Limitación conocida: el e2e usa un `fake-claude` en modo línea; en el Claude real el salto de línea dentro de un pegado forma parte del pegado (por eso el e2e envía una sola línea).

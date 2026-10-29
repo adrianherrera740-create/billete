@@ -56,5 +56,31 @@
     "choose": "Este panel ya tuvo una sesión de Claude. ¿La reanudas o empiezas otra?",
     "you": "Tú",
     "claude": "Claude"
+  },
+  "side": {
+    "toggle": "Tareas y notas",
+    "tab": { "tasks": "Tareas", "notes": "Notas", "inbox": "Bandeja" },
+    "noProject": "Elige un proyecto para ver sus tareas y notas.",
+    "newTask": "Nueva tarea…",
+    "add": "Añadir",
+    "noTasks": "Sin tareas todavía.",
+    "toggleDone": "Marcar como hecha",
+    "nextStatus": "Cambiar de estado",
+    "deleteTask": "Borrar tarea",
+    "status": { "todo": "Pendiente", "doing": "En curso", "done": "Hecha" },
+    "newNote": "Nueva nota",
+    "noNotes": "Este proyecto no tiene notas.",
+    "inboxEmpty": "La bandeja está vacía. Aquí caen las notas sin proyecto.",
+    "noteTitle": "Título de la nota",
+    "noteBody": "Escribe la nota…",
+    "moveTo": "Mover la nota a",
+    "inboxOption": "Bandeja (sin proyecto)",
+    "sendTarget": "Panel de Claude de destino",
+    "sendToClaude": "Enviar a Claude",
+    "sendHint": "Pega el texto en Claude sin enviarlo: tú pulsas Intro.",
+    "noClaude": "Añade un panel de Claude a la pizarra para poder enviarle texto.",
+    "deleteNote": "Borrar nota",
+    "deleteNoteTitle": "¿Borrar esta nota?",
+    "deleteNoteBody": "No se puede deshacer."
   }
 }

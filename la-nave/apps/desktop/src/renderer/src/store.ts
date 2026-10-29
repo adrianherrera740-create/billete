@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { fitToPanels, spawnPosition } from './board/geometry';
-import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, ClaudeEvent, ClaudeState, Panel, PanelKind, Project, ShellOption } from '@nave/shared';
+import type { Board, Camera, ChannelInput, ChannelName, ChannelOutputs, ClaudeEvent, ClaudeState, Note, Panel, PanelKind, Project, ShellOption, Task, TaskStatus } from '@nave/shared';
 
 async function call<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<ChannelOutputs[C]> {
   const res = await window.nave.invoke(channel, input);
@@ -19,6 +19,11 @@ interface State {
   shellId: string | null;
   claudeStates: Record<string, { state: ClaudeState; sessionId: string | null }>;
   activeId: string | null;
+  tasks: Task[];
+  notes: Note[];
+  inbox: Note[];
+  sideOpen: boolean;
+  info: string | null;
   board: Board | null;
   viewport: { w: number; h: number };
   overview: boolean;
@@ -29,6 +34,16 @@ interface State {
   setShowArchived(value: boolean): Promise<void>;
   setShellId(id: string): void;
   applyClaude(event: ClaudeEvent): void;
+  toggleSide(): void;
+  loadSide(): Promise<void>;
+  addTask(title: string): Promise<void>;
+  setTaskStatus(id: string, status: TaskStatus): Promise<void>;
+  removeTask(id: string): Promise<void>;
+  addNote(projectId: string | null): Promise<void>;
+  saveNote(id: string, patch: { title?: string; body?: string; projectId?: string | null }): Promise<void>;
+  removeNote(id: string): Promise<void>;
+  pasteToClaude(panelId: string, text: string): Promise<void>;
+  clearInfo(): void;
   select(id: string): Promise<void>;
   createProject(input: ChannelInput<'project:create'>): Promise<void>;
   archiveProject(id: string, archived: boolean): Promise<void>;
@@ -57,6 +72,7 @@ export const useNave = create<State>((set, get) => {
   const loadBoard = async (id: string): Promise<void> => {
     const board = await call('board:get', { projectId: id });
     set({ activeId: id, board, overview: false, savedCamera: null });
+    await get().loadSide();
   };
 
   return {
@@ -66,6 +82,11 @@ export const useNave = create<State>((set, get) => {
     shellId: null,
     claudeStates: {},
     activeId: null,
+    tasks: [],
+    notes: [],
+    inbox: [],
+    sideOpen: true,
+    info: null,
     board: null,
     viewport: { w: 1000, h: 700 },
     overview: false,
@@ -81,7 +102,10 @@ export const useNave = create<State>((set, get) => {
         const current = get().activeId;
         const first = projects.find((p) => p.id === current && !p.archivedAt) ?? projects.find((p) => !p.archivedAt);
         if (first) await loadBoard(first.id);
-        else set({ activeId: null, board: null });
+        else {
+          set({ activeId: null, board: null, tasks: [], notes: [] });
+          await get().loadSide();
+        }
       }),
 
     setShowArchived: async (value) => {
@@ -184,6 +208,67 @@ export const useNave = create<State>((set, get) => {
         const board = get().board;
         if (board) set({ board: { ...board, panels: board.panels.filter((p) => p.id !== id) } });
       }),
+
+    toggleSide: () => set({ sideOpen: !get().sideOpen }),
+
+    loadSide: async () => {
+      const { activeId } = get();
+      try {
+        const inbox = await call('note:list', { projectId: null });
+        if (!activeId) return set({ tasks: [], notes: [], inbox });
+        const [tasks, notes] = await Promise.all([call('task:list', { projectId: activeId }), call('note:list', { projectId: activeId })]);
+        set({ tasks, notes, inbox });
+      } catch (error) {
+        set({ error: error instanceof Error ? error.message : String(error) });
+      }
+    },
+
+    addTask: (title) =>
+      guard(async () => {
+        const { activeId } = get();
+        if (!activeId) return;
+        const task = await call('task:create', { projectId: activeId, title });
+        set({ tasks: [...get().tasks, task] });
+      }),
+
+    setTaskStatus: (id, status) =>
+      guard(async () => {
+        const task = await call('task:update', { id, status });
+        set({ tasks: get().tasks.map((x) => (x.id === id ? task : x)) });
+      }),
+
+    removeTask: (id) =>
+      guard(async () => {
+        await call('task:delete', { id });
+        set({ tasks: get().tasks.filter((x) => x.id !== id) });
+      }),
+
+    addNote: (projectId) =>
+      guard(async () => {
+        await call('note:create', { projectId });
+        await get().loadSide();
+      }),
+
+    saveNote: (id, patch) =>
+      guard(async () => {
+        await call('note:update', { id, ...patch });
+        await get().loadSide();
+      }),
+
+    removeNote: (id) =>
+      guard(async () => {
+        await call('note:delete', { id });
+        await get().loadSide();
+      }),
+
+    pasteToClaude: (panelId, text) =>
+      guard(async () => {
+        await call('claude:paste', { panelId, text });
+        const title = get().board?.panels.find((p) => p.id === panelId)?.title ?? 'Claude';
+        set({ info: `Pegado en «${title}». Revísalo y pulsa Intro dentro de Claude para enviarlo.` });
+      }),
+
+    clearInfo: () => set({ info: null }),
 
     clearError: () => set({ error: null })
   };

@@ -17,6 +17,8 @@ export function BoardView() {
   const addPanel = useNave((s) => s.addPanel);
   const removePanel = useNave((s) => s.removePanel);
   const project = useNave((s) => s.projects.find((p) => p.id === s.activeId));
+  const sideOpen = useNave((s) => s.sideOpen);
+  const toggleSide = useNave((s) => s.toggleSide);
   const shells = useNave((s) => s.shells);
   const shellId = useNave((s) => s.shellId);
   const setShellId = useNave((s) => s.setShellId);
@@ -101,6 +103,9 @@ export function BoardView() {
         </GlassButton>
         <GlassButton data-testid="overview-btn" aria-pressed={overview} onClick={toggleOverview}>
           {overview ? t('board.exitOverview') : t('board.overview')}
+        </GlassButton>
+        <GlassButton data-testid="side-toggle-btn" aria-pressed={sideOpen} onClick={toggleSide}>
+          {t('side.toggle')}
         </GlassButton>
         <span className="zoom" data-testid="zoom-label">{Math.round(camera.zoom * 100)} %</span>
       </header>

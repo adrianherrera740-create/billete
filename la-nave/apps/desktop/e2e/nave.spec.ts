@@ -235,3 +235,87 @@ test('Claude: sin claude instalado el panel lo explica', async () => {
   await expect(page.getByRole('status')).toContainText('No se ha encontrado Claude Code');
   await app.close();
 });
+
+test('tareas y notas: por proyecto, bandeja sin proyecto, mover entre ambos y persistir', async () => {
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  let app = await launch(dataDir);
+  let page = await ready(app);
+  await createProject(page, 'Alfa');
+  await page.getByTestId('task-input').fill('Leer Seller Center');
+  await page.getByTestId('task-add-btn').click();
+  await page.getByTestId('task-input').fill('Abrir la ficha de CJ');
+  await page.getByTestId('task-add-btn').click();
+  await expect(page.getByTestId('task')).toHaveCount(2);
+  await page.getByTestId('task').first().getByRole('checkbox').check();
+  await expect(page.getByTestId('task').first()).toHaveClass(/done/);
+
+  // Una nota de proyecto y otra en la bandeja (sin proyecto).
+  await page.getByTestId('tab-notes').click();
+  await page.getByTestId('note-add-btn').click();
+  await page.getByTestId('note-body').fill('nota de Alfa');
+  await page.getByTestId('note-body').blur();
+  await page.getByTestId('tab-inbox').click();
+  await page.getByTestId('inbox-add-btn').click();
+  await page.getByTestId('note-body').fill('idea suelta');
+  await page.getByTestId('note-body').blur();
+
+  // La bandeja no depende del proyecto: sigue ahí con otro proyecto abierto, y las tareas no se mezclan.
+  await createProject(page, 'Beta');
+  await expect(page.getByTestId('tab-tasks')).toBeVisible();
+  await page.getByTestId('tab-tasks').click();
+  await expect(page.getByTestId('task')).toHaveCount(0);
+  await page.getByTestId('tab-inbox').click();
+  await expect(page.getByTestId('note-body')).toHaveValue('idea suelta');
+
+  // Mover la nota de la bandeja a Beta y comprobar que sale de la bandeja.
+  await page.getByLabel('Mover la nota a').selectOption({ label: 'Beta' });
+  await expect(page.getByTestId('note')).toHaveCount(0);
+  await page.getByTestId('tab-notes').click();
+  await expect(page.getByTestId('note-body')).toHaveValue('idea suelta');
+  await app.close();
+
+  app = await launch(dataDir);
+  page = await ready(app);
+  await page.getByTestId('project-item').filter({ hasText: 'Alfa' }).click();
+  await expect(page.getByTestId('task')).toHaveCount(2);
+  await expect(page.getByTestId('task').first()).toHaveClass(/done/);
+  await page.getByTestId('tab-notes').click();
+  await expect(page.getByTestId('note-body')).toHaveValue('nota de Alfa');
+  await app.close();
+});
+
+test('enviar una nota a Claude la pega sin Intro; la persona decide cuándo enviarla', async () => {
+  test.skip(process.platform === 'win32', 'El falso claude es un script de Unix');
+  const dataDir = mkdtempSync(join(tmpdir(), 'nave-e2e-'));
+  const home = mkdtempSync(join(tmpdir(), 'nave-home-'));
+  const app = await electron.launch({
+    args: [join(__dirname, '../out/main/index.js'), '--no-sandbox'],
+    env: { ...process.env, HOME: home, NAVE_CLAUDE_BIN: join(__dirname, 'fixtures', 'fake-claude.mjs'), NAVE_NO_RELAUNCH: '1', NAVE_USER_DATA: dataDir }
+  });
+  const page = await ready(app);
+  await createProject(page, 'Con envío');
+  await page.getByTestId('tab-notes').click();
+  await page.getByTestId('note-add-btn').click();
+  await page.getByTestId('note-body').fill('revisa el plan de proveedores');
+  await page.getByTestId('note-body').blur();
+  // Sin panel de Claude no se puede enviar.
+  await expect(page.getByTestId('note-send-btn')).toBeDisabled();
+
+  await page.getByTestId('add-claude-btn').click();
+  await expect(page.getByTestId('claude-state')).toHaveText('Inactivo', { timeout: 15_000 });
+  await page.getByTestId('note-send-btn').click();
+  await expect(page.getByTestId('info-toast')).toContainText('pulsa Intro dentro de Claude');
+
+  // Sin Intro, Claude no empieza a trabajar.
+  await page.waitForTimeout(1200);
+  await expect(page.getByTestId('claude-state')).toHaveText('Inactivo');
+
+  // La persona pulsa Intro y entonces sí.
+  await page.locator('.xterm-helper-textarea').focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('claude-state')).toHaveText('Trabajando');
+  await expect(page.getByTestId('claude-state')).toHaveText('Inactivo', { timeout: 15_000 });
+  await page.getByTestId('claude-history-btn').click();
+  await expect(page.getByTestId('claude-history')).toContainText('revisa el plan de proveedores');
+  await app.close();
+});

@@ -29,7 +29,9 @@ hook('SessionStart');
 
 const rl = createInterface({ input: process.stdin });
 rl.on('line', (line) => {
-  const text = line.trim();
+  // Un pegado con bracketed paste llega con marcas ESC[200~ ... ESC[201~: se quitan, como haría el terminal de Claude.
+  // eslint-disable-next-line no-control-regex
+  const text = line.replace(/\x1b\[20[01]~/g, '').trim();
   if (!text) return;
   if (text === 'exit') {
     hook('SessionEnd');

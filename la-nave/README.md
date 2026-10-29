@@ -2,7 +2,7 @@
 
 Tu escritorio de proyectos con IA para Windows 11: proyectos, terminales reales, Claude Code, un Brain con búsqueda, tareas y notas.
 
-Estado: **F0 a F4 completadas** (andamiaje, núcleo y persistencia, proyectos y pizarra, terminales reales, Claude Code). Plan completo por fases en `docs/adr/` y en el prompt maestro de la persona (`../cerebro/la-nave-prompt-maestro.md`).
+Estado: **F0 a F5 completadas** (andamiaje, núcleo y persistencia, proyectos y pizarra, terminales reales, Claude Code, tareas y notas). Plan completo por fases en `docs/adr/` y en el prompt maestro de la persona (`../cerebro/la-nave-prompt-maestro.md`).
 
 ## Requisitos
 - Node 22 o superior y Git.

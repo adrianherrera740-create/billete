@@ -93,4 +93,24 @@ select option { background: #161c2a; }
 .claude-history .msg { margin: 0 0 10px; white-space: pre-wrap; }
 .claude-history .who { display: block; font-size: 11px; color: var(--muted); }
 
+.app.with-side { grid-template-columns: 260px 1fr 320px; }
+.side { display: flex; flex-direction: column; min-height: 0; padding: 10px; gap: 8px; }
+.tabs { display: flex; gap: 4px; }
+.tabs button { flex: 1; padding: 6px 4px; border-radius: 8px; border: 1px solid transparent; background: none; cursor: pointer; color: var(--muted); }
+.tabs button.on { background: rgba(255, 255, 255, 0.12); color: var(--text); }
+.side-body { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.inline-form { display: flex; gap: 6px; }
+.inline-form input, .note input, .note textarea { padding: 7px 9px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.06); color: var(--text); font: inherit; min-width: 0; }
+.inline-form input { flex: 1; }
+.side-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.task { display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 8px; background: rgba(255, 255, 255, 0.04); }
+.task.done .task-title { text-decoration: line-through; color: var(--muted); }
+.task-title { flex: 1; overflow-wrap: anywhere; }
+.task .glass-btn { font-size: 11px; }
+.note { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+.note textarea { min-height: 70px; resize: vertical; }
+.note-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.note-actions select { max-width: 130px; }
+.toast.info { background: rgba(20, 70, 120, 0.9); }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
