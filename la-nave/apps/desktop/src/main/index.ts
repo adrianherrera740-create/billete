@@ -1,8 +1,10 @@
 import { existsSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { app, BrowserWindow, shell } from 'electron';
 import { spawn as ptySpawn } from 'node-pty';
 import { APP_NAME } from '@nave/shared';
+import { ClaudeService } from './claude';
 import { handlersFor, registerIpc } from './ipc';
 import { startCore } from './nave';
 import { detectShells, realDeps } from './shells';
@@ -42,6 +44,7 @@ function createWindow(): BrowserWindow {
 
 let core: NaveCore | undefined;
 let terminals: TerminalManager | undefined;
+let claude: ClaudeService | undefined;
 
 /** Solo se atienden peticiones que vienen de nuestra propia página (archivo local o servidor de desarrollo). */
 function isOwnPage(event: unknown): boolean {
@@ -50,15 +53,32 @@ function isOwnPage(event: unknown): boolean {
   return dev ? url.startsWith(dev) : url.startsWith('file://');
 }
 
-void app.whenReady().then(() => {
+void app.whenReady().then(async () => {
   // NAVE_USER_DATA permite aislar los datos (tests e2e) sin tocar los reales.
   core = startCore(process.env['NAVE_USER_DATA'] ?? app.getPath('userData'), app.getVersion());
   const current = core;
   const shells = detectShells(realDeps());
+  const claudeService = new ClaudeService({
+    db: current.db,
+    bus: current.bus,
+    log: current.log.app,
+    dataDir: current.paths.dataDir,
+    home: homedir(),
+    env: process.env,
+    platform: process.platform,
+    exists: existsSync,
+    emit: (event) => {
+      for (const win of BrowserWindow.getAllWindows()) win.webContents.send('claude:event', event);
+    },
+    getPanel: (id) => current.projects.panel(id)
+  });
+  await claudeService.start();
+  claude = claudeService;
   const manager = new TerminalManager({
     getPanel: (id) => current.projects.panel(id),
     getProject: (id) => current.projects.get(id),
     shells: () => shells,
+    claude: claudeService.launch,
     spawn: (file, args, options) => ptySpawn(file, args, options),
     emit: (event) => {
       for (const win of BrowserWindow.getAllWindows()) win.webContents.send('terminal:event', event);
@@ -69,8 +89,9 @@ void app.whenReady().then(() => {
   });
   terminals = manager;
   current.bus.on('board.panel_removed', ({ panelId }) => manager.kill(panelId));
+  current.bus.on('terminal.process_exited', ({ panelId }) => claudeService.markEnded(panelId));
   registerIpc(
-    handlersFor(current.projects, manager),
+    handlersFor(current.projects, manager, claudeService),
     (error) => core?.log.app.error('Fallo interno en un canal IPC', error),
     undefined,
     isOwnPage
@@ -83,6 +104,7 @@ void app.whenReady().then(() => {
 
 app.on('before-quit', () => {
   terminals?.killAll();
+  void claude?.stop();
   core?.close();
   core = undefined;
 });

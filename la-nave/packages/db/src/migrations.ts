@@ -70,6 +70,19 @@ export const MIGRATIONS: Migration[] = [
       );
       CREATE INDEX panels_board ON panels(board_id);
     `
+  },
+  {
+    version: 3,
+    name: 'sesiones_de_claude',
+    sql: `
+      CREATE TABLE claude_sessions (
+        panel_id TEXT PRIMARY KEY REFERENCES panels(id) ON DELETE CASCADE,
+        session_id TEXT NOT NULL,
+        state TEXT NOT NULL,
+        transcript_path TEXT,
+        updated_at TEXT NOT NULL
+      );
+    `
   }
 ];
 

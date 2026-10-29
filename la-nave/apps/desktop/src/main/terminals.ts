@@ -2,6 +2,7 @@ import { homedir } from 'node:os';
 import type { EventBus, Logger } from '@nave/core';
 import type { EventMap, Panel, Project, ShellOption, TerminalEvent, TerminalStarted } from '@nave/shared';
 import { NaveError } from './projects';
+import type { ClaudeLaunchResult } from './claude';
 import type { ShellInfo } from './shells';
 
 export interface PtyLike {
@@ -23,6 +24,8 @@ export interface TerminalDeps {
   getPanel(id: string): Panel;
   getProject(id: string): Project;
   shells(): ShellInfo[];
+  /** Datos de arranque para los paneles `claude`; sin esto, un panel de Claude no se puede abrir. */
+  claude?(panel: Panel, resume: boolean): ClaudeLaunchResult;
   spawn: SpawnFn;
   emit(event: TerminalEvent): void;
   bus: EventBus<EventMap>;
@@ -34,9 +37,17 @@ export interface TerminalDeps {
   bufferChars?: number;
 }
 
+interface Launch {
+  id: string;
+  label: string;
+  file: string;
+  args: string[];
+  extraEnv: Record<string, string>;
+}
+
 interface Running {
   pty: PtyLike;
-  shell: ShellInfo;
+  shell: Launch;
   cwd: string;
   tail: string;
   end: number;
@@ -61,9 +72,9 @@ export class TerminalManager {
     return this.running.has(panelId);
   }
 
-  start(panelId: string, cols: number, rows: number): TerminalStarted {
+  start(panelId: string, cols: number, rows: number, resume = false): TerminalStarted {
     const panel = this.deps.getPanel(panelId);
-    if (panel.kind !== 'terminal') throw new NaveError('VALIDATION', 'Este panel no es una terminal.');
+    if (panel.kind !== 'terminal' && panel.kind !== 'claude') throw new NaveError('VALIDATION', 'Este panel no es una terminal.');
 
     const existing = this.running.get(panelId);
     if (existing) {
@@ -72,13 +83,22 @@ export class TerminalManager {
     }
 
     const notices: string[] = [];
-    const shells = this.deps.shells();
-    const wanted = typeof panel.config['shell'] === 'string' ? panel.config['shell'] : null;
-    const shell = shells.find((s) => s.id === wanted) ?? shells[0];
-    if (!shell) {
-      return { running: false, replay: '', end: 0, shell: '', cwd: '', notice: 'No se ha encontrado ningún shell en este equipo. Instala PowerShell, Git Bash o WSL.' };
+    let shell: Launch;
+    if (panel.kind === 'claude') {
+      const result = this.deps.claude?.(panel, resume);
+      if (!result) throw new NaveError('VALIDATION', 'Claude Code no está disponible en esta versión de La Nave.');
+      if ('unavailable' in result) return { running: false, replay: '', end: 0, shell: 'Claude Code', cwd: '', notice: result.unavailable };
+      shell = result.launch;
+    } else {
+      const shells = this.deps.shells();
+      const wanted = typeof panel.config['shell'] === 'string' ? panel.config['shell'] : null;
+      const found = shells.find((s) => s.id === wanted) ?? shells[0];
+      if (!found) {
+        return { running: false, replay: '', end: 0, shell: '', cwd: '', notice: 'No se ha encontrado ningún shell en este equipo. Instala PowerShell, Git Bash o WSL.' };
+      }
+      if (wanted !== null && found.id !== wanted) notices.push(`El shell «${wanted}» ya no está disponible; se abrió ${found.label}.`);
+      shell = { ...found, extraEnv: {} };
     }
-    if (wanted !== null && shell.id !== wanted) notices.push(`El shell «${wanted}» ya no está disponible; se abrió ${shell.label}.`);
 
     const home = this.deps.home ?? homedir();
     const root = this.deps.getProject(panel.projectId).rootPath;
@@ -91,6 +111,7 @@ export class TerminalManager {
     for (const [key, value] of Object.entries(this.deps.env ?? process.env)) {
       if (value !== undefined && !BLOCKED_ENV.test(key)) env[key] = value;
     }
+    Object.assign(env, shell.extraEnv);
     env['TERM'] = 'xterm-256color';
     env['COLORTERM'] = 'truecolor';
 

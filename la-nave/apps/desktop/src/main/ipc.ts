@@ -3,6 +3,7 @@ import { CHANNELS, ValidationError } from '@nave/shared';
 import type { ChannelInput, ChannelName, ChannelOutputs, Result } from '@nave/shared';
 import { NaveError } from './projects';
 import type { Projects } from './projects';
+import type { ClaudeService } from './claude';
 import type { TerminalManager } from './terminals';
 
 export type Handler<C extends ChannelName> = (input: ChannelInput<C>) => ChannelOutputs[C];
@@ -25,7 +26,7 @@ export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw:
   }
 }
 
-export function handlersFor(projects: Projects, terminals: TerminalManager): Handlers {
+export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -40,7 +41,13 @@ export function handlersFor(projects: Projects, terminals: TerminalManager): Han
     'terminal:start': (i) => terminals.start(i.panelId, i.cols, i.rows),
     'terminal:input': (i) => terminals.input(i.panelId, i.data),
     'terminal:resize': (i) => terminals.resize(i.panelId, i.cols, i.rows),
-    'terminal:kill': (i) => terminals.kill(i.panelId)
+    'terminal:kill': (i) => terminals.kill(i.panelId),
+    'claude:status': (i) => claude.status(i.panelId, terminals.isRunning(i.panelId)),
+    'claude:resume': (i) => {
+      if (terminals.isRunning(i.panelId)) throw new NaveError('VALIDATION', 'La sesión ya está en marcha. Cierra el panel si quieres empezar otra.');
+      return terminals.start(i.panelId, i.cols, i.rows, true);
+    },
+    'claude:history': (i) => claude.history(i.panelId)
   };
 }
 

@@ -5,6 +5,7 @@ import { NaveError } from './projects';
 import type { ShellInfo } from './shells';
 import { TerminalManager } from './terminals';
 import type { PtyLike, SpawnFn } from './terminals';
+import type { ClaudeLaunchResult } from './claude';
 
 class FakePty implements PtyLike {
   pid = 4242;
@@ -27,7 +28,7 @@ const SHELLS: ShellInfo[] = [
   { id: 'cmd', label: 'CMD', file: 'C:\\cmd.exe', args: [] }
 ];
 
-function setup(options: { panel?: Partial<Panel>; rootPath?: string | null; cwdExists?: boolean; shells?: ShellInfo[]; spawnThrows?: boolean } = {}) {
+function setup(options: { claude?: ClaudeLaunchResult; panel?: Partial<Panel>; rootPath?: string | null; cwdExists?: boolean; shells?: ShellInfo[]; spawnThrows?: boolean } = {}) {
   const ptys: FakePty[] = [];
   const calls: Array<{ file: string; args: string[]; cwd: string; env: Record<string, string> }> = [];
   const spawn: SpawnFn = (file, args, o) => {
@@ -49,6 +50,7 @@ function setup(options: { panel?: Partial<Panel>; rootPath?: string | null; cwdE
     getPanel: (id) => { if (id !== panel.id) throw new NaveError('NOT_FOUND', 'no existe'); return panel; },
     getProject: () => project,
     shells: () => options.shells ?? SHELLS,
+    ...(options.claude ? { claude: () => options.claude as ClaudeLaunchResult } : {}),
     spawn,
     emit: (e) => pushed.push(e),
     bus,
@@ -80,6 +82,23 @@ describe('TerminalManager', () => {
     expect(calls[0]?.cwd).toBe('C:\\Users\\yo');
     expect(res.notice).toContain('«fish» ya no está disponible');
     expect(res.notice).toContain('carpeta del proyecto no existe');
+  });
+
+  it('un panel de Claude se abre con el lanzador de Claude, con su token solo en el entorno', () => {
+    const { manager, calls } = setup({
+      panel: { kind: 'claude' },
+      claude: { launch: { file: '/usr/bin/claude', args: ['--session-id', 'abc'], label: 'Claude Code', id: 'claude', extraEnv: { NAVE_HOOK_TOKEN: 'tok', NAVE_PANEL_ID: 'p1' } } }
+    });
+    const res = manager.start('p1', 100, 30);
+    expect(res).toMatchObject({ running: true, shell: 'Claude Code' });
+    expect(calls[0]).toMatchObject({ file: '/usr/bin/claude', args: ['--session-id', 'abc'] });
+    expect(calls[0]?.env['NAVE_HOOK_TOKEN']).toBe('tok');
+  });
+
+  it('si Claude no está disponible lo explica y no abre nada', () => {
+    const { manager, calls } = setup({ panel: { kind: 'claude' }, claude: { unavailable: 'No se ha encontrado Claude Code' } });
+    expect(manager.start('p1', 80, 24)).toMatchObject({ running: false, notice: 'No se ha encontrado Claude Code' });
+    expect(calls).toHaveLength(0);
   });
 
   it('un panel que no es terminal se rechaza', () => {

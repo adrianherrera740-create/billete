@@ -66,3 +66,28 @@ export interface TerminalStarted {
 export type TerminalEvent =
   | { type: 'data'; panelId: string; data: string; end: number }
   | { type: 'exit'; panelId: string; exitCode: number | null };
+
+export const CLAUDE_STATES = ['unknown', 'idle', 'working', 'waiting', 'ended'] as const;
+export type ClaudeState = (typeof CLAUDE_STATES)[number];
+
+export interface ClaudeStatus {
+  panelId: string;
+  state: ClaudeState;
+  sessionId: string | null;
+  /** ¿Está instalado `claude` en este equipo? Si no, el panel lo explica en vez de fallar. */
+  available: boolean;
+  running: boolean;
+  notice: string | null;
+}
+
+export interface ClaudeEvent {
+  type: 'claude-state';
+  panelId: string;
+  state: ClaudeState;
+  sessionId: string | null;
+}
+
+export interface HistoryEntry {
+  role: 'user' | 'assistant';
+  text: string;
+}

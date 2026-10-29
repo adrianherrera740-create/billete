@@ -19,7 +19,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 });
@@ -51,9 +51,9 @@ describe('parsers de canales', () => {
 });
 
 describe('terminales (seguridad)', () => {
-  it('ningún canal de terminal está permitido en remoto', () => {
+  it('ningún canal de terminal ni de Claude está permitido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (name.startsWith('terminal:')) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (name.startsWith('terminal:') || name.startsWith('claude:')) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 

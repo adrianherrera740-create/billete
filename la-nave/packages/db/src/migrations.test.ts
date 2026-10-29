@@ -34,6 +34,20 @@ describe('migraciones', () => {
     expect(db.prepare('SELECT type FROM activity').all()).toEqual([{ type: 'prueba' }]);
   });
 
+  it('la migración 3 sobre una BD en versión 2 conserva proyectos y paneles', () => {
+    const db = mem();
+    db.exec('PRAGMA foreign_keys = ON');
+    migrate(db, MIGRATIONS, { upTo: 2 });
+    db.exec(`INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t');
+      INSERT INTO boards (id, project_id) VALUES ('b','p');
+      INSERT INTO panels (id, board_id, project_id, kind, title, x, y, w, h, created_at, updated_at) VALUES ('a','b','p','claude','t',0,0,200,100,'t','t');`);
+    expect(migrate(db)).toEqual([3]);
+    expect(db.prepare('SELECT id FROM panels').all()).toEqual([{ id: 'a' }]);
+    db.exec("INSERT INTO claude_sessions (panel_id, session_id, state, updated_at) VALUES ('a','s','idle','t')");
+    db.exec("DELETE FROM panels WHERE id = 'a'");
+    expect(db.prepare('SELECT COUNT(*) AS n FROM claude_sessions').get()).toEqual({ n: 0 });
+  });
+
   it('borrar un proyecto borra su pizarra y sus paneles en cascada', () => {
     const db = mem();
     db.exec('PRAGMA foreign_keys = ON');

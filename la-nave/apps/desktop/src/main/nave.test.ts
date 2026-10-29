@@ -10,7 +10,7 @@ describe('startCore', () => {
   it('crea la BD migrada, la copia de arranque y los logs', () => {
     const dir = tmp();
     const core = startCore(dir, '0.0.1');
-    expect(core.db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 2 });
+    expect(core.db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 3 });
     expect(existsSync(core.paths.backups)).toBe(true);
     core.close();
     expect(readFileSync(join(dir, 'logs', 'app.log'), 'utf8')).toContain('Arranque del núcleo');
@@ -44,7 +44,7 @@ describe('startCore', () => {
     startCore(dir, '0.0.1').close();
     writeFileSync(join(dir, 'nave.db'), 'dañada '.repeat(200));
     const core = startCore(dir, '0.0.1');
-    expect(core.db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 2 });
+    expect(core.db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 3 });
     expect(readFileSync(join(dir, 'logs', 'security.log'), 'utf8')).toContain('Base de datos recuperada');
     core.close();
   });

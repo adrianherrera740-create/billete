@@ -13,7 +13,7 @@ import {
 } from './parse';
 import type { Parser } from './parse';
 import { PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { Board, Panel, Project, ShellOption, TerminalEvent, TerminalStarted } from './domain';
+import type { Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Panel, Project, ShellOption, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -85,7 +85,14 @@ export const CHANNELS = {
     remote: 'forbidden',
     input: object({ panelId: id, cols: num({ min: 20, max: 500, int: true }), rows: num({ min: 5, max: 200, int: true }) })
   },
-  'terminal:kill': { remote: 'forbidden', input: object({ panelId: id }) }
+  'terminal:kill': { remote: 'forbidden', input: object({ panelId: id }) },
+  // Claude Code: se ejecuta el `claude` real; aquí solo se consulta su estado y se reanuda o lee el historial.
+  'claude:status': { remote: 'forbidden', input: object({ panelId: id }) },
+  'claude:resume': {
+    remote: 'forbidden',
+    input: object({ panelId: id, cols: num({ min: 20, max: 500, int: true }), rows: num({ min: 5, max: 200, int: true }) })
+  },
+  'claude:history': { remote: 'forbidden', input: object({ panelId: id }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
 export type ChannelName = keyof typeof CHANNELS;
@@ -106,6 +113,9 @@ export interface ChannelOutputs {
   'terminal:input': null;
   'terminal:resize': null;
   'terminal:kill': null;
+  'claude:status': ClaudeStatus;
+  'claude:resume': TerminalStarted;
+  'claude:history': HistoryEntry[];
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';
@@ -124,18 +134,28 @@ export type Transport = (channel: ChannelName, input: unknown) => Promise<Result
 export type Unsubscribe = () => void;
 export type TerminalSubscribe = (handler: (event: TerminalEvent) => void) => Unsubscribe;
 
+export type ClaudeSubscribe = (handler: (event: ClaudeEvent) => void) => Unsubscribe;
+
 export interface NaveApi {
   readonly platform: string;
+  /** Cambios de estado de las sesiones de Claude (main empuja). */
+  onClaude: ClaudeSubscribe;
   invoke<C extends ChannelName>(channel: C, input: ChannelInput<C>): Promise<Result<ChannelOutputs[C]>>;
   /** Salida de las terminales (main empuja; no es un canal invoke). */
   onTerminal: TerminalSubscribe;
 }
 
 /** La misma API funciona por IPC (escritorio) o por red (móvil): solo cambia el transporte. */
-export function createApi(platform: string, transport: Transport, onTerminal: TerminalSubscribe = () => () => undefined): NaveApi {
+export function createApi(
+  platform: string,
+  transport: Transport,
+  onTerminal: TerminalSubscribe = () => () => undefined,
+  onClaude: ClaudeSubscribe = () => () => undefined
+): NaveApi {
   return {
     platform,
     onTerminal,
+    onClaude,
     invoke: async (channel, input) => (await transport(channel, input)) as Result<ChannelOutputs[typeof channel]>
   };
 }
