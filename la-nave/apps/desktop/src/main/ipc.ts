@@ -3,6 +3,7 @@ import { CHANNELS, ValidationError } from '@nave/shared';
 import type { ChannelInput, ChannelName, ChannelOutputs, Result } from '@nave/shared';
 import { NaveError } from './projects';
 import type { Projects } from './projects';
+import type { Brain } from './brain';
 import type { ClaudeService } from './claude';
 import type { Tasks } from './tasks';
 import type { TerminalManager } from './terminals';
@@ -27,7 +28,7 @@ export function run<C extends ChannelName>(channel: C, handler: Handler<C>, raw:
   }
 }
 
-export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService, tasks: Tasks): Handlers {
+export function handlersFor(projects: Projects, terminals: TerminalManager, claude: ClaudeService, tasks: Tasks, brain: Brain): Handlers {
   return {
     'project:list': (i) => projects.list(i.includeArchived),
     'project:create': (i) => projects.create(i),
@@ -57,7 +58,15 @@ export function handlersFor(projects: Projects, terminals: TerminalManager, clau
     'note:list': (i) => tasks.listNotes(i.projectId),
     'note:create': (i) => tasks.createNote(i),
     'note:update': (i) => tasks.updateNote(i),
-    'note:delete': (i) => tasks.deleteNote(i.id)
+    'note:delete': (i) => tasks.deleteNote(i.id),
+    'brain:list': (i) => brain.list(i.projectId),
+    'brain:get': (i) => brain.get(i.id),
+    'brain:create': (i) => brain.create(i),
+    'brain:update': (i) => brain.update(i),
+    'brain:review': (i) => brain.review(i.id, i.action),
+    'brain:delete': (i) => brain.delete(i.id),
+    'brain:search': (i) => brain.search(i.projectId, i.query, i.includeDeprecated ?? false),
+    'brain:context': (i) => brain.context(i.projectId, i.query)
   };
 }
 

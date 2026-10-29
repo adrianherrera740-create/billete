@@ -8,6 +8,7 @@ import { CHANNELS } from '@nave/shared';
 import type { ChannelName, EventMap, Result } from '@nave/shared';
 import { handlersFor, registerIpc } from './ipc';
 import type { IpcLike } from './ipc';
+import type { Brain } from './brain';
 import { Projects } from './projects';
 import { Tasks } from './tasks';
 import type { ClaudeService } from './claude';
@@ -38,7 +39,7 @@ function setup(): { call: (channel: ChannelName, input: unknown) => Result<unkno
   const fake: IpcLike = { handle: (c, l) => void registered.set(c, l) };
   const errors: unknown[] = [];
   const projects = new Projects(db, new EventBus<EventMap>());
-  registerIpc(handlersFor(projects, stubTerminals(projects), stubClaude, new Tasks(db, new EventBus<EventMap>())), (e) => errors.push(e), fake);
+  registerIpc(handlersFor(projects, stubTerminals(projects), stubClaude, new Tasks(db, new EventBus<EventMap>()), {} as Brain), (e) => errors.push(e), fake);
   return {
     call: (channel, input) => registered.get(channel)?.({}, input) as Result<unknown>,
     errors,
@@ -75,7 +76,7 @@ describe('registro único de IPC', () => {
     migrate(db);
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
     const projects = new Projects(db, new EventBus<EventMap>());
-    registerIpc(handlersFor(projects, stubTerminals(projects), stubClaude, new Tasks(db, new EventBus<EventMap>())), () => undefined, { handle: (c, l) => void registered.set(c, l) }, (e) => (e as { ok?: boolean }).ok === true);
+    registerIpc(handlersFor(projects, stubTerminals(projects), stubClaude, new Tasks(db, new EventBus<EventMap>()), {} as Brain), () => undefined, { handle: (c, l) => void registered.set(c, l) }, (e) => (e as { ok?: boolean }).ok === true);
     const input = { includeArchived: false };
     expect(registered.get('project:list')?.({ ok: false }, input)).toMatchObject({ ok: false, error: { code: 'FORBIDDEN' } });
     expect(registered.get('project:list')?.({ ok: true }, input)).toEqual({ ok: true, data: [] });
@@ -88,7 +89,7 @@ describe('registro único de IPC', () => {
     const registered = new Map<string, (event: unknown, input: unknown) => unknown>();
     const projects2 = new Projects(openDatabase(join(mkdtempSync(join(tmpdir(), 'nave-ipc2-')), 'a.db')), new EventBus<EventMap>());
     registerIpc(
-      { ...handlersFor(projects2, stubTerminals(projects2), stubClaude, {} as Tasks), 'project:list': () => { throw new Error('ruta secreta C:\\Users\\yo\\x'); } },
+      { ...handlersFor(projects2, stubTerminals(projects2), stubClaude, {} as Tasks, {} as Brain), 'project:list': () => { throw new Error('ruta secreta C:\\Users\\yo\\x'); } },
       (e) => errors.push(e),
       { handle: (c, l) => void registered.set(c, l) }
     );

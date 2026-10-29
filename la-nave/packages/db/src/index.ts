@@ -11,3 +11,5 @@ export {
   verifyBackup
 } from './database';
 export type { OpenResult, RestoreOutcome } from './database';
+export { FTS_ROWID_OFFSET, buildFtsQuery } from './fts';
+export type { FtsQueryOptions } from './fts';

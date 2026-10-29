@@ -53,7 +53,7 @@ describe('migraciones', () => {
     db.exec('PRAGMA foreign_keys = ON');
     migrate(db, MIGRATIONS, { upTo: 3 });
     db.exec("INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t')");
-    expect(migrate(db)).toEqual([4]);
+    expect(migrate(db, MIGRATIONS, { upTo: 4 })).toEqual([4]);
     expect(db.prepare('SELECT id FROM projects').all()).toEqual([{ id: 'p' }]);
     db.exec(`INSERT INTO tasks (id, project_id, title, position, created_at, updated_at) VALUES ('t','p','x',1,'t','t');
       INSERT INTO notes (id, project_id, created_at, updated_at) VALUES ('n','p','t','t');`);

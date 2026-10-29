@@ -12,8 +12,8 @@ import {
   str
 } from './parse';
 import type { Parser } from './parse';
-import { PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, TASK_STATUSES, ZOOM_MAX, ZOOM_MIN } from './domain';
-import type { Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
+import { BRAIN_KINDS, PANEL_KINDS, PANEL_MIN_H, PANEL_MIN_W, TASK_STATUSES, ZOOM_MAX, ZOOM_MIN } from './domain';
+import type { BrainContext, BrainDetail, BrainHit, BrainNode, Board, ClaudeEvent, ClaudeStatus, HistoryEntry, Note, Panel, Project, ShellOption, Task, TerminalEvent, TerminalStarted } from './domain';
 
 export type Remote = 'allowed' | 'forbidden';
 
@@ -115,7 +115,25 @@ export const CHANNELS = {
     remote: 'forbidden',
     input: objectWith({ id }, { title: str({ max: 120, trim: true }), body: str({ max: 20_000 }), projectId: nullable(id) })
   },
-  'note:delete': { remote: 'forbidden', input: object({ id }) }
+  'note:delete': { remote: 'forbidden', input: object({ id }) },
+  // Brain: el renderer NO puede fijar `source` ni `confidence: verified` de lo que genera Claude; eso lo decide main.
+  'brain:list': { remote: 'forbidden', input: object({ projectId: id }) },
+  'brain:get': { remote: 'forbidden', input: object({ id }) },
+  'brain:create': {
+    remote: 'forbidden',
+    input: objectWith({ projectId: id, title: str({ min: 1, max: 160, trim: true }) }, { body: str({ max: 50_000 }), kind: oneOf(BRAIN_KINDS) })
+  },
+  'brain:update': {
+    remote: 'forbidden',
+    input: objectWith({ id }, { title: str({ min: 1, max: 160, trim: true }), body: str({ max: 50_000 }), kind: oneOf(BRAIN_KINDS) })
+  },
+  'brain:review': { remote: 'forbidden', input: object({ id, action: oneOf(['accept', 'reject', 'restore'] as const) }) },
+  'brain:delete': { remote: 'forbidden', input: object({ id }) },
+  'brain:search': {
+    remote: 'forbidden',
+    input: objectWith({ projectId: id, query: str({ max: 300 }) }, { includeDeprecated: bool })
+  },
+  'brain:context': { remote: 'forbidden', input: object({ projectId: id, query: str({ max: 300 }) }) }
 } as const satisfies Record<string, { remote: Remote; input: Parser<unknown> }>;
 
 export type ChannelName = keyof typeof CHANNELS;
@@ -148,6 +166,14 @@ export interface ChannelOutputs {
   'note:create': Note;
   'note:update': Note;
   'note:delete': null;
+  'brain:list': BrainNode[];
+  'brain:get': BrainDetail;
+  'brain:create': BrainNode;
+  'brain:update': BrainNode;
+  'brain:review': BrainNode;
+  'brain:delete': null;
+  'brain:search': BrainHit[];
+  'brain:context': BrainContext;
 }
 
 export type ErrorCode = 'VALIDATION' | 'NOT_FOUND' | 'FORBIDDEN' | 'INTERNAL';

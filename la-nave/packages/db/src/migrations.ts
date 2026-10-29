@@ -109,6 +109,46 @@ export const MIGRATIONS: Migration[] = [
       );
       CREATE INDEX notes_project ON notes(project_id, updated_at);
     `
+  },
+  {
+    version: 5,
+    name: 'brain',
+    // `rid` es INTEGER PRIMARY KEY: VACUUM (y por tanto las copias con VACUUM INTO) no lo renumera.
+    // El índice FTS usa rowid = 1e12 + rid y se mantiene SOLO por rowid (nunca por columnas UNINDEXED).
+    sql: `
+      CREATE TABLE brain_nodes (
+        rid INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT NOT NULL UNIQUE,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        kind TEXT NOT NULL DEFAULT 'note',
+        title TEXT NOT NULL,
+        body TEXT NOT NULL DEFAULT '',
+        confidence TEXT NOT NULL DEFAULT 'unverified',
+        source TEXT NOT NULL DEFAULT 'user',
+        source_ref TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      CREATE INDEX brain_nodes_project ON brain_nodes(project_id, confidence);
+      CREATE TABLE brain_links (
+        src_rid INTEGER NOT NULL REFERENCES brain_nodes(rid) ON DELETE CASCADE,
+        dst_title TEXT NOT NULL,
+        dst_rid INTEGER REFERENCES brain_nodes(rid) ON DELETE SET NULL,
+        PRIMARY KEY (src_rid, dst_title)
+      );
+      CREATE INDEX brain_links_dst ON brain_links(dst_rid);
+      CREATE VIRTUAL TABLE brain_fts USING fts5(title, body, tokenize = 'unicode61 remove_diacritics 2');
+      CREATE TRIGGER brain_nodes_ai AFTER INSERT ON brain_nodes BEGIN
+        INSERT INTO brain_fts (rowid, title, body) VALUES (1000000000000 + new.rid, new.title, new.body);
+      END;
+      CREATE TRIGGER brain_nodes_au AFTER UPDATE OF title, body ON brain_nodes BEGIN
+        DELETE FROM brain_fts WHERE rowid = 1000000000000 + old.rid;
+        INSERT INTO brain_fts (rowid, title, body) VALUES (1000000000000 + new.rid, new.title, new.body);
+      END;
+      CREATE TRIGGER brain_nodes_ad AFTER DELETE ON brain_nodes BEGIN
+        DELETE FROM brain_fts WHERE rowid = 1000000000000 + old.rid;
+      END;
+    `
   }
 ];
 

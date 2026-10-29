@@ -4,6 +4,7 @@ import { EventBus, createFileSink, createLogger, redactDeep } from '@nave/core';
 import type { LogChannel, Logger } from '@nave/core';
 import { createBackup, migrate, openWithRecovery } from '@nave/db';
 import type { EventMap, EventName } from '@nave/shared';
+import { Brain } from './brain';
 import { Projects } from './projects';
 import { Tasks } from './tasks';
 
@@ -12,6 +13,7 @@ export interface NaveCore {
   db: DatabaseSync;
   projects: Projects;
   tasks: Tasks;
+  brain: Brain;
   log: Record<LogChannel, Logger>;
   paths: { dataDir: string; db: string; backups: string; logs: string };
   close(): void;
@@ -40,6 +42,8 @@ export function startCore(dataDir: string, version: string): NaveCore {
 
   const projects = new Projects(db, bus);
   const tasks = new Tasks(db, bus);
+  const brain = new Brain(db, bus);
+  brain.rebuildLinks();
   recordActivity(db, bus);
 
   const backup = createBackup(db, paths.backups, { label: 'arranque' });
@@ -52,6 +56,7 @@ export function startCore(dataDir: string, version: string): NaveCore {
     db,
     projects,
     tasks,
+    brain,
     log,
     paths,
     close() {
@@ -74,7 +79,11 @@ const ACTIVITY_EVENTS: EventName[] = [
   'task.deleted',
   'note.created',
   'note.updated',
-  'note.deleted'
+  'note.deleted',
+  'brain.node_created',
+  'brain.node_updated',
+  'brain.node_deleted',
+  'brain.node_reviewed'
 ];
 
 /** Activity: cada evento de proyecto queda registrado, siempre redactado. Nunca la salida de terminales. */

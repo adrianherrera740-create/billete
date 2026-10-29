@@ -116,3 +116,42 @@ export interface Note {
   createdAt: string;
   updatedAt: string;
 }
+
+export const BRAIN_CONFIDENCE = ['verified', 'unverified', 'deprecated'] as const;
+export type BrainConfidence = (typeof BRAIN_CONFIDENCE)[number];
+export const BRAIN_KINDS = ['note', 'decision', 'fact', 'source'] as const;
+export type BrainKind = (typeof BRAIN_KINDS)[number];
+export type BrainSource = 'user' | 'claude';
+
+/** Un nodo del Brain. Lo generado por Claude NUNCA nace verificado: la persona lo acepta, edita o rechaza. */
+export interface BrainNode {
+  id: string;
+  projectId: string;
+  kind: BrainKind;
+  title: string;
+  body: string;
+  confidence: BrainConfidence;
+  source: BrainSource;
+  sourceRef: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BrainDetail {
+  node: BrainNode;
+  /** [[enlaces]] del texto; `targetId` es null si ese título no existe en el proyecto. */
+  links: Array<{ title: string; targetId: string | null }>;
+  backlinks: Array<{ id: string; title: string }>;
+}
+
+export interface BrainHit {
+  node: BrainNode;
+  snippet: string;
+}
+
+/** Paquete de contexto para la IA: solo lo relevante y con tope de tamaño, nunca el Brain entero. */
+export interface BrainContext {
+  text: string;
+  nodes: Array<{ id: string; title: string; confidence: BrainConfidence }>;
+  truncated: boolean;
+}

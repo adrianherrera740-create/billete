@@ -19,7 +19,7 @@ describe('clasificación de canales para acceso remoto (seguridad)', () => {
 
   it('todo lo que modifica datos está prohibido en remoto', () => {
     for (const name of Object.keys(CHANNELS) as ChannelName[]) {
-      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
+      if (/:(create|update|archive|delete|set-camera|start|input|resize|kill|resume|paste|review)$/.test(name)) expect(CHANNELS[name].remote, name).toBe('forbidden');
     }
   });
 });
@@ -92,6 +92,25 @@ describe('tareas y notas', () => {
     expect(() => p({ panelId: 'a', text: '' })).toThrow();
     expect(() => p({ panelId: 'a', text: 'x'.repeat(20_001) })).toThrow();
     expect(() => p({ panelId: 'a', text: 'hola', enter: true })).toThrow(/desconocido/);
+  });
+});
+
+describe('brain (seguridad)', () => {
+  it('el renderer no puede fijar source ni confidence al crear o editar un nodo', () => {
+    const create = CHANNELS['brain:create'].input;
+    expect(create({ projectId: 'p', title: 'T' })).toEqual({ projectId: 'p', title: 'T' });
+    expect(() => create({ projectId: 'p', title: 'T', source: 'user' })).toThrow(/desconocido/);
+    expect(() => create({ projectId: 'p', title: 'T', confidence: 'verified' })).toThrow(/desconocido/);
+    expect(() => CHANNELS['brain:update'].input({ id: 'a', confidence: 'verified' })).toThrow(/desconocido/);
+  });
+
+  it('revisar solo admite aceptar, rechazar o restaurar; buscar exige proyecto y limita la consulta', () => {
+    const review = CHANNELS['brain:review'].input;
+    expect(review({ id: 'a', action: 'accept' })).toEqual({ id: 'a', action: 'accept' });
+    expect(() => review({ id: 'a', action: 'verified' })).toThrow(/uno de/);
+    expect(() => CHANNELS['brain:search'].input({ query: 'x' })).toThrow(/falta este campo/);
+    expect(() => CHANNELS['brain:search'].input({ projectId: 'p', query: 'x'.repeat(301) })).toThrow();
+    expect(() => CHANNELS['brain:context'].input({ projectId: 'p', query: 'x', allProjects: true })).toThrow(/desconocido/);
   });
 });
 

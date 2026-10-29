@@ -91,7 +91,7 @@ void app.whenReady().then(async () => {
   current.bus.on('board.panel_removed', ({ panelId }) => manager.kill(panelId));
   current.bus.on('terminal.process_exited', ({ panelId }) => claudeService.markEnded(panelId));
   registerIpc(
-    handlersFor(current.projects, manager, claudeService, current.tasks),
+    handlersFor(current.projects, manager, claudeService, current.tasks, current.brain),
     (error) => core?.log.app.error('Fallo interno en un canal IPC', error),
     undefined,
     isOwnPage
