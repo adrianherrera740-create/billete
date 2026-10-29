@@ -1,0 +1,34 @@
+{
+  "name": "la-nave",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "La Nave: escritorio de proyectos con IA para Windows 11",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @nave/desktop",
+    "build": "npm run build -w @nave/desktop",
+    "dist": "npm run dist -w @nave/desktop",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:e2e": "npm run test:e2e -w @nave/desktop",
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "24.19.2",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.0.5"
+  }
+}

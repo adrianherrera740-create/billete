@@ -1,0 +1,8 @@
+{
+  "app": {
+    "name": "La Nave",
+    "tagline": "Tu escritorio de proyectos con IA",
+    "phase": "Fase {{phase}}: andamiaje listo",
+    "platform": "Sistema: {{platform}}"
+  }
+}
