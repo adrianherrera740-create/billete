@@ -1,6 +1,11 @@
-import { contextBridge } from 'electron';
-import type { NaveApi } from '@nave/shared';
+import { contextBridge, ipcRenderer } from 'electron';
+import { CHANNELS, createApi } from '@nave/shared';
+import type { ChannelName, Result } from '@nave/shared';
 
-// F0: superficie mínima. Los canales IPC reales llegan en F1/F2 desde @nave/shared.
-const api: NaveApi = { platform: process.platform };
+// El preload solo deja pasar canales declarados en @nave/shared; main vuelve a validar cada entrada.
+const api = createApi(process.platform, async (channel: ChannelName, input: unknown) => {
+  if (!(channel in CHANNELS)) throw new Error(`Canal desconocido: ${String(channel)}`);
+  return (await ipcRenderer.invoke(channel, input)) as Result<unknown>;
+});
+
 contextBridge.exposeInMainWorld('nave', api);

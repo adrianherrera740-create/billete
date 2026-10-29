@@ -30,6 +30,46 @@ export const MIGRATIONS: Migration[] = [
       );
       CREATE INDEX activity_ts ON activity(ts);
     `
+  },
+  {
+    version: 2,
+    name: 'proyectos_y_pizarra',
+    sql: `
+      CREATE TABLE projects (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        icon TEXT NOT NULL,
+        color TEXT NOT NULL,
+        root_path TEXT,
+        archived_at TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      CREATE TABLE boards (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL UNIQUE REFERENCES projects(id) ON DELETE CASCADE,
+        cam_x REAL NOT NULL DEFAULT 0,
+        cam_y REAL NOT NULL DEFAULT 0,
+        zoom REAL NOT NULL DEFAULT 1
+      );
+      CREATE TABLE panels (
+        id TEXT PRIMARY KEY,
+        board_id TEXT NOT NULL REFERENCES boards(id) ON DELETE CASCADE,
+        project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        kind TEXT NOT NULL,
+        title TEXT NOT NULL,
+        x REAL NOT NULL,
+        y REAL NOT NULL,
+        w REAL NOT NULL,
+        h REAL NOT NULL,
+        z INTEGER NOT NULL DEFAULT 0,
+        config TEXT NOT NULL DEFAULT '{}',
+        host_id TEXT,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      CREATE INDEX panels_board ON panels(board_id);
+    `
   }
 ];
 

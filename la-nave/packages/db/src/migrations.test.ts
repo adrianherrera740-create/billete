@@ -24,6 +24,27 @@ describe('migraciones', () => {
     expect(db.prepare('SELECT nombre, color FROM t').all()).toEqual([{ nombre: 'Proyecto uno', color: 'azul' }]);
   });
 
+  it('la migración 2 sobre una BD en versión 1 conserva ajustes y actividad', () => {
+    const db = mem();
+    migrate(db, MIGRATIONS, { upTo: 1 });
+    db.prepare("INSERT INTO settings (key, value, updated_at) VALUES ('tema', 'oscuro', 'hoy')").run();
+    db.prepare("INSERT INTO activity (ts, type) VALUES ('hoy', 'prueba')").run();
+    expect(migrate(db)).toEqual(MIGRATIONS.slice(1).map((m) => m.version));
+    expect(db.prepare('SELECT value FROM settings').all()).toEqual([{ value: 'oscuro' }]);
+    expect(db.prepare('SELECT type FROM activity').all()).toEqual([{ type: 'prueba' }]);
+  });
+
+  it('borrar un proyecto borra su pizarra y sus paneles en cascada', () => {
+    const db = mem();
+    db.exec('PRAGMA foreign_keys = ON');
+    migrate(db);
+    db.exec(`INSERT INTO projects VALUES ('p','n','i','#000000',NULL,NULL,'t','t');
+      INSERT INTO boards (id, project_id) VALUES ('b','p');
+      INSERT INTO panels (id, board_id, project_id, kind, title, x, y, w, h, created_at, updated_at) VALUES ('a','b','p','sticky','t',0,0,200,100,'t','t');`);
+    db.exec("DELETE FROM projects WHERE id = 'p'");
+    expect(db.prepare('SELECT COUNT(*) AS n FROM panels').get()).toEqual({ n: 0 });
+  });
+
   it('rechaza una migración antigua editada (checksum)', () => {
     const db = mem();
     migrate(db);
