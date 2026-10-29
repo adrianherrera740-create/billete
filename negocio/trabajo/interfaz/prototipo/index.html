@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>Panel privado</title>
+<style>
+:root{--fondo:#faf9f6;--texto:#1c1c1c;--suave:#555;--tarjeta:#fff;--borde:#cfcac0;--ok:#1d5c3a;--no:#8a2a2a;--acento:#243b53}
+@media (prefers-color-scheme:dark){:root{--fondo:#16181b;--texto:#ececec;--suave:#b0b0b0;--tarjeta:#1f2226;--borde:#3a3f45;--ok:#7fd1a0;--no:#f0a0a0;--acento:#a9c1dc}}
+html{font-size:112.5%}body{margin:0;background:var(--fondo);color:var(--texto);font-family:system-ui,sans-serif;line-height:1.5}
+header,main,nav,.barra{max-width:40rem;margin:0 auto;padding:.5rem 1rem}
+h2{font-size:1.4rem}h3{font-size:1.1rem}.nota{color:var(--suave);font-size:.9rem}.estado{font-weight:600}
+nav{display:flex;gap:.5rem;flex-wrap:wrap}
+button{min-height:48px;min-width:48px;padding:.5rem 1rem;font:inherit;border:2px solid var(--acento);background:var(--tarjeta);color:var(--texto);border-radius:.5rem}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
+.tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:.75rem;padding:.75rem 1rem;margin:.75rem 0}
+.fila{display:flex;gap:.5rem;flex-wrap:wrap}.ok{border-color:var(--ok)}.no{border-color:var(--no)}.peligro{border-color:var(--no);color:var(--no);font-weight:700;width:100%}
+.aviso{border-left:4px solid var(--no);padding-left:.5rem}.telefono{background:#101114;color:#eee;border-radius:1.5rem;padding:1rem;max-width:20rem}.hora{font-size:2.5rem;margin:.2rem 0}.notif{background:#2a2d33;border-radius:.75rem;padding:.5rem .75rem}
+.barra{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;font-size:.9rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header><strong>Panel privado</strong> <span class="nota">prototipo con datos ficticios, sin red</span> <span class="nota">Pendientes: <b id="pend">0</b></span></header>
+<div class="barra">
+  <label>Modo <select id="rol"><option value="titular">Titular</option><option value="asistente">Asistente</option></select></label>
+  <label><input type="checkbox" id="linea" checked> En linea</label>
+  <label><input type="checkbox" id="paso2"> Segundo paso (simula huella/passkey)</label>
+</div>
+<nav aria-label="Secciones">
+  <button type="button" data-vista="hoy">Hoy</button>
+  <button type="button" data-vista="cola">Aprobaciones</button>
+  <button type="button" data-vista="bloqueo">Bloqueo</button>
+  <button type="button" data-vista="ajustes">Apagar</button>
+</nav>
+<main><div id="estado" role="status" aria-live="polite" class="estado"></div><div id="contenido"></div></main>
+<script src="datos.js"></script>
+<script src="logica.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
