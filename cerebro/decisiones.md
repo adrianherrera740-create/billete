@@ -7,3 +7,6 @@ Web móvil propia servida por La Nave sobre Tailscale, lista cerrada de canales;
 
 ## 2026-10-29 — Nuevo negocio: chief of staff digital con agentes de IA para patrimonios altos
 La persona elige este negocio a partir del informe PDF. Se vende como servicio boutique con aprobación humana, no como «agencia de agentes». Primer producto: briefing diario + triaje de correo. Se empieza por verificar el informe (nada de él es verificado), construir una demo con datos ficticios y preparar el kit de confianza; cero gasto hasta que haya conversaciones. Reglas en `negocio/resumen.md`.
+
+## 2026-10-29 — Calendario de ventas de 12 semanas (propuesta, pendiente de la persona)
+Del 02/11/2026 al 24/01/2027, sin conversaciones nuevas del 21/12 al 03/01; el piloto cae en la semana 10 y la decisión de retainer hacia febrero de 2027. Umbrales de éxito y precios son hipótesis hasta calibrarlos en las conversaciones. Ver `negocio/trabajo/ventas/`.
