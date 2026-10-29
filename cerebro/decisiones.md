@@ -21,3 +21,6 @@
 
 ## 2026-10-29 — La Nave: web móvil y ajustes de emparejamiento (M4–M6)
 Decisión: el móvil usa una web propia (`apps/mobile`) servida por el propio servidor de La Nave, con los mismos canales que el escritorio y solo los de lista cerrada; la gestión del acceso (activar, emparejar, revocar) es solo del PC. Motivo: cero servicios externos, cero secretos en la nube, mínima superficie. Detalle en `la-nave/docs/adr/ADR-002-acceso-movil.md`. No verificado: Tailscale real y teléfono real.
+
+## 2026-10-29 — La persona: sin stock hasta validar; se admite otro país
+Decisión de la persona (mensaje del 29/10): 100 % sin stock hasta validar la idea; si otro país de TikTok Shop es más fácil y rentable, se puede vender fuera de España. Esto levanta "solo España" como condición, no "sin stock". Investigación (WebSearch, solo blogs de terceros, [NO VERIFICADO]): ningún mercado queda demostrado como más fácil; EEUU cita despacho en 2 días laborables y entrega en ~6, y requisitos de empresa (>=60 días) para tiendas transfronterizas; Reino Unido, Alemania y España sin datos concretos de dropshipping. Las guías de TikTok favorecen tener stock antes de colaborar con creadores. Falta leer Seller Center de cada mercado.
