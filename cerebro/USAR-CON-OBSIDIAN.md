@@ -8,7 +8,7 @@
 - Verlo en el móvil si lo sincronizas.
 
 ## Cómo abrirlo
-1. Instala Obsidian (https://obsidian.md) y clona el repo en tu ordenador (ver [[cerebro/USAR-EN-FCC]]).
+1. Instala Obsidian (https://obsidian.md) y clona el repo en tu ordenador.
 2. En Obsidian: "Abrir carpeta como bóveda" y elige la carpeta del repo (no solo `cerebro/`, para que se vean también los informes de `tienda/trabajo/`). Obsidian ignora las carpetas que empiezan por punto (`.claude/`).
 3. Empieza por [[cerebro/00-inicio]]. Se regenera con `python3 cerebro/generar-indice.py`.
 

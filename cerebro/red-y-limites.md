@@ -17,8 +17,8 @@
 - Que abre ampliar Network access (la persona, en la configuracion del entorno): bigbuy.eu, cjdropshipping.com, printful.com, gelato.com, printify.com, seller-es.tiktok.com, seller.tiktokshop.com, globomatik.com, dmi.es, faire.com. Abriria leer ayuda oficial de comisiones, plazo y alta, y catalogos. NO abre: cuentas con login (CJ global-warehouses), FastMoss (429), fichas de AliExpress (anti-bot), ni precios de TikTok Shop ES.
 - Un WebSearch NO es lectura: no se puede marcar [OFICIAL].
 
-## Entorno local de la persona (por ejemplo con Free Claude Code)
-Ver `USAR-EN-FCC.md`. No verificado: si la red local alcanza fichas de AliExpress, CJ o BigBuy. Si es así, el barrido y la comprobación de proveedores mejoran mucho.
+## Entorno local de la persona
+No verificado: si la red local alcanza fichas de AliExpress, CJ o BigBuy. Si es así, el barrido y la comprobación de proveedores mejoran mucho.
 
 ## Qué sirve para estar seguro de que un proveedor existe
 Doble comprobación independiente (dos búsquedas con términos distintos y cruce de IDs) + catálogo CSV del proveedor (`filtrar_catalogo.py`) + la persona abre la ficha.

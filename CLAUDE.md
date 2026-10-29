@@ -17,4 +17,3 @@ Primera tienda de dropshipping en TikTok Shop España, sin stock propio, 500 €
 - Proceso: puertas de decisión, ritmo semanal, criterios de parada y modelo de escalado en `cerebro/proceso.md`; tareas en `cerebro/backlog.md`; OKR, hipótesis, riesgos y KPI en `cerebro/`.
 - Herramientas: `margen_es.py` (margen), `escalado.py` (¿escalar?), `barrido.py` (barrido de AliExpress en paralelo), `aliexpress_es.js`, `filtrar_catalogo.py`.
 - Oficina visual: `tienda/panel-agentes.html` (artefacto privado). Resultados en `tienda/trabajo/ronda-<n>/`.
-- Uso con Free Claude Code: `cerebro/USAR-EN-FCC.md`.

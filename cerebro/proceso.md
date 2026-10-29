@@ -58,7 +58,7 @@ Ejecutar `python3 .claude/skills/proveedor-es/scripts/escalado.py --pvp X --cost
 - Riesgos abiertos: `cerebro/riesgos.md`. Hipótesis a probar: `cerebro/hipotesis.md`.
 
 ## 8. Estrategia de modelos (varios modelos para trabajar de forma continua)
-Asignar el modelo más fuerte a quien decide y uno más barato y rápido a quien recoge datos. En Claude Code se puede fijar con `model:` en la cabecera de cada agente; en Free Claude Code se configura por niveles (Fable/Opus/Sonnet/Haiku) en su Admin.
+Asignar el modelo más fuerte a quien decide y uno más barato y rápido a quien recoge datos. En Claude Code se puede fijar con `model:` en la cabecera de cada agente.
 | Nivel | Roles | Motivo |
 |---|---|---|
 | Fuerte | `director`, `ceo-estratega`, `cfo-finanzas`, `critico-escepticismo`, `auditor-calidad`, `analista-escalado` | Decisiones y razonamiento con números |

@@ -8,7 +8,7 @@ Uso:
 
 terminos.txt: un término por línea. Lanza `aliexpress_es.js` en N procesos, une los resultados, quita duplicados,
 filtra por coste, ventas y valoración y escribe SALIDA.json (todo) y SALIDA.md (tabla filtrada).
-Requiere Node + Playwright (ver cerebro/USAR-EN-FCC.md). Solo son datos de listado, no de ficha.
+Requiere Node + Playwright (`npm install -g playwright && npx playwright install chromium`). Solo son datos de listado, no de ficha.
 """
 import argparse
 import json

@@ -8,5 +8,4 @@
 - Interés por el tirón de GTA VI sin usar la marca; público gamer, coches, streetwear.
 - Ha probado la idea de high ticket y quiere otras estrategias distintas a TikTok si hay.
 - Pide siempre enlaces directos a los productos para verlos él mismo.
-- Usa Free Claude Code (github.com/alishahryar1/free-claude-code) y quiere que este proyecto funcione allí.
 - No ha dado datos personales; no guardar ninguno.

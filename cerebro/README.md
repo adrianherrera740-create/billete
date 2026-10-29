@@ -1,6 +1,6 @@
 # Cerebro del proyecto
 
-Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual en Claude Code, en `fcc-claude` (Free Claude Code) y en cualquier otro agente que lea el repo.
+Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual en Claude Code y en cualquier otro agente que lea el repo.
 
 ## Qué hay aquí
 | Archivo | Para qué sirve | Cuándo se lee | Cuándo se escribe |
@@ -19,7 +19,6 @@ Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual 
 | `diario/AAAA-MM-DD.md` | Qué se hizo cada día, en orden | Solo si hace falta el detalle | Al final de cada sesión |
 | `00-inicio.md` | Índice con enlaces para Obsidian (se genera con `generar-indice.py`) | Para navegar | Al terminar cada ronda |
 | `USAR-CON-OBSIDIAN.md` | Cómo abrir el cerebro en Obsidian | Una vez | Cuando cambie el método |
-| `USAR-EN-FCC.md` | Cómo usar este proyecto con Free Claude Code | Una vez | Cuando cambie el método |
 
 ## Protocolo (obligatorio)
 1. **Al empezar:** leer `estado.md`, `aprendizajes.md`, `usuario.md` y la fila de `productos.md` de lo que se vaya a tocar. En Claude Code, un hook (`.claude/settings.json`) ya imprime `estado.md` y `aprendizajes.md` al abrir la sesión.

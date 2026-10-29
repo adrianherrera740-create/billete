@@ -21,7 +21,7 @@ Origen: prompt maestro de La Nave, aportado por la persona el 29/10/2026 (texto 
 - **Director:** antes de cada lote, comprueba 1, 2, 7 y 12 en el plan; al cerrar, 3, 5 y 8.
 - **auditor-calidad:** en cada puerta revisa 4, 6, 8 y 10 y rechaza lo que incumpla, citando el número.
 - **curador-cerebro:** al cerrar una ronda comprueba 3, 4 y 5.
-- **Cualquier agente (también en `fcc-claude`):** si dudas de una condición, se aplica la más estricta.
+- **Cualquier agente:** si dudas de una condición, se aplica la más estricta.
 
 ## La Nave
 Es un proyecto aparte (app de escritorio para Windows 11) y todavía no está construido. Su prompt exige empezar solo con una propuesta de arquitectura y esperar la aprobación de la persona. Hasta entonces no se escribe código de La Nave en este repositorio.
