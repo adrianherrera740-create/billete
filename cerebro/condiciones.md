@@ -24,4 +24,4 @@ Origen: prompt maestro de La Nave, aportado por la persona el 29/10/2026 (texto 
 - **Cualquier agente:** si dudas de una condición, se aplica la más estricta.
 
 ## La Nave
-Es un proyecto aparte (app de escritorio para Windows 11) y todavía no está construido. Su prompt exige empezar solo con una propuesta de arquitectura y esperar la aprobación de la persona. Hasta entonces no se escribe código de La Nave en este repositorio.
+Proyecto aparte (app de escritorio para Windows 11). La persona aprobó la propuesta de arquitectura el 29/10/2026 ("haz la nave") y se construye en `la-nave/` (carpeta autocontenida de este repositorio, separable a su propio repo). Estado y decisiones técnicas: `la-nave/README.md` y `la-nave/docs/adr/`. Las 13 condiciones rigen también para su código: `npm run verify` antes de cada commit y un commit por cambio.

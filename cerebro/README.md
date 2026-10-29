@@ -6,7 +6,7 @@ Memoria compartida de todos los agentes. Son archivos de texto: funcionan igual 
 | Archivo | Para qué sirve | Cuándo se lee | Cuándo se escribe |
 |---|---|---|---|
 | `condiciones.md` | 13 condiciones por las que pasa todo trabajo (plan, fases, commits, secretos, verificación...) | Siempre, al empezar | Solo si la persona las cambia |
-| `la-nave-prompt-maestro.md` | Prompt maestro de La Nave (proyecto aparte, sin construir): fuente de las condiciones | Si se construye La Nave | Nunca (texto de la persona) |
+| `la-nave-prompt-maestro.md` | Prompt maestro de La Nave (proyecto aparte, en construcción en `la-nave/`): fuente de las condiciones | Al trabajar en La Nave | Nunca (texto de la persona) |
 | `estado.md` | Dónde estamos, qué sigue y qué decide la persona. Máx. 60 líneas | Siempre, al empezar | Al terminar cada sesión o paso |
 | `aprendizajes.md` | Reglas que ya nos han costado caras. No repetir errores | Siempre, al empezar | Cuando se aprende algo nuevo |
 | `productos.md` | Tabla de todo producto evaluado: enlace, coste, PVP, veredicto y motivo | Antes de proponer un producto | Al evaluar o cambiar un veredicto |
