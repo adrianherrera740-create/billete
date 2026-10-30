@@ -11,7 +11,7 @@
 - Del informe: de 12 cifras, 2 verificadas, 7 no verificadas, 2 contradichas y 1 obsoleta (`negocio/trabajo/verificacion/`). WhatsApp: la reversión fue de la Comisión Europea (medidas cautelares 09/06/2026), no de Meta; no construir sobre WhatsApp. THE LIVE Barcelona ya pasó.
 - Mercado: ningún competidor español claro (indicio débil); 2–5 clientes de retainer bastan para 5.000 €/mes (aritmética propia). Falta acceso de red para leer fuentes (`negocio/trabajo/mercado/`).
 
-## Próximo paso
+## Próximo paso (30/10/2026: estrategia cambiada a asesor personal; ver `negocio/estrategia-asesor-personal.md`)
 Ronda 1 CERRADA (calidad aprobó en segunda pasada; todo NO VERIFICADO). Ronda 2 (30/10/2026): mejorar la idea, las automatizaciones y la interfaz de entrega al empresario; ver `backlog.md`. Pendiente de la persona: gmail.compose (recomendación A), canal de aprobación, calendario con parón de Navidad. Si amplía el acceso de red (eur-lex, citigroup, ubs, pwc.es, rankiapro, Meta), repetir verificación y mercado con lectura primaria.
 
 ## Solo la persona

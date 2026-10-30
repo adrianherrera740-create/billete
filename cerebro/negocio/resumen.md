@@ -1,5 +1,8 @@
 # Negocio: «Chief of staff digital» para patrimonios altos (Barcelona/Cataluña)
 
+> **30/10/2026: la persona cambia la estrategia a «asesor personal a medida, poco pero muy útil».** Manda `estrategia-asesor-personal.md`; lo de abajo es el planteamiento inicial (plataforma de agentes) y queda como contexto.
+
+
 Fuente: informe en PDF aportado por la persona el 29/10/2026 («Agentes de IA a medida para grandes patrimonios»). Generado por IA: estado **No verificado** (condición 8). Cada cifra necesita su fuente leída antes de sostener una decisión.
 
 ## Idea

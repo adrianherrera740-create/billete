@@ -19,3 +19,6 @@ Aprobadas: mercado, seguridad, demo, verificación, ventas y legal (con tres obs
 
 ## 2026-10-29 — Ronda 2: interfaz y automatizaciones; propuestas del pre-mortem pendientes de la persona
 Calidad aprobó en segunda pasada el diseño de la interfaz (panel web privado instalable con passkey; el móvil solo recibe «Tienes N asuntos pendientes»), las automatizaciones por persona y el pre-mortem. NO adoptado: los cambios de oferta del pre-mortem (cliente asistente, diagnóstico como producto, implantación con herramientas del cliente, un solo nicho, alianzas); R-01 y R-03 cambian la métrica de decisión y requieren luz verde de la persona. Todo NO VERIFICADO.
+
+## 2026-10-30 — Cambio de estrategia: asesor personal a medida, poco pero muy útil
+Decisión de la persona. Se abandona el enfoque de plataforma de agentes y se pasa a un servicio de asesor personal (organización y operaciones) para 3–5 clientes, con 3 servicios (diagnóstico de continuidad y accesos, protocolo antifraude, guardián de plazos con briefing semanal). La IA es herramienta interna. Plan por pasos y puertas en `cerebro/negocio/estrategia-asesor-personal.md`. Aviso: no presentarse como asesor financiero o fiscal [ABOGADO].
