@@ -18,7 +18,7 @@ Cómo se usa: se rellena en la entrevista de diagnóstico, lo revisa el titular,
 |---|---|---|---|---|
 | Agenda y viajes | Lucía Vidal | Jordi Prat | Diaria | Reservas las confirma la titular |
 | Pagos a proveedores | Lucía prepara; **Marta aprueba** | Gestoría (solo prepara) | Semanal | Ver protocolo antifraude |
-| Casa de Sitges (mantenimiento) | Jordi Prat (mayordomo) | Lucía | Mensual | Presupuestos > 500 € los aprueba Marta |
+| Casa de Sitges (mantenimiento) | Jordi Prat (mayordomo) | Lucía | Mensual | Presupuestos > 500 € (importe PROPUESTO sin validar) los aprueba Marta |
 | Documentos fiscales (entrega a asesor) | Lucía recopila | Marta | Trimestral | Presenta el asesor, no la asistente |
 | Seguros | Lucía vigila vencimientos | Marta | Anual | Corredor: Seguros Ejemplo S. L. |
 | Personal doméstico (nóminas) | Gestoría Laboral Ejemplo | Lucía | Mensual | [ABOGADO] revisar contratos |
@@ -28,7 +28,7 @@ Cómo se usa: se rellena en la entrevista de diagnóstico, lo revisa el titular,
 | Acto | Quién puede firmar/autorizar | Límite | Cómo se acredita | Documento de apoyo |
 |---|---|---|---|---|
 | Pagos corrientes | Marta Casal | Sin límite | Banca con doble confirmación | n/a |
-| Pagos corrientes en su ausencia | Lucía Vidal (solo preparar) + Rafael Casal (aprobar) | Hasta 3.000 € | Aprobación por llamada verificada | [ABOGADO] confirmar apoderamiento |
+| Pagos corrientes en su ausencia | Lucía Vidal (solo preparar) + Rafael Casal (aprobar) | Hasta 3.000 € (PROPUESTA sin validar; lo fija el titular con su abogado) | Aprobación por llamada verificada | [ABOGADO] confirmar apoderamiento |
 | Contratos con proveedores | Marta Casal | n/a | Firma manuscrita | Archivo en carpeta «Contratos» |
 | Operaciones con inmuebles | Marta Casal con notario | n/a | Escritura | [ABOGADO] |
 

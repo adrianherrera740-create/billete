@@ -12,7 +12,7 @@ Estado: plantilla NO VERIFICADA (generada por IA, 30/10/2026). Ejemplo FICTICIO 
 
 ## 1. Reglas de verificación de pagos
 1. **Pago nuevo o proveedor nuevo:** llamada de verificación al teléfono guardado en el libro de operaciones (no al del mensaje) y segunda aprobación.
-2. **Cambio de cuenta bancaria de un proveedor:** nunca por correo, mensaje o enlace. Se llama al contacto ya conocido, se pide que confirme los últimos 4 dígitos de la cuenta actual y se anota quién verificó, cuándo y con quién. No se paga a la nueva cuenta hasta pasadas **24 h** desde la verificación.
+2. **Cambio de cuenta bancaria de un proveedor:** nunca por correo, mensaje o enlace. Se llama al contacto ya conocido, se pide que confirme los últimos 4 dígitos de la cuenta actual y se anota quién verificó, cuándo y con quién. No se paga a la nueva cuenta hasta pasadas **24 h** desde la verificación (PROPUESTA sin validar; lo fija el titular).
 3. **Doble aprobación** a partir de **3.000 €** (importe del ejemplo; lo fija el titular): prepara una persona, aprueba otra.
 4. **Urgencia, secreto o presión** («hoy mismo», «no se lo digas a nadie», «el jefe está de viaje») = señal de fraude. Se para y se llama.
 5. **Peticiones por voz, vídeo o mensaje de voz** del titular o de un familiar pidiendo dinero o datos: no se atienden hasta devolver la llamada al número guardado y pedir la **palabra de seguridad**.

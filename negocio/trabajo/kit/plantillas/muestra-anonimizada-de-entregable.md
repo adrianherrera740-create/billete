@@ -9,7 +9,7 @@ Estado: documento de MUESTRA, NO VERIFICADO (generado por IA, 30/10/2026). Todo 
 
 ## 1. Resumen ejecutivo (media página)
 
-**Qué se hizo.** En dos semanas se entrevistó a la titular (90 min), a su asistente (90 min), a su hijo (45 min) y al mayordomo (30 min). Se revisaron los documentos que la familia quiso enseñar. No se conectó ningún buzón ni sistema, y no se accedió a cuentas. Todo lo anotado procede de lo que contaron las personas y de lo que vimos en papel.
+**Qué se hizo.** En dos semanas se entrevistó a la titular (90 min), a su asistente (45 min), a su hijo (45 min) y al mayordomo (30 min). Se revisaron los documentos que la familia quiso enseñar. No se conectó ningún buzón ni sistema, y no se accedió a cuentas. Todo lo anotado procede de lo que contaron las personas y de lo que vimos en papel.
 
 **Lo más importante.**
 1. **Una sola persona concentra casi todo.** Marta es la única que puede aprobar pagos y la única que sabe dónde está la copia del testamento y cómo se abre la caja fuerte. Si no pudiera actuar, su asistente y su hijo no tendrían claro quién decide.
@@ -76,14 +76,14 @@ El libro de operaciones completo queda entregado como anexo A (formato de `libro
 ### H2. Cambio de cuenta sin regla (Alta)
 *Qué vimos.* El 05/09/2026 llegó un correo de un dominio casi igual al del proveedor de mantenimiento pidiendo ingresar a otra cuenta «por auditoría». La asistente llamó y era falso. No se pagó. No hubo registro.
 *Por qué importa.* Es el patrón típico de suplantación; la próxima vez puede llegar en un momento de ausencia de Marta.
-*Qué proponemos.* Regla: ningún cambio de cuenta sin llamada al número de la ficha; espera de 24 h; registro de cada intento.
+*Qué proponemos.* Regla: ningún cambio de cuenta sin llamada al número de la ficha; espera de 24 h (PROPUESTA sin validar); registro de cada intento.
 
 ### H3. Documentos dispersos (Alta)
 *Qué vimos.* La copia del testamento está en caja fuerte y en la notaría; los contratos, en un armario; las pólizas, en el correo de Marta.
 *Qué proponemos.* Un único libro de operaciones que diga **dónde**, sin copiar documentos ni claves. Digitalizar las pólizas en un espacio compartido con permisos.
 
 ### H4. Accesos sin inventario (Media-alta)
-*Qué vimos.* 8 servicios digitales y 5 elementos físicos; en el espacio compartido figura un usuario de un exempleado; la app de la alarma no exige segundo factor.
+*Qué vimos.* 8 servicios digitales y 6 elementos físicos; en el espacio compartido figura un usuario de un exempleado; la app de la alarma no exige segundo factor.
 *Qué proponemos.* Inventario de accesos con dueño y fecha de revisión, y lista de baja para salidas (anexo C). Ejecuta el cambio la familia.
 
 ### H5. Vencimientos sin calendario común (Media)

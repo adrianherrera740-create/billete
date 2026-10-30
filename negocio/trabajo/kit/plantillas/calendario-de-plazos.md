@@ -6,7 +6,7 @@ Estado: plantilla NO VERIFICADA (generada por IA, 30/10/2026). Estructura para q
 1. El asesor fiscal del cliente rellena la columna «Fecha límite» y «Modelo/obligación» con fuente (su calendario oficial).
 2. El cliente o su asistente rellena lo no fiscal (seguros, contratos, vehículos).
 3. Cada fila lleva **estado de verificación** y **quién la confirmó y cuándo**. Sin confirmación, la fila no genera avisos.
-4. El guardián de plazos solo **avisa**; la presentación la hace el asesor.
+4. El guardián de plazos solo **avisa**; la presentación la hace el asesor. Los avisos de plazos que salgan por cualquier canal llevan solo el recuento («Tienes N plazos próximos»); el detalle va dentro del panel.
 5. Revisión cada trimestre y al cambiar la situación del cliente (traslado, venta, herencia...).
 
 Leyenda de estado: **Confirmado** (por asesor, con fecha) · **Pendiente** [CONFIRMAR CON ASESOR] · **Obsoleto**.
