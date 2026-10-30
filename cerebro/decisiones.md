@@ -22,3 +22,6 @@ Calidad aprobó en segunda pasada el diseño de la interfaz (panel web privado i
 
 ## 2026-10-30 — Cambio de estrategia: asesor personal a medida, poco pero muy útil
 Decisión de la persona. Se abandona el enfoque de plataforma de agentes y se pasa a un servicio de asesor personal (organización y operaciones) para 3–5 clientes, con 3 servicios (diagnóstico de continuidad y accesos, protocolo antifraude, guardián de plazos con briefing semanal). La IA es herramienta interna. Plan por pasos y puertas en `cerebro/negocio/estrategia-asesor-personal.md`. Aviso: no presentarse como asesor financiero o fiscal [ABOGADO].
+
+## 2026-10-30 — Respuestas de la persona al Paso 0
+(1) Horas: las que vaya pudiendo; la idea es ir desatascando la herramienta poco a poco, sin calendario rígido. (2) Contactos: intentará hablar con Renfe (aclarar en qué sentido: cliente, contacto o vía de entrada). (3) Gasto: sin tope fijo; se decide según si el retorno es relevante. Regla de trabajo mientras no haya tope: gasto 0 € sin preguntar; cada gasto se propone con coste, retorno esperado y cómo se medirá.
