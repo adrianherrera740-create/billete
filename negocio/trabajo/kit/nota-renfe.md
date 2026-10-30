@@ -2,6 +2,8 @@
 
 Fecha: 30/10/2026. Estado: **NO VERIFICADO**. No contiene datos sobre Renfe: no sé nada comprobado de su organización, programas ni contactos y no lo invento. Todo lo que sigue son preguntas e hipótesis [IDEA]. **La decisión de si, cómo y con quién hablar es de la persona.**
 
+> **REQUISITO PREVIO BLOQUEANTE [ABOGADO]:** la persona trabaja en una subcontrata de una gran empresa (ver `cerebro/decisiones.md`). Antes de hablar de esto en el trabajo, revisar con gestoría o abogado si su contrato laboral tiene cláusulas de exclusividad, no competencia o confidencialidad. No usar correo, teléfono, tiempo ni contactos del empleador. Hasta tenerlo, no usar nada de esta nota.
+
 ## Primero, aclarar qué buscas (decide tú)
 La decisión del 30/10/2026 dice «intentará hablar con Renfe» sin precisar el sentido. Tres posibilidades, con distinto trato:
 - **Cliente (la empresa paga):** lo más difícil y lento para un servicio unipersonal [IDEA].
@@ -51,9 +53,9 @@ Marca: seguir como contacto / seguir como vía de entrada / no seguir. Apunta la
 
 ---
 ## Aclaración de la persona (30/10/2026) y consecuencias [IDEA mía, NO VERIFICADO]
-La persona trabaja en una subcontrata de Renfe y podría hablar con la gente de allí. Esto cambia el uso de la nota:
+La persona (ver `cerebro/decisiones.md`) podría hablar con gente de su entorno laboral. Esto cambia el uso de la nota:
 1. **No son clientes patrimoniales:** casi nadie de una plantilla es el perfil. Sirven como **red**: preguntar a quién conocen (un familiar con empresa propia, un directivo jubilado, un autónomo con buen patrimonio) y pedir una presentación.
-2. **Sirven como práctica gratis:** 2 o 3 compañeros de confianza pueden hacer una versión corta del diagnóstico (continuidad y protocolo antifraude para una familia normal) para medir cuántas horas cuesta, qué falla en las plantillas y qué les sirve. No se cobra y no se presenta como servicio para patrimonios altos.
-3. **Primero el contrato:** antes de hablar de esto en el trabajo, revisar con gestoría o abogado si tu contrato tiene cláusulas de exclusividad, no competencia o confidencialidad. No usar el correo, el teléfono, el tiempo ni los contactos del empleador para esto. Es la primera comprobación [ABOGADO].
-4. **Reglas de conversación:** hablar fuera de horario, sin presionar, sin preguntar por su patrimonio, con la propuesta de una página en la mano y solo si ellos muestran interés.
+2. **Sirven como práctica gratis:** 2 o 3 compañeros de confianza pueden hacer una versión corta del diagnóstico (continuidad y protocolo antifraude para una familia normal) para medir cuántas horas cuesta, qué falla en las plantillas y qué les sirve. No se cobra y no se presenta como servicio para patrimonios altos. Condiciones: acuerdo de confidencialidad sencillo firmado antes (o, como mínimo, notas anonimizadas desde el primer momento), ningún dato real en ninguna herramienta de IA, y preferiblemente datos ficticios o propios. [ABOGADO: forma del acuerdo]
+3. **Primero el contrato:** ver el aviso bloqueante de la cabecera; es la primera comprobación.
+4. **Reglas de conversación:** hablar fuera de horario, sin presionar, sin preguntar por su patrimonio, sin precio ni propuesta escrita (si hace falta enseñar algo, solo el mapa de ejemplo con datos ficticios) y solo si ellos muestran interés.
 5. **Qué no hacer:** no mencionar nada del trabajo de la subcontrata ni de datos de Renfe; no presentar la subcontrata como respaldo de tu servicio.

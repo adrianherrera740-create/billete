@@ -5,7 +5,7 @@ Fecha: 30/10/2026. Estado: **NO VERIFICADO**. Borrador para que la persona lo ed
 ---
 
 ## Qué hago
-Soy asesor personal de **organización y operaciones**. Ayudo a personas y familias a evitar pérdidas y sorpresas en el día a día: que sepan quién hace qué, dónde está cada cosa, que un pago falso no pase y que ningún plazo se escape. Trabajo directamente yo, con apoyo de herramientas propias de preparación y redacción; usted trata con una persona, no con un programa.
+Soy asesor personal de **organización y operaciones**. Ayudo a personas y familias a evitar pérdidas y sorpresas en el día a día: que sepan quién hace qué y dónde está cada cosa, y ayudo a reducir el riesgo de que un pago falso prospere o de que se pase un plazo. Reduzco el riesgo; no lo garantizo. Trabajo directamente yo, con apoyo de herramientas propias de preparación y redacción; usted trata con una persona, no con un programa.
 
 Tres servicios, nada más:
 1. **Diagnóstico de continuidad y accesos (2 semanas):** mapa de quién hace qué, dónde están las cosas, quién firma, qué vence. Entrega: libro de operaciones y sobre de emergencia.
@@ -30,25 +30,24 @@ Tres servicios, nada más:
 - Una persona de contacto para dudas durante dos semanas.
 - La lista de profesionales (gestor, abogado) a quienes pregunto las fechas y umbrales; yo no los fijo.
 - Que revise y valide el borrador de cada entrega.
-- Firmar antes de empezar el NDA y el encargo.
+- Firmar, antes de la entrevista y de que yo vea nada, el NDA y el contrato de encargo.
 
 ## Privacidad
-- NDA mutuo antes de la primera conversación sustantiva.
-- Contrato de encargo de tratamiento (art. 28 RGPD) antes de ver datos personales. [ABOGADO]
+- NDA mutuo firmado antes de la conversación inicial y de la entrevista: siempre antes de cualquier información confidencial.
+- Contrato de encargo de tratamiento (art. 28 RGPD) antes de ver nada (ningún documento ni dato). [ABOGADO]
 - Pido lo mínimo; no necesito contraseñas ni documentos de identidad.
 - Hasta que exista contrato firmado y una región UE confirmada por escrito, ningún dato real suyo pasa por una herramienta de IA. Antes, solo información anonimizada o con su autorización escrita.
 - Usted puede pedir en cualquier momento el borrado y recibir confirmación. [ABOGADO: formulación]
 - No hay nombres de clientes ni referencias públicas sin su permiso escrito.
 
 ## Precio (HIPÓTESIS, no oferta)
-Diagnóstico: **1.500–3.000 €**, cifra procedente del informe base, sin ancla europea ni validada con ningún cliente. Se afinará tras las primeras conversaciones y tras medir mis horas reales. Retainer de antifraude y plazos: por definir (la regla de partida es no más de 8 horas al mes por cliente; [IDEA] precio sin fijar hasta tener datos). IVA e impuestos: por confirmar con gestoría.
+Diagnóstico: **1.500–3.000 €**, cifra procedente del informe base, sin ancla europea ni validada con ningún cliente. Se afinará tras las primeras conversaciones y tras medir mis horas reales. Retainer de antifraude y plazos: por definir (tope interno de partida de 8 horas al mes por cliente: [PROPUESTA] mía, de uso interno, a no mostrar al cliente salvo decisión de la persona; precio sin fijar hasta tener datos). IVA e impuestos: por confirmar con gestoría.
 
 ## Proceso en 4 pasos
-1. **Conversación inicial** (20 min, sin compromiso, tras NDA): entiendo si hay un problema real que resolver.
-2. **Propuesta y firma:** alcance, precio cerrado, NDA y encargo.
+1. **Conversación inicial** (20 min, sin compromiso, con el NDA ya firmado): entiendo si hay un problema real que resolver.
+2. **Propuesta y firma:** alcance, precio cerrado y contrato de encargo; el NDA ya está firmado desde el paso 1 y nada se ve antes de firmar el encargo.
 3. **Diagnóstico (2 semanas):** entrevista, documentos, mapa y borrador; revisamos juntos.
 4. **Entrega y siguiente paso:** libro de operaciones y sobre de emergencia; si le sirve, hablamos de protocolo antifraude y guardián de plazos.
 
-## Pendiente antes de enviar [ABOGADO / persona]
-- Confirmar la fórmula «asesor personal de organización y operaciones» sin riesgo de confusión con asesoramiento regulado.
-- Alta como autónomo/epígrafe, seguro de responsabilidad civil y límite de responsabilidad: ver Paso 0 de la estrategia.
+## Pendiente antes de enviar [solo la persona]
+Lista única en `pendientes-de-la-persona.md` (final de `nota-renfe.md` también la resume). Aquí: abogado (fórmula «asesor personal de organización y operaciones», NDA, encargo, límite de responsabilidad), gestoría (epígrafe, IVA), seguro de responsabilidad civil y revisión del contrato laboral.

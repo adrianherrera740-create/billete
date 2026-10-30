@@ -3,14 +3,14 @@
 Fecha: 30/10/2026. Estado: **NO VERIFICADO**. Versión corta de `negocio/trabajo/ventas/01-guion-descubrimiento.md`, adaptada a la estrategia de asesor personal (Paso 2). [IDEA] = mío.
 
 ## Para qué sirve
-Puerta 1: al menos 2 de 5 reconocen un dolor concreto de V1, V2, V3 o V5 con un ejemplo real y aceptan una segunda conversación. Si tras 5 no hay ninguno, el problema es canal o posicionamiento (decisión del mes 4).
+Puerta 1: al menos 2 de 5 reconocen un dolor concreto (puntuación ≥ 2 en la escala de abajo) de V1, V2, V3 o V5 y aceptan una segunda conversación. V1, V2, V3 y V5 se definen en `negocio/trabajo/casos-de-uso/servicios-vitales.md`. Si tras 5 no hay ninguno, el problema es canal o posicionamiento (decisión del mes 4).
 
 ## Con quién
 Solo gente de tu red o por presentación: asistentes ejecutivas, asesor fiscal o abogado de alguien, fundador con exit. Un tipo de perfil por hoja. Sin nombres en ningún archivo del repo.
 
 ## Reglas
 - Se pregunta, no se vende. Hablar menos del 30 %. Ejemplos pasados, no intenciones.
-- Sin NDA firmado: solo llamada previa de 10 min sin información confidencial. Esta conversación de 20 min va con NDA (revisado por abogado) o sin intercambio de información confidencial de ninguna de las partes, dicho al empezar. [ABOGADO]
+- Sin NDA firmado: solo llamada previa de 10 min sin información confidencial. La conversación de 20 min se hace con NDA firmado (revisado por abogado). Hasta tenerlo, pedir solo casos genéricos o anonimizados («una situación que conozcas, sin nombres, sin importes, sin identificar a nadie») y anotarlos sin identificar. [ABOGADO]
 - No dar precio. Si preguntan: «Aún estoy calibrando; ¿qué rango te parecería razonable?». No prometer resultados.
 - Nunca pedir ni aceptar accesos, contraseñas o documentos.
 - Presentación: «asesor personal de organización y operaciones», nunca financiero ni fiscal.
@@ -46,7 +46,7 @@ Solo gente de tu red o por presentación: asistentes ejecutivas, asesor fiscal o
 - Si hay confianza: «¿Conoces a alguien a quien le pueda servir hablar de esto?» (sin pedir nombres en el acto).
 
 ## Señales para anotar
-Cuenta la **cita literal** de un incidente concreto; un «me interesaría» sin ejemplo cuenta como 0. [IDEA] Puntuación del dolor: 0 = ninguno, 1 = lo reconoce sin ejemplo, 2 = ejemplo concreto pasado, 3 = ejemplo con coste y acepta segunda conversación.
+Anota la **cita literal**. [IDEA] Escala del dolor por servicio: 0 = no lo reconoce; 1 = «me interesaría» o lo reconoce en abstracto, sin ejemplo (no cuenta para la Puerta 1); 2 = ejemplo concreto pasado (puede ser genérico/anonimizado); 3 = ejemplo con coste (tiempo, dinero, tensión). Puerta 1 = puntuación ≥ 2 en algún servicio y segunda conversación aceptada, en 2 de 5.
 
 ## Hoja de resultados (sin nombres reales)
 Copiar una fila por conversación en un archivo FUERA del repo. El identificador es un código (C1…C5), nunca un nombre. La clave de códigos, si existe, vive también fuera.
