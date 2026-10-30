@@ -16,12 +16,21 @@ class TestAprobaciones(Base):
         ejecutar_dia(self.sis)
         self.aid = next(i["id"] for i in self.sis.cola.pendientes() if i["tipo"] == "borrador")
 
-    def test_canal_solo_id_y_verbo(self):
-        m = self.sis.cola.mensaje_canal(self.aid)
+    def test_aviso_de_bloqueo_solo_recuento(self):
+        m = self.sis.cola.aviso_bloqueo()
+        self.assertRegex(m, r"^Tienes \d+ asuntos? pendientes?\.$")
+        for i in self.sis.cola.pendientes():
+            self.assertNotIn(i["id"], m)
+            self.assertNotIn(i["tipo"], m)
+        for c in self.sis.buzon.listar_correos():
+            self.assertNotIn(c["asunto"], m)
+        self.assertNotIn("@", m)
+
+    def test_texto_de_panel_lleva_id_pero_sin_asunto_ni_cuerpo(self):
+        m = self.sis.cola.texto_panel(self.aid)
         self.assertIn(self.aid, m)
         for c in self.sis.buzon.listar_correos():
             self.assertNotIn(c["asunto"], m)
-        self.assertLess(len(m), 120)
         self.assertNotIn("@", m)
 
     def test_cuenta_no_vinculada_rechazada(self):

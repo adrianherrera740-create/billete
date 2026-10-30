@@ -32,7 +32,7 @@ class Abuso:
         r = ejecutar_dia(self.sis)
         textos = [r["briefing"]] + [dossier.a_texto(d) for d in r["dossiers"]]
         textos += [f"{b['asunto']} {b['cuerpo']}" for b in self.sis.buzon.borradores()]
-        textos += [self.sis.cola.mensaje_canal(i["id"]) for i in self.sis.cola.pendientes()]
+        textos += [self.sis.cola.texto_panel(i["id"]) for i in self.sis.cola.pendientes()] + [self.sis.cola.aviso_bloqueo()]
         for txt in textos:
             for p in PROHIBIDO:
                 self.assertNotIn(p, txt, f"{p!r} en: {txt[:80]}")

@@ -32,8 +32,13 @@ class Cola:
     def item(self, aid: str) -> dict:
         return dict(self._items[aid])
 
-    def mensaje_canal(self, aid: str) -> str:
-        """Lo unico que sale hacia Telegram/Slack/correo: sin asunto, sin cuerpo, sin enlaces."""
+    def aviso_bloqueo(self) -> str:
+        """Lo unico que sale hacia Telegram/Slack/correo y a la pantalla de bloqueo: solo el recuento."""
+        n = len(self.pendientes())
+        return f"Tienes {n} asunto pendiente." if n == 1 else f"Tienes {n} asuntos pendientes."
+
+    def texto_panel(self, aid: str) -> str:
+        """Texto con ID y verbo: solo se muestra DENTRO del panel, ya desbloqueado. Nunca sale por el canal de aviso."""
         i = self._items[aid]
         return f"Pendiente: {i['tipo']} {i['id']}. Revisa en tu panel. Responde APROBAR {i['id']} o RECHAZAR {i['id']}."
 

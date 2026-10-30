@@ -28,9 +28,10 @@ def main():
     print(dossier.a_texto(r["dossiers"][0]))
     titulo("2b. DOSSIER: invitacion de desconocido con inyeccion")
     print(dossier.a_texto(r["dossiers"][1]))
-    titulo("3. APROBACIONES: lo que viaja por el canal (solo ID y verbo)")
+    titulo("3. APROBACIONES: aviso por el canal (solo recuento) y texto dentro del panel")
     aid = sis.cola.pendientes()[0]["id"]
-    print(sis.cola.mensaje_canal(aid))
+    print("Aviso (bloqueo/canal):", sis.cola.aviso_bloqueo())
+    print("Panel (desbloqueado):", sis.cola.texto_panel(aid))
     try:
         sis.cola.decidir(aid, "aprobar", "atacante@otro.example", sis.cola.codigo_dispositivo())
     except AprobacionDenegada as e:
