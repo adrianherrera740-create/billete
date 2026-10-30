@@ -83,3 +83,48 @@ Cumple la condición pedida en su totalidad: ninguna fecha fiscal o umbral real,
 ## Qué devolver y a quién
 - `estratega-ventas-confianza`: propuesta (puntos 1-4), guion-5 (1-3), nota-renfe (1-3), libro (1), protocolo (1-2), muestra (1-3).
 - Tras corregir, nueva pasada de calidad solo sobre los 6 documentos rechazados.
+
+## Segunda pasada
+
+Fecha: 30/10/2026. Revisor: auditor-calidad. Alcance: los 6 documentos rechazados, la línea de solo recuento de `calendario-de-plazos.md`, el nuevo `kit/pendientes-de-la-persona.md` y regresiones en todo el kit. No se ha corregido nada ni hecho commit.
+
+### Resultado global: RECHAZADO (1 documento devuelto, 1 fallo; el resto aprobado)
+
+| Documento | Veredicto |
+|---|---|
+| `kit/propuesta-una-pagina.md` | APROBADO |
+| `kit/guion-5-conversaciones.md` | APROBADO |
+| `kit/nota-renfe.md` | RECHAZADO |
+| `kit/plantillas/libro-de-operaciones.md` | APROBADO |
+| `kit/plantillas/protocolo-antifraude.md` | APROBADO (con observación) |
+| `kit/plantillas/muestra-anonimizada-de-entregable.md` | APROBADO |
+| `kit/plantillas/calendario-de-plazos.md` (línea de solo recuento) | APROBADO |
+| `kit/pendientes-de-la-persona.md` | APROBADO |
+
+### kit/nota-renfe.md: RECHAZADO
+Corregidos: fallo 2 (l.181: sin precio ni propuesta, solo mapa de ejemplo ficticio) y fallo 3 (l.126: requisito bloqueante en cabecera). Queda:
+1. **Cond. 4 y 12 / estrategia Paso 3, fallo 1 solo a medias.** L.179 permite acuerdo de confidencialidad «o, como mínimo, notas anonimizadas», es decir, entrevistar sin NDA; no menciona contrato de encargo y deja «preferiblemente» datos ficticios o propios. Es una regresión frente a «NDA antes de la entrevista y de ver nada». Corregir: NDA firmado siempre antes de cualquier información; práctica solo con datos ficticios o propios (o, si el compañero aporta su caso real, NDA y encargo firmados); notas anonimizadas además, no en lugar del NDA.
+2. **Cond. 4, dato personal de la persona (observación O del informe anterior, sin resolver).** L.126 («trabaja en una subcontrata de una gran empresa») y l.182 («ni de datos de Renfe») juntan en el repo el empleador y el cliente final. No aparece la cadena literal «subcontrata de Renfe», pero l.182 la compone. Sustituir por una referencia a `cerebro/decisiones.md` y quitar «ni de datos de Renfe» (basta «ni datos de su empleador»).
+
+### Documentos aprobados
+- `propuesta-una-pagina.md`: los 4 fallos corregidos. Tope de 8 h marcado [PROPUESTA] y de uso interno (l.44); NDA antes de la conversación inicial y de la entrevista (l.33, 36, 47); encargo antes de ver cualquier documento o dato (l.37, 48); «ayudo a reducir el riesgo... no lo garantizo» (l.8, 20). Precio como HIPÓTESIS (l.43).
+- `guion-5-conversaciones.md`: escala medible y coherente (l.102: 1 = sin ejemplo, no cuenta; ≥ 2 exige ejemplo concreto, de acuerdo con l.59, 116); sin NDA solo llamada de 10 min y casos genéricos anonimizados (l.66); V1, V2, V3, V5 remiten a su definición (l.59).
+- `libro-de-operaciones.md`: 3.000 € (l.31) y 500 € (l.21) marcados como propuesta.
+- `muestra-anonimizada-de-entregable.md`: 24 h marcada (l.79); 6 elementos físicos (l.86) cuadra con el inventario; 45 min de la asistente (l.12) alineado con la propuesta.
+- `calendario-de-plazos.md`: l.9 lleva «solo el recuento («Tienes N plazos próximos»); el detalle va dentro del panel». O1 cerrada.
+- `pendientes-de-la-persona.md`: 6 puntos (abogado, contrato laboral bloqueante, gestoría, seguro, decisión sobre Renfe, tope de 8 h) que cubren la condición 12 y la observación O3; sin nombres ni datos.
+- `protocolo-antifraude.md`: 24 h y 3.000 € marcadas (l.15-16). **Observación (no bloquea):** siguen sin etiqueta «propuesta» 30 min (l.18, 35, 49), 60 minutos (l.38) y 48 h (l.46); la cabecera no lo dice. Añadir una frase «tiempos del protocolo: PROPUESTA sin validar».
+
+### Regresiones buscadas en todo el kit: ninguna nueva
+- NDA antes de entrevista y de ver nada: presente en entrevista l.5, 11, propuesta, muestra l.116 (solo falla nota-renfe l.179, arriba).
+- Ninguna garantía: todas las menciones son negaciones («ayuda, no garantiza»).
+- Escala del dolor medible: sí (guion-5 l.102).
+- Sin IBAN reales, contraseñas, URL ni DNI: solo dominios `.example`, teléfonos `+34 600 000 00X` y un «Cambio de IBAN» descrito sin número (protocolo l.54).
+- Sin la cadena «subcontrata de Renfe» (ver fallo 2 de nota-renfe).
+- Menores sin resolver (no bloquean): nombres de libro, sobre y calendario (Núria Pons, Elena Soler, Pere Roig, Oriol Vila) siguen sin el sufijo «Ejemplo» (O2); `guion-entrevista-diagnostico-90min.md` l.11 sigue citando «[regla 4 del negocio]»; `muestra` l.15 («Marta es la única que aprueba pagos») frente al libro l.31 (Rafael aprueba) sin aclarar que el anexo es el estado «después».
+
+### Qué devolver
+`estratega-ventas-confianza`: solo `nota-renfe.md` (puntos 1 y 2) y, si se quiere cerrar, las observaciones menores. Tercera pasada solo sobre `nota-renfe.md`.
+
+## Tercera pasada (corrección aplicada por el director, pendiente de verificar)
+`nota-renfe.md`: NDA siempre antes de empezar, encargo [ABOGADO], solo datos ficticios o propios, y las menciones a la subcontrata sustituidas por una referencia a `cerebro/decisiones.md`. Observaciones menores abiertas: tiempos del protocolo (30 min, 60 min, 48 h) sin marca de propuesta, nombres sin sufijo «Ejemplo», «regla 4» en el guion de entrevista y Marta/Rafael en la muestra.
