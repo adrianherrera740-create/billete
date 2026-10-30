@@ -48,3 +48,12 @@ Anota el resultado en la hoja de `guion-5-conversaciones.md` como un tipo de per
 
 ## Decisión de la persona
 Marca: seguir como contacto / seguir como vía de entrada / no seguir. Apunta la decisión en `cerebro/decisiones.md`.
+
+---
+## Aclaración de la persona (30/10/2026) y consecuencias [IDEA mía, NO VERIFICADO]
+La persona trabaja en una subcontrata de Renfe y podría hablar con la gente de allí. Esto cambia el uso de la nota:
+1. **No son clientes patrimoniales:** casi nadie de una plantilla es el perfil. Sirven como **red**: preguntar a quién conocen (un familiar con empresa propia, un directivo jubilado, un autónomo con buen patrimonio) y pedir una presentación.
+2. **Sirven como práctica gratis:** 2 o 3 compañeros de confianza pueden hacer una versión corta del diagnóstico (continuidad y protocolo antifraude para una familia normal) para medir cuántas horas cuesta, qué falla en las plantillas y qué les sirve. No se cobra y no se presenta como servicio para patrimonios altos.
+3. **Primero el contrato:** antes de hablar de esto en el trabajo, revisar con gestoría o abogado si tu contrato tiene cláusulas de exclusividad, no competencia o confidencialidad. No usar el correo, el teléfono, el tiempo ni los contactos del empleador para esto. Es la primera comprobación [ABOGADO].
+4. **Reglas de conversación:** hablar fuera de horario, sin presionar, sin preguntar por su patrimonio, con la propuesta de una página en la mano y solo si ellos muestran interés.
+5. **Qué no hacer:** no mencionar nada del trabajo de la subcontrata ni de datos de Renfe; no presentar la subcontrata como respaldo de tu servicio.

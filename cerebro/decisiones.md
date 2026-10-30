@@ -25,3 +25,6 @@ Decisión de la persona. Se abandona el enfoque de plataforma de agentes y se pa
 
 ## 2026-10-30 — Respuestas de la persona al Paso 0
 (1) Horas: las que vaya pudiendo; la idea es ir desatascando la herramienta poco a poco, sin calendario rígido. (2) Contactos: intentará hablar con Renfe (aclarar en qué sentido: cliente, contacto o vía de entrada). (3) Gasto: sin tope fijo; se decide según si el retorno es relevante. Regla de trabajo mientras no haya tope: gasto 0 € sin preguntar; cada gasto se propone con coste, retorno esperado y cómo se medirá.
+
+## 2026-10-30 — Renfe: aclarado por la persona
+La persona trabaja en una subcontrata de Renfe y podría hablar con gente de allí. Se usa como red de contactos y práctica, no como cliente. Antes de nada: revisar su contrato (exclusividad, competencia, confidencialidad) [ABOGADO/gestoría]; no usar recursos, correos ni contactos del empleador para vender.
