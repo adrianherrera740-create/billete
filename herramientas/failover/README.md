@@ -22,3 +22,8 @@ Pon como segundo uno más pequeño que el primero para que quepa en tu RAM.
 4. `ANTHROPIC_BASE_URL=http://127.0.0.1:8787 claude`
 
 Sin verificar contra Anthropic ni Ollama reales; probado solo con servidores falsos.
+
+## Prueba con dos cuentas de Ollama (una de cada persona)
+Cadena: Claude -> Ollama cuenta 1 -> Ollama cuenta 2. Cada persona exporta SU clave
+(`OLLAMA_API_KEY_1`, `OLLAMA_API_KEY_2`) en su entorno; nunca en el repo ni en `config.json`.
+Comprobad antes los términos de Ollama sobre compartir claves (no verificado aquí).
