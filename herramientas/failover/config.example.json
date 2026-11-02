@@ -4,11 +4,9 @@
   "cooldown": 300,
   "providers": [
     {"name": "claude", "base_url": "https://api.anthropic.com", "api_key_env": "ANTHROPIC_API_KEY"},
-    {"name": "ollama-nube", "base_url": "https://ollama.com", "api_key_env": "OLLAMA_API_KEY",
-     "models": {"*": "MODELO_DE_OLLAMA_NUBE"}},
-    {"name": "ollama-local", "base_url": "http://127.0.0.1:11434",
-     "models": {"*": "MODELO_LOCAL"}},
-    {"name": "otra-ia", "base_url": "https://URL_COMPATIBLE_ANTHROPIC", "api_key_env": "OTRA_API_KEY",
-     "models": {"*": "MODELO_OTRA_IA"}}
+    {"name": "ollama-local-1", "base_url": "http://127.0.0.1:11434",
+     "models": {"*": "MODELO_LOCAL_GRANDE"}},
+    {"name": "ollama-local-2", "base_url": "http://127.0.0.1:11434",
+     "models": {"*": "MODELO_LOCAL_PEQUENO"}}
   ]
 }
