@@ -4,9 +4,23 @@
       {
         "matcher": "startup|resume|clear|compact",
         "hooks": [
-          { "type": "command", "command": "cat cerebro/condiciones.md cerebro/estado.md cerebro/aprendizajes.md" }
+          {
+            "type": "command",
+            "command": "cat cerebro/condiciones.md cerebro/estado.md cerebro/aprendizajes.md"
+          }
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "codex@openai-codex": true
   }
 }

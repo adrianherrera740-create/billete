@@ -28,3 +28,9 @@ Decisión de la persona. Se abandona el enfoque de plataforma de agentes y se pa
 
 ## 2026-10-30 — Renfe: aclarado por la persona
 La persona trabaja en una subcontrata de Renfe y podría hablar con gente de allí. Se usa como red de contactos y práctica, no como cliente. Antes de nada: revisar su contrato (exclusividad, competencia, confidencialidad) [ABOGADO/gestoría]; no usar recursos, correos ni contactos del empleador para vender.
+
+## 2026-11-12 · Plugin Codex (OpenAI) para Claude Code
+- Decisión: registrar `openai/codex-plugin-cc` como marketplace y activar `codex@openai-codex` en `.claude/settings.json`, a petición de la persona.
+- Motivo: poder pedir revisiones y delegar tareas a Codex (suscripción ChatGPT) desde el mismo proyecto.
+- Solo la persona: `/codex:setup` y `codex login` (cuenta ChatGPT). Sin claves en el repo. No activar `--enable-review-gate` sin supervisar. `/codex:rescue` puede editar archivos: revisar antes de commitear.
+- Estado: NO VERIFICADO en una sesión real.
